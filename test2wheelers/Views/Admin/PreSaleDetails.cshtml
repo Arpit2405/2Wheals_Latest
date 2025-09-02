@@ -1,0 +1,83 @@
+﻿@model _2whealers.Models.UserTransactionViewModel
+@{
+    ViewBag.Title = "PreSaleDetails";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="~/css/pre-sale.css" rel="stylesheet" />
+
+
+
+<div class="challan-wrapper">
+    <div class="text-center mb-3">
+        <img src="~/AdminAssets/dist/img/logo1.png" alt="Bike Nation Logo" class="challan-logo" />
+        <h2 class="company-name">Bike Nation Motors Pvt. Ltd.</h2>
+        <p class="company-address">Near HDFC Bank, Main Bawana Road, Samaypur, Delhi-42</p>
+        <h3 class="challan-title">Purchase Challan</h3>
+    </div>
+
+    <table class="table challan-table">
+        <tbody>
+            <tr>
+                <th>Order ID</th>
+                <td>#@Model.Purchase.Id</td>
+                <th>Order Date</th>
+                <td>@(Model.Purchase.dateofsale != null ? Model.Purchase.dateofsale.Value.ToString("dd-MMM-yyyy") : "-")</td>
+            </tr>
+            <tr>
+                <th>Customer Name</th>
+                <td>@Model.Purchase.Name</td>
+                <th>Phone</th>
+                <td><a href="tel:@Model.Purchase.MobileNo">@Model.Purchase.MobileNo</a></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td colspan="3">@Model.Purchase.Address1</td>
+            </tr>
+            <tr>
+                <th>Vehicle Name</th>
+                <td>@Model.Purchase.ModelName</td>
+                <th>Vehicle No</th>
+                <td>@Model.Purchase.RegNo</td>
+            </tr>
+            <tr>
+                <th>Chassis No</th>
+                <td>@Model.Purchase.ChassisNo</td>
+                <th>Engine No</th>
+                <td>@Model.Purchase.EngineNo</td>
+            </tr>
+            <tr>
+                <th>Cash Amount</th>
+                <td colspan="3" class="fw-bold text-success">Rs. @Model.Purchase.CashAmount.ToString("N0") /-</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="disclaimer">
+        <h6 class="fw-bold text-danger">Disclaimer</h6>
+        <p>
+            I hereby <strong>@Model.Purchase.Name</strong> confirm that all the details regarding my two-wheeler are true and mine.
+            If any details are hidden like any previous unpaid challan or record, I am responsible for transfer of the vehicle/authority.
+            If my signature is different at the time of transfer, it is my responsibility to clear the issue regarding the vehicle.
+            In any case of mis-happening, <strong>Bike Nation</strong> is not responsible for the authority.
+        </p>
+    </div>
+
+    <div class="signature-row">
+        <div class="signature-left">
+            <div class="signature-box"></div>
+            <p>(Customer Signature)</p>
+        </div>
+        <div class="signature-right">
+            <div class="signature-box"></div>
+            <p>(Authorized Signature)</p>
+        </div>
+    </div>
+
+    <div class="text-center no-print">
+        <button onclick="window.print()" class="print-btn">
+            <i class="bi bi-printer"></i> Print
+        </button>
+    </div>
+</div>

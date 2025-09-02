@@ -1,0 +1,57 @@
+﻿@model _2whealers.Models.UserTransactionViewModel
+@{
+    ViewBag.Title = "Delivery Challan";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="~/css/pre-sale.css" rel="stylesheet" />
+
+
+<div class="challan-wrapper">
+    <div class="text-center mb-3">
+        <img src="~/AdminAssets/dist/img/logo1.png" alt="Bike Nation Logo" class="challan-logo" />
+        <h2 class="company-name">Bike Nation Motors Pvt. Ltd.</h2>
+        <p class="company-address">Near HDFC Bank, Main Bawana Road, Samaypur, Delhi-42</p>
+        <h3 class="challan-title">Delivery Challan</h3>
+    </div>
+
+    <!-- Table -->
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Order ID</th>
+                <td>@Model.Transaction.Id</td>
+            </tr>
+            <tr>
+                <th>Contact Number</th>
+                <td><a href="tel:@Model.Transaction.MobileNo">@Model.Transaction.MobileNo</a></td>
+            </tr>
+            <tr>
+                <th>Engine Number</th>
+                <td>@Model.Transaction.EngineNo</td>
+            </tr>
+            <tr>
+                <th>Chassis Number</th>
+                <td>@Model.Transaction.ChassisNo</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="signature-row">
+        <div class="signature-left">
+            <div class="signature-box"></div>
+            <p>(Customer Signature)</p>
+        </div>
+        <div class="signature-right">
+            <div class="signature-box"></div>
+            <p>(Authorized Signature)</p>
+        </div>
+    </div>
+
+    <div class="text-center no-print">
+        <button onclick="window.print()" class="print-btn">
+            <i class="bi bi-printer"></i> Print
+        </button>
+    </div>
+</div>

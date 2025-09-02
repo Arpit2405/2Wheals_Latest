@@ -1,0 +1,17 @@
+﻿@model _2whealers.Models.Brands
+
+@using (Html.BeginForm("EditBrands", "Admin", FormMethod.Post, new { id = "editBikeForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.BrandName)
+        @Html.TextBoxFor(m => m.BrandName, new { @class = "form-control", placeholder = "Enter brand" })
+        @Html.ValidationMessageFor(m => m.BrandName, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block mt-3">
+        <i class="fa fa-save"></i> Update
+    </button>
+}

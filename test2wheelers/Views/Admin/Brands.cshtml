@@ -1,0 +1,203 @@
+﻿@model List<_2whealers.Models.Brands>
+
+@{
+    ViewBag.Title = "Brands";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Brands </li>
+</ol>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="mb-4">🚴 Brands</h2>
+
+                <!-- Add Brands Button -->
+                <div class="mb-3 text-right">
+                    <button class="btn btn-success btn-sm px-3" data-toggle="modal" data-target="#addBrandsModal">
+                        <i class="fa fa-plus"></i> Add Brands
+                    </button>
+                </div>
+
+                <!-- Add Brands Modal -->
+                <div class="modal fade" id="addBrandsModal" tabindex="-1" role="dialog" aria-labelledby="addBrandsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content shadow-lg rounded-lg">
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title" id="addBrandsModalLabel">Add Brands</h5>
+                                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @Html.Partial("_AddBrandsModal", new _2whealers.Models.Brands())
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Brands Modal -->
+                <div class="modal fade" id="editBrandsModal" tabindex="-1" role="dialog" aria-labelledby="editBrandsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content shadow-lg rounded-lg">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title" id="editBrandsModalLabel">Edit Brands</h5>
+                                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="editBrandsModalBody">
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="BrandsTable" class="table table-striped table-hover table-bordered align-middle shadow-sm rounded overflow-hidden">
+                        <thead style="background: linear-gradient(90deg, #6c63ff, #4facfe); color: #fff;">
+                            <tr>
+                                <th style="width:60px;" class="text-center">SNo.</th>
+                                <th>Brand Name</th>
+                                <th>Created Date</th>
+                                <th style="width:160px;" class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int row = 1;
+                            }
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model.OrderByDescending(x => x.Id))
+                                {
+                                    <tr>
+                                        <td class="text-center fw-bold">@row</td>
+                                        <td class="fw-semibold">@item.BrandName</td>
+                                        <td class="text-muted">@item.CreatedDate.ToString("dd-MMM-yyyy")</td>
+                                        <td class="text-center">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-gradient me-1 editBrandsBtn"
+                                                    data-id="@item.Id"
+                                                    title="Edit">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </button>
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-sm btn-danger deleteBtn"
+                                               data-id="@item.Id"
+                                               data-url="@Url.Action("DeleteBrands", "Admin", new { id = item.Id })">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    row++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">
+                                        🚫 No Brands found
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                 
+                <style>
+                    /* Gradient button */
+                    .btn-gradient {
+                        background: linear-gradient(45deg, #6c63ff, #4facfe);
+                        color: #fff;
+                        border: none;
+                    }
+
+                        .btn-gradient:hover {
+                            background: linear-gradient(45deg, #4facfe, #6c63ff);
+                            color: #fff;
+                        }
+
+                    /* Table striping */
+                    .table-striped tbody tr:nth-of-type(odd) {
+                        background-color: #f9f9ff;
+                    }
+
+                    /* Hover effect */
+                    .table-hover tbody tr:hover {
+                        background-color: #eef2ff;
+                        transition: 0.3s;
+                    }
+                </style>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(function () {
+        toastr.options = { "positionClass": "toast-bottom-right" };
+
+        @if (TempData["Success"] != null)
+        {
+            <text>toastr.success("@TempData["Success"]");</text>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <text>toastr.error("@TempData["Error"]");</text>
+        }
+    });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#BrandsTable').DataTable({ 
+                responsive: true,
+                lengthChange: true,
+                autoWidth: false,
+                buttons: ["copy", "csv", "excel", "pdf"]
+            }).buttons().container().appendTo('#BrandsTable_wrapper .col-md-6:eq(0)');
+      
+             
+            $(document).on("click", ".editBrandsBtn", function () {
+                var id = $(this).data("id");
+                $.get("/Admin/EditBrands", { id: id }, function (html) {
+                    $("#editBrandsModalBody").html(html);
+                     
+                    $.validator.unobtrusive.parse("#editBrandsModalBody");
+                     
+                    $("#editBrandsModal").modal("show");
+                });
+            });
+
+            $(document).on("click", ".deleteBtn", function () {
+                var url = $(this).data("url");
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won’t be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e3342f',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+}

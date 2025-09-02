@@ -1,0 +1,50 @@
+﻿@model _2whealers.Models.BikeModels
+
+@using (Html.BeginForm("AddModels", "Admin", FormMethod.Post, new { @id = "addBikeModelForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="modalBodyContainer">
+        @Html.Label("Select Brands")
+        @Html.DropDownListFor(m => m.Brand_Id_Fk, Model.BrandList, "-- Select Brand --", new { @class = "form-control" })
+        <br />
+
+        @Html.Label("Enter Model Name")
+        @Html.TextBoxFor(m => m.ModelName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ModelName, "", new { @class = "text-danger" })
+        <br />
+
+        <button type="submit" class="btn btn-success">Save</button>
+    </div>
+}
+
+<script>
+        $(document).ready(function () {
+        $("#addBikeModelForm").on("submit", function (e) {
+            e.preventDefault(); // stop default form submit
+
+            $.ajax({
+                url: $(this).attr("action"), // Admin/AddModels
+                type: "POST",
+                data: $(this).serialize(),   // serialize form data
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message); // success toast
+                        $("#addModelModal").modal("hide");
+
+                         setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+
+                    } else {
+                        toastr.error(response.message || "Something went wrong!");
+                    }
+                },
+                error: function () {
+                    toastr.error("Server error occurred. Please try again.");
+                }
+            });
+        });
+    });
+
+</script>

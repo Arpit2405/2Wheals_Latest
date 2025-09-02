@@ -1,0 +1,243 @@
+﻿@model _2whealers.Models.UserTransactionViewModel
+@{
+    ViewBag.Title = "Add Pre-Sale";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Add Pre-Sale </li>
+</ol>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card card-primary">
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h3 class="card-title mb-0">Purchase Transaction</h3>
+
+                </div>
+
+                <a href="javascript:history.back()" class="btn btn-danger ml-auto">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            @using (Html.BeginForm("AddPreSale", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="BikeDropdown">Select Bike *</label>
+                            @Html.DropDownListFor(m => m.Purchase.BikeId,
+                                     new SelectList(ViewBag.BikeList, "Value", "Text"),
+                                     "-- Select --",
+                                     new { @class = "form-control select2", id = "BikeDropdown", style = "width:100%;" })
+                            @Html.ValidationMessageFor(m => m.Purchase.BikeId, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Model -->
+                        <div class="col-md-3">
+                            <label for="ModelDropdown">Select Model *</label>
+                            @Html.DropDownListFor(m => m.Purchase.ModelId,
+                                     new SelectList(Enumerable.Empty<SelectListItem>()),
+                                     "-- Select --",
+                                     new { @class = "form-control select2", id = "ModelDropdown", style = "width:100%;" })
+                            @Html.ValidationMessageFor(m => m.Purchase.ModelId, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="MobileNo">Mobile No *</label>
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                @Html.TextBoxFor(m => m.Purchase.MobileNo, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter Mobile Number",
+                                        maxlength = "10",
+                                        oninput = "this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)",
+                                        type = "tel"
+                                    })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Purchase.MobileNo, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Registration Number <span class="required-star">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.Purchase.RegNo, new { @class = "form-control", placeholder = "e.g. MH12AB1234", maxlength = "20", style = "text-transform:uppercase" })
+                            @Html.ValidationMessageFor(m => m.Purchase.RegNo, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Seller Name -->
+                        <div class="col-md-3">
+                            <label for="SellerName">Seller Name *</label>
+                            @Html.TextBoxFor(m => m.Purchase.Name, new { @class = "form-control", placeholder = "Enter Seller Name" })
+                            @Html.ValidationMessageFor(m => m.Purchase.Name, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            <label for="SellerName">Email Id *</label>
+                            @Html.TextBoxFor(m => m.Purchase.Email, new { @class = "form-control", type = "email" })
+                            @Html.ValidationMessageFor(m => m.Purchase.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Date -->
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Date Of Sale <span class="required-star">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.Purchase.dateofsale,   new { @class = "form-control", @id = "dateOfSale", autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.Purchase.dateofsale, "", new { @class = "text-danger" })
+                        </div>
+
+                         
+
+                        <!-- Address -->
+                        <div class="form-group col-md-12">
+                            <label for="Address">Address *</label>
+                            @Html.TextAreaFor(m => m.Purchase.Address1, new { @class = "form-control", rows = 2, placeholder = "Enter Address" })
+                            @Html.ValidationMessageFor(m => m.Purchase.Address1, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="ChassisNo">Chassis No *</label>
+                            @Html.TextBoxFor(m => m.Purchase.ChassisNo,
+                                     new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = "Enter Chassis No",
+                                         maxlength = "30",
+                                         minlength = "5",
+                                         style = "text-transform:uppercase",
+                                         oninput = "this.value = this.value.toUpperCase();",
+                                         pattern = "^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$",
+                                         title = "Chassis number must contain both letters and numbers (A-Z, 0-9)"
+                                     })
+                            @Html.ValidationMessageFor(m => m.Purchase.ChassisNo, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Engine No -->
+                        <div class="col-md-3">
+                            <label for="EngineNo">Engine No *</label>
+                            @Html.TextBoxFor(m => m.Purchase.EngineNo,
+                                     new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = "Enter Engine No",
+                                         maxlength = "30",
+                                         minlength = "5",
+                                         style = "text-transform:uppercase",
+                                         oninput = "this.value = this.value.toUpperCase();",
+                                         pattern = "^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$",
+                                         title = "Engine number must contain both letters and numbers (A-Z, 0-9)"
+                                     })
+                            @Html.ValidationMessageFor(m => m.Purchase.EngineNo, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="BankName">Bank Name</label>
+                            @Html.DropDownListFor(m => m.Purchase.FinancedBy,
+                                     ViewBag.BankList as List<SelectListItem>,
+                                     "-- Select Bank --",
+                                     new { @class = "form-control select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(m => m.Purchase.FinancedBy, "", new { @class = "text-danger" })
+                        </div>
+                        <!-- Cash -->
+                        <div class="col-md-3">
+                            <label for="CashAmount">Cash Amount *</label>
+                            @Html.TextBoxFor(m => m.Purchase.CashAmount, new { @class = "form-control", placeholder = "Enter Amount" })
+                            @Html.ValidationMessageFor(m => m.Purchase.CashAmount, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Insurance -->
+                        <div class="col-md-3">
+                            <label>Insurance *</label><br />
+                            <div class="icheck-primary d-inline">
+                                @Html.RadioButtonFor(m => m.Purchase.InsuranceValid, true, new { id = "insValid" })
+                                <label for="insValid">Valid</label>
+                            </div>
+                            <div class="icheck-danger d-inline ms-3">
+                                @Html.RadioButtonFor(m => m.Purchase.InsuranceValid, false, new { id = "insNotValid" })
+                                <label for="insNotValid">Not Valid</label>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Purchase.InsuranceValid, "", new { @class = "text-danger" })
+                        </div>
+                        <!-- NOC -->
+                        <div class="col-md-3">
+                            <label>NOC *</label><br />
+                            <div class="icheck-primary d-inline">
+                                @Html.RadioButtonFor(m => m.Purchase.NocValid, true, new { id = "nocValid" })
+                                <label for="nocValid">Valid</label>
+                            </div>
+                            <div class="icheck-danger d-inline ms-3">
+                                @Html.RadioButtonFor(m => m.Purchase.NocValid, false, new { id = "nocNotValid" })
+                                <label for="nocNotValid">Not Valid</label>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Purchase.NocValid, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Bank Name -->
+                        <!-- Notes -->
+                        <div class="form-group col-md-12">
+                            <label for="Notes">Notes</label>
+                            @Html.TextAreaFor(m => m.Purchase.Notes, new { @class = "form-control", rows = 2, placeholder = "Any notes" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer text-right">
+                    <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("#dateOfSale", {
+            dateFormat: "Y-m-d",
+            minDate: "today",   // ⚡ Past block ho gaya
+            allowInput: false
+        });
+
+    });
+</script>
+<script>
+
+
+    $('#BikeDropdown').change(function () {
+        var bikeId = $(this).val();
+        if (bikeId) {
+            $.ajax({
+                url: '/Admin/GetModelsByBike',
+                type: 'GET',
+                data: { bikeId: bikeId },
+                success: function (data) {
+                    var modelDropdown = $('#ModelDropdown');
+                    modelDropdown.empty();
+                    modelDropdown.append($('<option>').val('').text('-- Select Model --'));
+                       $.each(data, function (i, model) {
+        modelDropdown.append($('<option>').val(model.value).text(model.text));
+    });
+                }
+            });
+        } else {
+            $('#ModelDropdown').empty().append($('<option>').val('').text('-- Select Model --'));
+        }
+    });
+
+</script> 

@@ -1,0 +1,128 @@
+﻿@model _2whealers.Models.Receipts
+@{
+    ViewBag.Title = "Add Receipt";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Add Receipts </li>
+</ol>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-primary">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">Receipts</h3>
+                <a href="@Url.Action("Receipts","Admin")" class="btn btn-danger ml-auto">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            @using (Html.BeginForm("AddReceipts", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card-body row g-3">
+
+                    <div class="col-md-4">
+                        <label>Customer Name <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control", placeholder = "Enter Name" })
+                        @Html.ValidationMessageFor(m => m.CustomerName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Mobile No <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", maxlength = "10", placeholder = "Enter Mobile Number", oninput = "this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" })
+                        @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Brands <span class="required-star">*</span>
+                        </label>
+                        @Html.DropDownListFor(m => m.BrandsId, new SelectList(ViewBag.BrandsList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BrandsDropdown" })
+                        @Html.ValidationMessageFor(m => m.BrandsId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Model <span class="required-star">*</span>
+                        </label>
+                        @Html.DropDownListFor(m => m.ModelId, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Select Model --", new { @class = "form-control", id = "ModelDropdown" })
+                        @Html.ValidationMessageFor(m => m.ModelId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Amount <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", type = "number", min = "1", step = "0.01" })
+                        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label for="ReceiptDate">Date <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.ReceiptDate, new { @class = "form-control", @id = "receiptDate", @autocomplete = "off", placeholder = "Select date" })
+                        @Html.ValidationMessageFor(m => m.ReceiptDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Payment Mode <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.PaymentMode,
+                                 new List<SelectListItem> {
+                    new SelectListItem{ Text="Cash", Value="Cash"},
+                    new SelectListItem{ Text="Card", Value="Card"},
+                    new SelectListItem{ Text="UPI", Value="UPI"},
+                    new SelectListItem{ Text="Cheque", Value="Cheque"}
+                    },
+                                 "-- Select Mode --",
+                                 new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.PaymentMode, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("#receiptDate", {
+                dateFormat: "d-m-Y",
+                allowInput: false
+            });
+        });
+
+          $('#BrandsDropdown').change(function () {
+                var bikeId = $(this).val();
+                if (bikeId) {
+                    $.ajax({
+                        url: '/Admin/GetModelsByBike',
+                        type: 'GET',
+                        data: { bikeId: bikeId },
+                        success: function (data) {
+                            var modelDropdown = $('#ModelDropdown');
+                            modelDropdown.empty();
+                                modelDropdown.append($('<option>').val('').text('-- Select Model --'));
+                           $.each(data, function (i, model) {
+            modelDropdown.append($('<option>').val(model.value).text(model.text));
+        });
+                        }
+                    });
+                } else {
+                    $('#ModelDropdown').empty().append($('<option>').val('').text('-- Select Model--'));
+                }
+            });
+    </script>
+}
