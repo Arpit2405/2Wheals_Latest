@@ -9,43 +9,53 @@
 </div>
 
 <h3 class="text-center mb-4">Login</h3>
- 
-    @Html.AntiForgeryToken()
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-user"></i></span>
-        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Enter username" })
-    </div>
-    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
 
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
-        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-            <i class="fas fa-eye"></i>
-        </button>
-    </div>
-    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+@Html.AntiForgeryToken()
+<div class="input-group mb-3">
+    <span class="input-group-text"><i class="fas fa-user"></i></span>
+    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Enter username" })
+</div>
+@Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
 
-    <div class="d-flex align-items-center justify-content-between mb-3">
-        <span class="captcha-box" id="captchaText">AB12CD</span>
-        <button type="button" id="reloadCaptcha" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-sync-alt"></i> Refresh
-        </button>
-    </div>
+<div class="input-group mb-3">
+    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
+    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+        <i class="fas fa-eye"></i>
+    </button>
+</div>
+@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
-        @Html.TextBoxFor(m => m.CaptchaCode, new { @class = "form-control", placeholder = "Enter captcha" })
-        @Html.HiddenFor(m => m.HiddenCaptcha)
-    </div>
-    @Html.ValidationMessageFor(m => m.CaptchaCode, "", new { @class = "text-danger" })
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <span class="captcha-box" id="captchaText">AB12CD</span>
+    <button type="button" id="reloadCaptcha" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+</div>
+
+<div class="input-group mb-3">
+    <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
+    @Html.TextBoxFor(m => m.CaptchaCode, new { @class = "form-control", placeholder = "Enter captcha" })
+    @Html.HiddenFor(m => m.HiddenCaptcha)
+</div>
+@Html.ValidationMessageFor(m => m.CaptchaCode, "", new { @class = "text-danger" })
 
 
-    <button type="button" class="btn btn-primary w-100" id="btnLogin">Login</button> 
+<button id="btnLogin" type="submit" class="btn btn-primary w-100">
+    <span class="spinner-border spinner-border-sm d-none" id="loginSpinner"></span>
+    <span id="btnLoginText">Login</span>
+</button>
 @section Scripts {
 
 
     <script>
+
+          $("#UserName, #Password, #CaptchaCode").on("keypress", function (e) {
+            if (e.which === 13) {
+                $("#btnLogin").click();
+            }
+        });
+
         function generateCaptcha() {
             var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
             var captcha = "";
@@ -84,6 +94,11 @@
             $("#btnLogin").on("click", function (e) {
             e.preventDefault();
 
+            var $btn = $(this);
+             $btn.prop("disabled", true);
+            $("#btnLoginText").text("Please wait...");
+            $("#loginSpinner").removeClass("d-none");
+
            var data = {
             __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(), // antiforgery
             UserName: $("#UserName").val(),
@@ -103,10 +118,16 @@
                         window.location.href = res.redirectUrl;
                     } else {
                         toastr.error(res.message);
+                         $btn.prop("disabled", false);
+                        $("#btnLoginText").text("Login");
+                        $("#loginSpinner").addClass("d-none");
                     }
                 },
                 error: function () {
                     toastr.error("Something went wrong, please try again.");
+                     $btn.prop("disabled", false);
+                    $("#btnLoginText").text("Login");
+                    $("#loginSpinner").addClass("d-none");
                 }
             });
         });

@@ -47,9 +47,12 @@
             <tr>
                 <th>Registration Number</th>
                 <td>
-                    <small class="text-muted d-block mb-1">
-                        Registration Number can be edited only once if it is "A/F".
-                    </small>
+                    @if (Model.RegNo == "A/F")
+                    {
+                        <small class="text-muted d-block mb-1">
+                            Registration Number can be edited only once if it is "A/F".
+                        </small>
+                    }
 
                     <div id="regno-view">
                         <span id="regno-text">@Model.RegNo</span>
@@ -92,7 +95,7 @@
             </tr>
             <tr>
                 <th>Finance Details</th>
-                <td>Financed By:-@Model.FinancedBy ,Downpayment: @Model.Downpayment,Monthly EMI:@Model.CashAmount,Installments: @Model.NoOfInstallments  </td>
+                <td>Financed By:- @Model.FinancedBy <br /> Downpayment:- @Model.Downpayment<br /> Monthly EMI:@Model.CashAmount<br /> Installments: @Model.NoOfInstallments  </td>
             </tr>
             <tr>
                 <th>Service Reminder Date</th>
@@ -141,8 +144,26 @@
                 var newRegNo = $("#regno-input").val();
                 var id = @Model.Id;
 
+                       if (newRegNo === "") {
+                        toastr.error("Registration Number is required");
+                        return;
+                        }
+
+                    if (newRegNo.length > 20) {
+                        toastr.error("Registration No cannot exceed 20 characters.");
+                        return;
+                    }
+
+
+                    var regExp = /^[A-Za-z]{2}[0-9]{1,2}[A-Za-z]{1,3}[0-9]{1,4}$/;
+                    if (!regExp.test(newRegNo)) {
+                        toastr.error("Enter valid Registration No (e.g. MH12AB1234 or DL2CAE3422)");
+                        return;
+                    }
+
+
                 $.ajax({
-                    url: '@Url.Action("UpdateRegNo", "YourController")',
+                    url: '@Url.Action("UpdateRegNo", "Admin")',
                     type: 'POST',
                     data: { id: id, regNo: newRegNo },
                     success: function (res) {
@@ -151,7 +172,7 @@
                             $("#regno-text").text(res.regNo);
                             $("#regno-edit").hide();
                             $("#regno-view").show();
-                            $("#edit-regno").remove(); // edit option hata do (sirf 1st time allowed)
+                            $("#edit-regno").remove();
                         } else {
                             toastr.error(res.message || "Error updating record");
                         }

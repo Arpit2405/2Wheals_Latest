@@ -29,8 +29,8 @@
                         <thead style="background: linear-gradient(90deg, #6c63ff, #4facfe); color: #fff;">
                             <tr>
                                 <th style="width:60px;" class="text-center">SNo.</th>
-                                <th>Owner</th>
-                                <th>vehicle</th>
+                                <th>Owner Details</th>
+                                <th>Model Name</th>
                                 <th>Date of Sale</th>
                                 <th>Down Payment</th>
                                 <th>EMI Amount</th>
@@ -57,23 +57,15 @@
                                         <td class="text-center">@item.Downpayment</td>
                                         <td class="text-center">@item.CashAmount</td>
                                         <td class="text-center">@Convert.ToDateTime(@item.DateOfSaleReminder).ToString("dd-MM-yyyy")</td>
-
                                         <td class="text-center">
-                                            <a href="@Url.Action("SaleDetails", "Admin", new { id = item.Id })" class="btn btn-sm btn-primary">    <i class="fas fa-eye"></i></a>
+                                            <a href="@Url.Action("SaleDetails", "Admin", new { id = item.Id })" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     rowNumber++;
                                 }
                             }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="8" class="text-center text-muted py-4">
-                                        🚫 No Records found
-                                    </td>
-                                </tr>
-                            }
-
                         </tbody>
                     </table>
 

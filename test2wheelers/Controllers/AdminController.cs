@@ -486,7 +486,7 @@ namespace test2wheelers.Controllers
 
             TempData["Success"] = "Pre-sale added successfully!";
             return RedirectToAction("PreSales");
-        }  
+        }
 
 
         public ActionResult PreSaleDetails(int id)
@@ -595,7 +595,7 @@ namespace test2wheelers.Controllers
         new SqlParameter("@RegNo", model.RegNo ),
         new SqlParameter("@VehicleDetails", model.VehicleDetails ),
         new SqlParameter("@IsRegularService", model.IsRegularService),
-        new SqlParameter("@ServicingReminderDate", model.dateofsale) 
+        new SqlParameter("@ServicingReminderDate", model.dateofsale)
     };
 
             _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Sales", parameters);
@@ -636,19 +636,50 @@ namespace test2wheelers.Controllers
                 model.CashAmount = Convert.ToDecimal(row["EMIAmount"]);
                 model.VehicleDetails = row["VehicleDetails"].ToString();
                 model.Notes = row["Notes"].ToString();
+                model.Downpayment = Convert.ToDecimal(row["Downpayment"].ToString());
                 model.DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"]);
             }
 
             return model;
         }
 
-
         public ActionResult SaleDetails(int id)
         {
             var model = GetSaleById(id);
             return View("SaleDetails", model);
         }
+        [HttpPost]
+        public JsonResult UpdateRegNo(int id, string regNo)
+        {
+            if (string.IsNullOrWhiteSpace(regNo))
+                return Json(new { success = false, message = "Registration Number is required" });
 
+            if (regNo.Length > 20)
+                return Json(new { success = false, message = "Registration No cannot exceed 20 characters" });
+
+            var regex = new System.Text.RegularExpressions.Regex(@"^[A-Za-z]{2}[0-9]{1,2}[A-Za-z]{1,3}[0-9]{1,4}$");
+            if (!regex.IsMatch(regNo))
+                return Json(new { success = false, message = "Enter valid Registration No (e.g. MH12AB1234 or DL2CAE3422)" });
+
+            try
+            {
+                SqlParameter[] parameters = {
+            new SqlParameter("@calltype", "UpdateRegId"),
+            new SqlParameter("@id", id),
+            new SqlParameter("@RegNo", regNo)
+        };
+
+                var dt = _sqlHelper.ExecuteStoredProcedure("sp_Sales", parameters);
+
+                return Json(new { success = true, regNo = regNo, message = "Registration Number updated successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error: " + ex.Message });
+            }
+
+            return Json(new { success = false, message = "Something went wrong" });
+        } 
 
 
 
@@ -674,6 +705,7 @@ namespace test2wheelers.Controllers
 
             return View(receiptList);
         }
+
         public ActionResult AddReceipts()
         {
             ViewBag.BrandsList = GetBrands();
