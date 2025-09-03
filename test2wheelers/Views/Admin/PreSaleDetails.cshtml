@@ -1,4 +1,4 @@
-﻿@model _2whealers.Models.UserTransactionViewModel
+﻿@model _2whealers.Models.PurchaseViewModel
 @{
     ViewBag.Title = "PreSaleDetails";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
@@ -21,35 +21,35 @@
         <tbody>
             <tr>
                 <th>Order ID</th>
-                <td>#@Model.Purchase.Id</td>
+                <td>#@Model.Id</td>
                 <th>Order Date</th>
-                <td>@(Model.Purchase.dateofsale != null ? Model.Purchase.dateofsale.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                <td>@(Model.dateofsale != null ? Model.dateofsale.Value.ToString("dd-MMM-yyyy") : "-")</td>
             </tr>
             <tr>
                 <th>Customer Name</th>
-                <td>@Model.Purchase.Name</td>
+                <td>@Model.Name</td>
                 <th>Phone</th>
-                <td><a href="tel:@Model.Purchase.MobileNo">@Model.Purchase.MobileNo</a></td>
+                <td><a href="tel:@Model.MobileNo">@Model.MobileNo</a></td>
             </tr>
             <tr>
                 <th>Address</th>
-                <td colspan="3">@Model.Purchase.Address1</td>
+                <td colspan="3">@Model.Address1</td>
             </tr>
             <tr>
                 <th>Vehicle Name</th>
-                <td>@Model.Purchase.ModelName</td>
+                <td>@Model.ModelName</td>
                 <th>Vehicle No</th>
-                <td>@Model.Purchase.RegNo</td>
+                <td>@Model.RegNo</td>
             </tr>
             <tr>
                 <th>Chassis No</th>
-                <td>@Model.Purchase.ChassisNo</td>
+                <td>@Model.ChassisNo</td>
                 <th>Engine No</th>
-                <td>@Model.Purchase.EngineNo</td>
+                <td>@Model.EngineNo</td>
             </tr>
             <tr>
                 <th>Cash Amount</th>
-                <td colspan="3" class="fw-bold text-success">Rs. @Model.Purchase.CashAmount.ToString("N0") /-</td>
+                <td colspan="3" class="fw-bold text-success">Rs. @Model.CashAmount.ToString("N0") /-</td>
             </tr>
         </tbody>
     </table>
@@ -57,7 +57,7 @@
     <div class="disclaimer">
         <h6 class="fw-bold text-danger">Disclaimer</h6>
         <p>
-            I hereby <strong>@Model.Purchase.Name</strong> confirm that all the details regarding my two-wheeler are true and mine.
+            I hereby <strong>@Model.Name</strong> confirm that all the details regarding my two-wheeler are true and mine.
             If any details are hidden like any previous unpaid challan or record, I am responsible for transfer of the vehicle/authority.
             If my signature is different at the time of transfer, it is my responsibility to clear the issue regarding the vehicle.
             In any case of mis-happening, <strong>Bike Nation</strong> is not responsible for the authority.

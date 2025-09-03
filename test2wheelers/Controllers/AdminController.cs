@@ -427,28 +427,24 @@ namespace test2wheelers.Controllers
 
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Users", parameters);
 
-            var userTransactionList = dt.AsEnumerable().Select(row => new UserTransactionViewModel
+            var userTransactionList = dt.AsEnumerable().Select(row => new PurchaseViewModel
             {
-                Purchase = new PurchaseViewModel
-                {
-                    Name = row["Name"].ToString(),
-                    MobileNo = row["Mobile"].ToString(),
-                    Id = Convert.ToInt32(row["transactionid"]),
-                    ModelName = row["ModelName"].ToString(),
-                    CashAmount = Convert.ToDecimal(row["CashAmount"]),
-                    IsActive = Convert.ToBoolean(row["IsActive"])
-                }
-            }).OrderByDescending(x => x.Purchase.Id).ToList();
+
+                Name = row["Name"].ToString(),
+                MobileNo = row["Mobile"].ToString(),
+                Id = Convert.ToInt32(row["transactionid"]),
+                ModelName = row["ModelName"].ToString(),
+                CashAmount = Convert.ToDecimal(row["CashAmount"]),
+                IsActive = Convert.ToBoolean(row["IsActive"])
+
+            }).OrderByDescending(x => x.Id).ToList();
 
             return View(userTransactionList);
         }
 
         public ActionResult AddPreSale()
         {
-            var model = new UserTransactionViewModel
-            {
-                Purchase = new PurchaseViewModel()
-            };
+            var model = new PurchaseViewModel();
 
             ViewBag.BankList = GetBankList();
             ViewBag.BikeList = GetBrands();
@@ -458,43 +454,39 @@ namespace test2wheelers.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddPreSale(UserTransactionViewModel model)
+        public ActionResult AddPreSale(PurchaseViewModel model)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                SqlParameter[] parameters = {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                .Select(e => e.ErrorMessage)
+                                .ToList();
+
+                TempData["Errors"] = errors;
+                return View("PreSales", model);
+            }
+            SqlParameter[] parameters = {
             new SqlParameter("@calltype", "InsertPreSales"),
-            new SqlParameter("@userName", model.Purchase.Name ),
-            new SqlParameter("@MobileNo", model.Purchase.MobileNo ),
-            new SqlParameter("@Address", model.Purchase.Address1 ),
-            new SqlParameter("@ModelId", model.Purchase.ModelId),
-            new SqlParameter("@BikeId", model.Purchase.BikeId),
-            new SqlParameter("@VehicleNo", (model.Purchase.RegNo ?? "").ToUpper()),
-            new SqlParameter("@DateOfSale", model.Purchase.dateofsale ),
-            new SqlParameter("@ChassisNo", model.Purchase.ChassisNo ),
-            new SqlParameter("@EngineNo", model.Purchase.EngineNo ),
-            new SqlParameter("@CashAmount", Convert.ToDecimal(model.Purchase.CashAmount)),
-            new SqlParameter("@InsuranceValid", model.Purchase.InsuranceValid ),
-            new SqlParameter("@BankName", model.Purchase.FinancedBy ),
-            new SqlParameter("@NocValid", model.Purchase.NocValid ),
+            new SqlParameter("@userName", model.Name ),
+            new SqlParameter("@MobileNo", model.MobileNo ),
+            new SqlParameter("@Address", model.Address1 ),
+            new SqlParameter("@ModelId", model.ModelId),
+            new SqlParameter("@BikeId", model.BikeId),
+            new SqlParameter("@VehicleNo", (model.RegNo).ToUpper()),
+            new SqlParameter("@DateOfSale", model.dateofsale ),
+            new SqlParameter("@ChassisNo", model.ChassisNo ),
+            new SqlParameter("@EngineNo", model.EngineNo ),
+            new SqlParameter("@CashAmount", Convert.ToDecimal(model.CashAmount)),
+            new SqlParameter("@InsuranceValid", model.InsuranceValid ),
+            new SqlParameter("@BankName", model.FinancedBy ),
+            new SqlParameter("@NocValid", model.NocValid ),
         };
 
-                _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
+            _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
 
-                TempData["Success"] = "Pre-sale added successfully!";
-                return RedirectToAction("PreSales");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Failed to add Pre-sale. Error: " + ex.Message;
-
-                ViewBag.BikeList = GetBrands();
-                ViewBag.ModelList = GetBikeModels();
-                ViewBag.BankList = GetBankList();
-
-                return View(model);
-            }
-        }
+            TempData["Success"] = "Pre-sale added successfully!";
+            return RedirectToAction("PreSales");
+        }  
 
 
         public ActionResult PreSaleDetails(int id)
@@ -506,22 +498,22 @@ namespace test2wheelers.Controllers
 
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Users", parameters);
 
-            var model = new UserTransactionViewModel { Purchase = new PurchaseViewModel() };
+            var model = new PurchaseViewModel();
 
             if (dt.Rows.Count > 0)
             {
                 var row = dt.Rows[0];
-                model.Purchase.Id = Convert.ToInt32(row["TransactionId"]);
-                model.Purchase.Name = row["Name"].ToString();
-                model.Purchase.MobileNo = row["Mobile"].ToString();
-                model.Purchase.Address1 = row["Address1"].ToString();
-                model.Purchase.dateofsale = Convert.ToDateTime(row["DateOfSale"]);
-                model.Purchase.RegNo = row["RegNo"].ToString();
-                model.Purchase.ChassisNo = row["ChassisNo"].ToString();
-                model.Purchase.EngineNo = row["EngineNo"].ToString();
-                model.Purchase.CashAmount = Convert.ToDecimal(row["CashAmount"]);
-                model.Purchase.ModelName = row["ModelName"].ToString();
-                model.Purchase.FinancedBy = row["BankName"].ToString();
+                model.Id = Convert.ToInt32(row["TransactionId"]);
+                model.Name = row["Name"].ToString();
+                model.MobileNo = row["Mobile"].ToString();
+                model.Address1 = row["Address1"].ToString();
+                model.dateofsale = Convert.ToDateTime(row["DateOfSale"]);
+                model.RegNo = row["vehicleno"].ToString();
+                model.ChassisNo = row["ChassisNo"].ToString();
+                model.EngineNo = row["EngineNo"].ToString();
+                model.CashAmount = Convert.ToDecimal(row["CashAmount"]);
+                model.ModelName = row["ModelName"].ToString();
+                model.FinancedBy = row["BankName"].ToString();
             }
 
             return View("PreSaleDetails", model);
@@ -536,19 +528,16 @@ namespace test2wheelers.Controllers
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Sales", parameters);
 
             var salesList = dt.AsEnumerable()
-                .Select(row => new UserTransactionViewModel
+                .Select(row => new TransactionViewModel
                 {
-                    Transaction = new TransactionViewModel
-                    {
-                        Name = row["Name"].ToString(),
-                        MobileNo = row["Mobile"].ToString(),
-                        Id = Convert.ToInt32(row["TransactionId"]),
-                        ModelName = row["ModelName"].ToString(),
-                        dateofsale = Convert.ToDateTime(row["DateOfSale"]),
-                        Downpayment = Convert.ToDecimal(row["DownPayment"]),
-                        CashAmount = Convert.ToDecimal(row["EMIAmount"]),
-                        DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"])
-                    }
+                    Name = row["Name"].ToString(),
+                    MobileNo = row["Mobile"].ToString(),
+                    Id = Convert.ToInt32(row["TransactionId"]),
+                    ModelName = row["ModelName"].ToString(),
+                    dateofsale = Convert.ToDateTime(row["DateOfSale"]),
+                    Downpayment = Convert.ToDecimal(row["DownPayment"]),
+                    CashAmount = Convert.ToDecimal(row["EMIAmount"]),
+                    DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"])
                 }).ToList();
 
             return View(salesList);
@@ -557,11 +546,7 @@ namespace test2wheelers.Controllers
 
         public ActionResult AddSales()
         {
-            var model = new UserTransactionViewModel
-            {
-                Transaction = new TransactionViewModel()
-            };
-
+            var model = new TransactionViewModel();
             ViewBag.BankList = GetBankList();
             ViewBag.BikeList = GetBrands();
             return View(model);
@@ -569,64 +554,60 @@ namespace test2wheelers.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddSales(UserTransactionViewModel model)
+        public ActionResult AddSales(TransactionViewModel model)
         {
-            try
+            if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                .Select(e => e.ErrorMessage)
+                                .ToList();
 
-                SqlParameter[] parameters = {
+                TempData["Errors"] = errors;
+                return View("Sales", model);
+            }
+
+            SqlParameter[] parameters = {
         new SqlParameter("@calltype", "InsertSales"),
-        new SqlParameter("@Name", model.Transaction.Name),
-        new SqlParameter("@MobileNo", model.Transaction.MobileNo),
-        new SqlParameter("@Address1", model.Transaction.Address1 ),
-        new SqlParameter("@Address2", model.Transaction.Address2 ),
-        new SqlParameter("@DateOfBirth", model.Transaction.DateOfBirth),
-        new SqlParameter("@Email", model.Transaction.Email ),
-        new SqlParameter("@Location", model.Transaction.Location ),
-        new SqlParameter("@Pincode", model.Transaction.Pincode ),
-        new SqlParameter("@State", model.Transaction.State ),
-        new SqlParameter("@City", model.Transaction.City ),
-        new SqlParameter("@BikeId", model.Transaction.BikeId),
-        new SqlParameter("@ChassisNo", model.Transaction.ChassisNo ),
-        new SqlParameter("@DRM", model.Transaction.DRM),
-        new SqlParameter("@DateOfSale", model.Transaction.dateofsale),
-        new SqlParameter("@DownPayment", model.Transaction.Downpayment),
-        new SqlParameter("@EMIAmount", model.Transaction.CashAmount),
-        new SqlParameter("@EngineNo", model.Transaction.EngineNo ),
-        new SqlParameter("@FinancedBy", model.Transaction.FinancedBy ),
-        new SqlParameter("@InsuranceDueDate", model.Transaction.InsuranceDuDate),
-        new SqlParameter("@MR", model.Transaction.MeterReading),
-        new SqlParameter("@ManufacturingYear", model.Transaction.ManufacturingYear ),
-        new SqlParameter("@ModelId", model.Transaction.ModelId),
-        new SqlParameter("@NoOfInstallments", model.Transaction.NoOfInstallments),
-        new SqlParameter("@Notes", model.Transaction.Notes ),
-        new SqlParameter("@RegNo", model.Transaction.RegNo ),
-        new SqlParameter("@VehicleDetails", model.Transaction.VehicleDetails ),
-        new SqlParameter("@IsRegularService", model.Transaction.IsRegularService),
-        new SqlParameter("@ServicingReminderDate", model.Transaction.dateofsale) // 🚨 careful: you had ServicingReminderDate = dateofsale
+        new SqlParameter("@Name", model.Name),
+        new SqlParameter("@MobileNo", model.MobileNo),
+        new SqlParameter("@Address1", model.Address1 ),
+        new SqlParameter("@Address2", model.Address2 ),
+        new SqlParameter("@DateOfBirth", model.DateOfBirth),
+        new SqlParameter("@Email", model.Email ),
+        new SqlParameter("@Location", model.Location ),
+        new SqlParameter("@Pincode", model.Pincode ),
+        new SqlParameter("@State", model.State ),
+        new SqlParameter("@City", model.City ),
+        new SqlParameter("@BikeId", model.BikeId),
+        new SqlParameter("@ChassisNo", model.ChassisNo ),
+        new SqlParameter("@DRM", model.DRM),
+        new SqlParameter("@DateOfSale", model.dateofsale),
+        new SqlParameter("@DownPayment", model.Downpayment),
+        new SqlParameter("@EMIAmount", model.CashAmount),
+        new SqlParameter("@EngineNo", model.EngineNo ),
+        new SqlParameter("@FinancedBy", model.FinancedBy ),
+        new SqlParameter("@InsuranceDueDate", model.InsuranceDuDate),
+        new SqlParameter("@MR", model.MeterReading),
+        new SqlParameter("@ManufacturingYear", model.ManufacturingYear ),
+        new SqlParameter("@ModelId", model.ModelId),
+        new SqlParameter("@NoOfInstallments", model.NoOfInstallments),
+        new SqlParameter("@Notes", model.Notes ),
+        new SqlParameter("@RegNo", model.RegNo ),
+        new SqlParameter("@VehicleDetails", model.VehicleDetails ),
+        new SqlParameter("@IsRegularService", model.IsRegularService),
+        new SqlParameter("@ServicingReminderDate", model.dateofsale) 
     };
 
-                _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Sales", parameters);
+            _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Sales", parameters);
 
-                TempData["Success"] = "Sales added successfully!";
-                return RedirectToAction("Sales");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Failed to add Pre-sale. Error: " + ex.Message;
+            TempData["Success"] = "Sales added successfully!";
+            return RedirectToAction("Sales");
 
-                ViewBag.BikeList = GetBrands();
-                ViewBag.ModelList = GetBikeModels();
-                ViewBag.BankList = GetBankList();
-                 
-
-                return View(model);
-            }
         }
 
 
 
-        private UserTransactionViewModel GetSaleById(int id)
+        private TransactionViewModel GetSaleById(int id)
         {
             SqlParameter[] parameters = {
         new SqlParameter("@calltype", "GetSaleById"),
@@ -635,27 +616,27 @@ namespace test2wheelers.Controllers
 
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Sales", parameters);
 
-            var model = new UserTransactionViewModel { Transaction = new TransactionViewModel() };
+            var model = new TransactionViewModel();
 
             if (dt.Rows.Count > 0)
             {
                 var row = dt.Rows[0];
-                model.Transaction.Id = Convert.ToInt32(row["TransactionId"]);
-                model.Transaction.Name = row["Name"].ToString();
-                model.Transaction.MobileNo = row["Mobile"].ToString();
-                model.Transaction.ModelName = row["ModelName"].ToString();
-                model.Transaction.Address1 = row["Address1"].ToString();
-                model.Transaction.dateofsale = Convert.ToDateTime(row["DateOfSale"]);
-                model.Transaction.RegNo = row["RegNo"].ToString();
-                model.Transaction.ChassisNo = row["ChassisNo"].ToString();
-                model.Transaction.EngineNo = row["EngineNo"].ToString();
-                model.Transaction.DRM = Convert.ToInt32(row["DRM"]);
-                model.Transaction.FinancedBy = row["FinancedBy"].ToString();
-                model.Transaction.NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]);
-                model.Transaction.CashAmount = Convert.ToDecimal(row["EMIAmount"]);
-                model.Transaction.VehicleDetails = row["VehicleDetails"].ToString();
-                model.Transaction.Notes = row["Notes"].ToString();
-                model.Transaction.DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"]);
+                model.Id = Convert.ToInt32(row["TransactionId"]);
+                model.Name = row["Name"].ToString();
+                model.MobileNo = row["Mobile"].ToString();
+                model.ModelName = row["ModelName"].ToString();
+                model.Address1 = row["Address1"].ToString();
+                model.dateofsale = Convert.ToDateTime(row["DateOfSale"]);
+                model.RegNo = row["RegNo"].ToString();
+                model.ChassisNo = row["ChassisNo"].ToString();
+                model.EngineNo = row["EngineNo"].ToString();
+                model.DRM = Convert.ToInt32(row["DRM"]);
+                model.FinancedBy = row["FinancedBy"].ToString();
+                model.NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]);
+                model.CashAmount = Convert.ToDecimal(row["EMIAmount"]);
+                model.VehicleDetails = row["VehicleDetails"].ToString();
+                model.Notes = row["Notes"].ToString();
+                model.DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"]);
             }
 
             return model;

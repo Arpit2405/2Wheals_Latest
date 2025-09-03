@@ -1,4 +1,4 @@
-﻿@model _2whealers.Models.UserTransactionViewModel
+﻿@model _2whealers.Models.PurchaseViewModel
 @{
     ViewBag.Title = "Add Pre-Sale";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
@@ -36,21 +36,21 @@
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label for="BikeDropdown">Select Bike *</label>
-                            @Html.DropDownListFor(m => m.Purchase.BikeId,
+                            @Html.DropDownListFor(m => m.BikeId,
                                      new SelectList(ViewBag.BikeList, "Value", "Text"),
                                      "-- Select --",
                                      new { @class = "form-control select2", id = "BikeDropdown", style = "width:100%;" })
-                            @Html.ValidationMessageFor(m => m.Purchase.BikeId, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.BikeId, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Model -->
                         <div class="col-md-3">
                             <label for="ModelDropdown">Select Model *</label>
-                            @Html.DropDownListFor(m => m.Purchase.ModelId,
+                            @Html.DropDownListFor(m => m.ModelId,
                                      new SelectList(Enumerable.Empty<SelectListItem>()),
                                      "-- Select --",
                                      new { @class = "form-control select2", id = "ModelDropdown", style = "width:100%;" })
-                            @Html.ValidationMessageFor(m => m.Purchase.ModelId, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.ModelId, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-md-3">
@@ -60,7 +60,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
-                                @Html.TextBoxFor(m => m.Purchase.MobileNo, new
+                                @Html.TextBoxFor(m => m.MobileNo, new
                                     {
                                         @class = "form-control",
                                         placeholder = "Enter Mobile Number",
@@ -69,27 +69,27 @@
                                         type = "tel"
                                     })
                             </div>
-                            @Html.ValidationMessageFor(m => m.Purchase.MobileNo, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label">
                                 Registration Number <span class="required-star">*</span>
                             </label>
-                            @Html.TextBoxFor(m => m.Purchase.RegNo, new { @class = "form-control", placeholder = "e.g. MH12AB1234", maxlength = "20", style = "text-transform:uppercase" })
-                            @Html.ValidationMessageFor(m => m.Purchase.RegNo, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.RegNo, new { @class = "form-control", placeholder = "e.g. MH12AB1234", maxlength = "20", style = "text-transform:uppercase" })
+                            @Html.ValidationMessageFor(m => m.RegNo, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Seller Name -->
                         <div class="col-md-3">
                             <label for="SellerName">Seller Name *</label>
-                            @Html.TextBoxFor(m => m.Purchase.Name, new { @class = "form-control", placeholder = "Enter Seller Name" })
-                            @Html.ValidationMessageFor(m => m.Purchase.Name, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter Seller Name" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-3">
                             <label for="SellerName">Email Id *</label>
-                            @Html.TextBoxFor(m => m.Purchase.Email, new { @class = "form-control", type = "email" })
-                            @Html.ValidationMessageFor(m => m.Purchase.Email, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Date -->
@@ -97,8 +97,8 @@
                             <label class="form-label">
                                 Date Of Sale <span class="required-star">*</span>
                             </label>
-                            @Html.TextBoxFor(m => m.Purchase.dateofsale,   new { @class = "form-control", @id = "dateOfSale", autocomplete = "off" })
-                            @Html.ValidationMessageFor(m => m.Purchase.dateofsale, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.dateofsale,   new { @class = "form-control", @id = "dateOfSale", autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.dateofsale, "", new { @class = "text-danger" })
                         </div>
 
                          
@@ -106,13 +106,13 @@
                         <!-- Address -->
                         <div class="form-group col-md-12">
                             <label for="Address">Address *</label>
-                            @Html.TextAreaFor(m => m.Purchase.Address1, new { @class = "form-control", rows = 2, placeholder = "Enter Address" })
-                            @Html.ValidationMessageFor(m => m.Purchase.Address1, "", new { @class = "text-danger" })
+                            @Html.TextAreaFor(m => m.Address1, new { @class = "form-control", rows = 2, placeholder = "Enter Address" })
+                            @Html.ValidationMessageFor(m => m.Address1, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-md-3">
                             <label for="ChassisNo">Chassis No *</label>
-                            @Html.TextBoxFor(m => m.Purchase.ChassisNo,
+                            @Html.TextBoxFor(m => m.ChassisNo,
                                      new
                                      {
                                          @class = "form-control",
@@ -124,13 +124,13 @@
                                          pattern = "^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$",
                                          title = "Chassis number must contain both letters and numbers (A-Z, 0-9)"
                                      })
-                            @Html.ValidationMessageFor(m => m.Purchase.ChassisNo, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.ChassisNo, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Engine No -->
                         <div class="col-md-3">
                             <label for="EngineNo">Engine No *</label>
-                            @Html.TextBoxFor(m => m.Purchase.EngineNo,
+                            @Html.TextBoxFor(m => m.EngineNo,
                                      new
                                      {
                                          @class = "form-control",
@@ -142,56 +142,56 @@
                                          pattern = "^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$",
                                          title = "Engine number must contain both letters and numbers (A-Z, 0-9)"
                                      })
-                            @Html.ValidationMessageFor(m => m.Purchase.EngineNo, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.EngineNo, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-md-3">
                             <label for="BankName">Bank Name</label>
-                            @Html.DropDownListFor(m => m.Purchase.FinancedBy,
+                            @Html.DropDownListFor(m => m.FinancedBy,
                                      ViewBag.BankList as List<SelectListItem>,
                                      "-- Select Bank --",
                                      new { @class = "form-control select2", style = "width:100%;" })
-                            @Html.ValidationMessageFor(m => m.Purchase.FinancedBy, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.FinancedBy, "", new { @class = "text-danger" })
                         </div>
                         <!-- Cash -->
                         <div class="col-md-3">
                             <label for="CashAmount">Cash Amount *</label>
-                            @Html.TextBoxFor(m => m.Purchase.CashAmount, new { @class = "form-control", placeholder = "Enter Amount" })
-                            @Html.ValidationMessageFor(m => m.Purchase.CashAmount, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.CashAmount, new { @class = "form-control", placeholder = "Enter Amount" })
+                            @Html.ValidationMessageFor(m => m.CashAmount, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Insurance -->
                         <div class="col-md-3">
                             <label>Insurance *</label><br />
                             <div class="icheck-primary d-inline">
-                                @Html.RadioButtonFor(m => m.Purchase.InsuranceValid, true, new { id = "insValid" })
+                                @Html.RadioButtonFor(m => m.InsuranceValid, true, new { id = "insValid" })
                                 <label for="insValid">Valid</label>
                             </div>
                             <div class="icheck-danger d-inline ms-3">
-                                @Html.RadioButtonFor(m => m.Purchase.InsuranceValid, false, new { id = "insNotValid" })
+                                @Html.RadioButtonFor(m => m.InsuranceValid, false, new { id = "insNotValid" })
                                 <label for="insNotValid">Not Valid</label>
                             </div>
-                            @Html.ValidationMessageFor(m => m.Purchase.InsuranceValid, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.InsuranceValid, "", new { @class = "text-danger" })
                         </div>
                         <!-- NOC -->
                         <div class="col-md-3">
                             <label>NOC *</label><br />
                             <div class="icheck-primary d-inline">
-                                @Html.RadioButtonFor(m => m.Purchase.NocValid, true, new { id = "nocValid" })
+                                @Html.RadioButtonFor(m => m.NocValid, true, new { id = "nocValid" })
                                 <label for="nocValid">Valid</label>
                             </div>
                             <div class="icheck-danger d-inline ms-3">
-                                @Html.RadioButtonFor(m => m.Purchase.NocValid, false, new { id = "nocNotValid" })
+                                @Html.RadioButtonFor(m => m.NocValid, false, new { id = "nocNotValid" })
                                 <label for="nocNotValid">Not Valid</label>
                             </div>
-                            @Html.ValidationMessageFor(m => m.Purchase.NocValid, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.NocValid, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Bank Name -->
                         <!-- Notes -->
                         <div class="form-group col-md-12">
                             <label for="Notes">Notes</label>
-                            @Html.TextAreaFor(m => m.Purchase.Notes, new { @class = "form-control", rows = 2, placeholder = "Any notes" })
+                            @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 2, placeholder = "Any notes" })
                         </div>
                     </div>
                 </div>

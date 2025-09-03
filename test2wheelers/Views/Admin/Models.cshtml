@@ -71,7 +71,7 @@
                             }
                             @if (Model != null && Model.Any())
                             {
-                                foreach (var item in Model)
+                                foreach (var item in Model.OrderByDescending(x => x.Id))
                                 {
                                     <tr>
                                         <td class="text-center fw-bold">@row</td>

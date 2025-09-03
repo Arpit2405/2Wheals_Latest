@@ -1,4 +1,4 @@
-﻿@model _2whealers.Models.UserTransactionViewModel
+﻿@model _2whealers.Models.TransactionViewModel
 @{
     ViewBag.Title = "Add Sale";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
@@ -48,7 +48,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
-                                @Html.TextBoxFor(m => m.Transaction.MobileNo, new
+                                @Html.TextBoxFor(m => m.MobileNo, new
  {
      @class = "form-control",
      placeholder = "Enter Mobile Number",
@@ -57,7 +57,7 @@
   type = "tel"
  })
                             </div>
-                            @Html.ValidationMessageFor(m => m.Transaction.MobileNo, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
@@ -72,48 +72,45 @@
                                     <label class="form-label">
                                         Name <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.Name, new { @class = "form-control", placeholder = "Enter Name", maxlength = "50" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Name, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter Name", maxlength = "50" })
+                                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Email <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.Email, new { @class = "form-control", placeholder = "Enter Email", type = "email", maxlength = "50" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Email, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email", type = "email", maxlength = "50" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Date of Birth <span class="required-star">*</span>
                                     </label>
-                                    <div class="input-group">
-                                        <input type="text" id="dob" name="Transaction.DateOfBirth"
-                                               class="form-control" placeholder="Select DOB" autocomplete="off" />
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                    </div>
+                                    @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control", @id = "dob", placeholder = "Select DOB", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Address 1 <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.Address1, new { @class = "form-control", placeholder = "Enter Address 1" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Address1, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Address1, new { @class = "form-control", placeholder = "Enter Address 1" })
+                                    @Html.ValidationMessageFor(m => m.Address1, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">Address 2</label>
-                                    @Html.TextBoxFor(m => m.Transaction.Address2, new { @class = "form-control", placeholder = "Enter Address 2" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Address2, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Address2, new { @class = "form-control", placeholder = "Enter Address 2" })
+                                    @Html.ValidationMessageFor(m => m.Address2, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         State <span class="required-star">*</span>
                                     </label>
-                                    @Html.DropDownListFor(m => m.Transaction.State,
+                                    @Html.DropDownListFor(m => m.State,
                                         new List<SelectListItem> {
                                             new SelectListItem { Text = "-- Select State --", Value = "" },
                                             new SelectListItem { Text = "Delhi", Value = "Delhi" },
@@ -123,22 +120,22 @@
                                             new SelectListItem { Text = "Punjab", Value = "Punjab" }
                                         },
                                         new { @class = "form-control", id = "StateDropdown" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.State, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         City <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.City, new { @class = "form-control", placeholder = "Enter City" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.City, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "Enter City" })
+                                    @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Pincode <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.Pincode, new
+                                    @Html.TextBoxFor(m => m.Pincode, new
                                     {
                                         @class = "form-control",
                                         placeholder = "Enter Pincode",
@@ -146,15 +143,15 @@
                                         pattern = @"\d{6}",
                                         oninput = "this.value=this.value.replace(/[^0-9]/g,'')"
                                     })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Pincode, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.Pincode, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Location <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.Location, new { @class = "form-control", placeholder = "Enter Location" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Location, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Location, new { @class = "form-control", placeholder = "Enter Location" })
+                                    @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
@@ -172,21 +169,21 @@
                                     <label class="form-label">
                                         Bike <span class="required-star">*</span>
                                     </label>
-                                    @Html.DropDownListFor(m => m.Transaction.BikeId, new SelectList(ViewBag.BikeList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BikeDropdown" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.BikeId, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(m => m.BikeId, new SelectList(ViewBag.BikeList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BikeDropdown" })
+                                    @Html.ValidationMessageFor(m => m.BikeId, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Model <span class="required-star">*</span>
                                     </label>
-                                    @Html.DropDownListFor(m => m.Transaction.ModelId, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Select Model --", new { @class = "form-control", id = "ModelDropdown" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.ModelId, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(m => m.ModelId, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Select Model --", new { @class = "form-control", id = "ModelDropdown" })
+                                    @Html.ValidationMessageFor(m => m.ModelId, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Manufacturing Year <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.ManufacturingYear, new
+                                    @Html.TextBoxFor(m => m.ManufacturingYear, new
                                     {
                                         @class = "form-control",
                                         placeholder = "Enter Year (e.g. 2020)",
@@ -194,35 +191,35 @@
                                         pattern = @"\d{4}",
                                      oninput = "this.value=this.value.replace(/[^0-9]/g,'')"
                                     })
-                                    @Html.ValidationMessageFor(m => m.Transaction.ManufacturingYear, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.ManufacturingYear, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Registration Number <span class="required-star">*</span>
-                                    </label>
-                                    @Html.TextBoxFor(m => m.Transaction.RegNo, new { @class = "form-control", placeholder = "e.g. MH12AB1234", maxlength = "20", style = "text-transform:uppercase" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.RegNo, "", new { @class = "text-danger" })
+                                    </label> 
+                                    @Html.TextBox("RegNo", "A/F", new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.RegNo, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Engine No <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.EngineNo, new { @class = "form-control", placeholder = "Enter Engine No", maxlength = "20", style = "text-transform:uppercase;" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.EngineNo, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.EngineNo, new { @class = "form-control", placeholder = "Enter Engine No", maxlength = "20", style = "text-transform:uppercase;" })
+                                    @Html.ValidationMessageFor(m => m.EngineNo, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Chasis No <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.ChassisNo, new { @class = "form-control", placeholder = "Enter Chassis No", maxlength = "20", style = "text-transform:uppercase;" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.ChassisNo, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.ChassisNo, new { @class = "form-control", placeholder = "Enter Chassis No", maxlength = "20", style = "text-transform:uppercase;" })
+                                    @Html.ValidationMessageFor(m => m.ChassisNo, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Daily running mileage (K.M.) <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.DRM, new { @class = "form-control", type = "number", min = "1", max = "500", placeholder = "Enter KM" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.DRM, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.DRM, new { @class = "form-control", type = "number", min = "1", max = "500", placeholder = "Enter KM" })
+                                    @Html.ValidationMessageFor(m => m.DRM, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
@@ -237,38 +234,38 @@
                             <div class="row g-3">
                                 <div class="col-md-3">
                                     <label class="form-label">
-                                        Date Of Sale <span class="required-star">*</span>
+                                        Date Of Sale Reminder <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.DateOfSaleReminder, new { @class = "form-control", @id = "dateOfSaleReminder", autocomplete = "off" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.DateOfSaleReminder, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.DateOfSaleReminder, new { @class = "form-control", @id = "dateOfSaleReminder", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(m => m.DateOfSaleReminder, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Meter Reading (KM) <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.MeterReading, new { @class = "form-control", type = "number", min = "1", max = "999999", placeholder = "Enter Meter Reading" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.MeterReading, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.MeterReading, new { @class = "form-control", type = "number", min = "1", max = "999999", placeholder = "Enter Meter Reading" })
+                                    @Html.ValidationMessageFor(m => m.MeterReading, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
-                                        Date Of Service Reminder <span class="required-star">*</span>
+                                        Date Of Service <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.dateofsale, new { @class = "form-control", @id = "dateOfSale", autocomplete = "off" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.dateofsale, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.dateofsale, new { @class = "form-control", @id = "dateOfSale", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(m => m.dateofsale, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Insurance Due Date <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.InsuranceDuDate, new { @class = "form-control", @id = "insuranceDueDate", autocomplete = "off" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.InsuranceDuDate, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.InsuranceDuDate, new { @class = "form-control", @id = "insuranceDueDate", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(m => m.InsuranceDuDate, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">
                                         Vehicle Details <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextAreaFor(m => m.Transaction.VehicleDetails, new { @class = "form-control", rows = 2, maxlength = "100", placeholder = "Enter vehicle details (max 100 characters)" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.VehicleDetails, "", new { @class = "text-danger" })
+                                    @Html.TextAreaFor(m => m.VehicleDetails, new { @class = "form-control", rows = 2, maxlength = "100", placeholder = "Enter vehicle details (max 100 characters)" })
+                                    @Html.ValidationMessageFor(m => m.VehicleDetails, "", new { @class = "text-danger" })
                                 </div>
 
 
@@ -297,15 +294,15 @@
                                     <label class="form-label">
                                         Financed By <span class="required-star">*</span>
                                     </label>
-                                    @Html.DropDownListFor(m => m.Transaction.FinancedBy, ViewBag.BankList as List<SelectListItem>, "-- Select Bank --", new { @class = "form-control select2", style = "width:100%;" })
-                                    @Html.ValidationMessageFor(m => m.Transaction.FinancedBy, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(m => m.FinancedBy, ViewBag.BankList as List<SelectListItem>, "-- Select Bank --", new { @class = "form-control select2", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(m => m.FinancedBy, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
 
                                     <label class="form-label">
                                         Down Payment <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.Downpayment, new
+                                    @Html.TextBoxFor(m => m.Downpayment, new
                                     {
                                         @class = "form-control",
                                         type = "text",
@@ -313,13 +310,13 @@
                                         placeholder = "Down Payment",
                                    oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
                                     })
-                                    @Html.ValidationMessageFor(m => m.Transaction.Downpayment, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.Downpayment, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         EMI Amount <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.CashAmount, new
+                                    @Html.TextBoxFor(m => m.CashAmount, new
                                     {
                                         @class = "form-control",
                                         type = "text",
@@ -327,13 +324,13 @@
                                         placeholder = "Enter EMI Amount",
                                    oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
                                     })
-                                    @Html.ValidationMessageFor(m => m.Transaction.CashAmount, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.CashAmount, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         No Of Installments <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.Transaction.NoOfInstallments, new
+                                    @Html.TextBoxFor(m => m.NoOfInstallments, new
                                     {
                                         @class = "form-control",
                                         type = "text",
@@ -341,13 +338,12 @@
                                         placeholder = "Enter No Of Installments",
                                    oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
                                     })
-                                    @Html.ValidationMessageFor(m => m.Transaction.NoOfInstallments, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.NoOfInstallments, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Notes  </label>
-                                @Html.TextAreaFor(m => m.Transaction.Notes, new { @class = "form-control", rows = 2 })
-                                @Html.ValidationMessageFor(m => m.Transaction.Notes, "", new { @class = "text-danger" })
+                                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 2 }) 
                             </div>
                         </div>
                     </div>
@@ -393,7 +389,7 @@
         const userDetailsSection = $('#user-details-section');
         userDetailsSection.hide();
 
-        const mobileNoInput = $('#Transaction_MobileNo');
+        const mobileNoInput = $('#MobileNo');
         mobileNoInput.on('input', function () {
             const value = $(this).val();
             const isValid = /^\d{10}$/.test(value);

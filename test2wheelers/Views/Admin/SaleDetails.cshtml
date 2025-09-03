@@ -1,4 +1,4 @@
-﻿@model _2whealers.Models.UserTransactionViewModel
+﻿@model _2whealers.Models.TransactionViewModel
 @{
     ViewBag.Title = "Delivery Challan";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
@@ -21,20 +21,85 @@
         <tbody>
             <tr>
                 <th>Order ID</th>
-                <td>@Model.Transaction.Id</td>
+                <td>@Model.Id</td>
+            </tr>
+            <tr>
+                <th>Order Date</th>
+                <td>@Model.CreatedDate.ToString("dd-MM-yyyy")</td>
+            </tr>
+            <tr>
+                <th>Owner Details</th>
+                <td>@Model.Name @Model.Address1 @Model.Address2</td>
             </tr>
             <tr>
                 <th>Contact Number</th>
-                <td><a href="tel:@Model.Transaction.MobileNo">@Model.Transaction.MobileNo</a></td>
+                <td><a href="tel:@Model.MobileNo">@Model.MobileNo</a></td>
             </tr>
             <tr>
+                <th>Model Name</th>
+                <td>@Model.ModelName</td>
+            </tr>
+            <tr>
+                <th>Vehicle Details</th>
+                <td>@Model.VehicleDetails</td>
+            </tr>
+
+            <tr>
+                <th>Registration Number</th>
+                <td>
+                    <small class="text-muted d-block mb-1">
+                        Registration Number can be edited only once if it is "A/F".
+                    </small>
+
+                    <div id="regno-view">
+                        <span id="regno-text">@Model.RegNo</span>
+                        @if (Model.RegNo == "A/F")
+                        {
+                            <button class="btn btn-sm btn-primary" id="edit-regno">Edit</button>
+                        }
+                    </div>
+
+                    <div id="regno-edit" style="display:none;">
+                        <input type="text" id="regno-input" class="form-control d-inline-block" style="width:200px;" value="@Model.RegNo" />
+                        <button class="btn btn-sm btn-success" id="save-regno">Save</button>
+                        <button class="btn btn-sm btn-secondary" id="cancel-regno">Cancel</button>
+                    </div>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
                 <th>Engine Number</th>
-                <td>@Model.Transaction.EngineNo</td>
+                <td>@Model.EngineNo</td>
             </tr>
             <tr>
                 <th>Chassis Number</th>
-                <td>@Model.Transaction.ChassisNo</td>
+                <td>@Model.ChassisNo</td>
             </tr>
+            <tr>
+                <th>Mileage</th>
+                <td>@Model.DRM</td>
+            </tr>
+            <tr>
+                <th>Jobs Done</th>
+                <td>Sale</td>
+            </tr>
+            <tr>
+                <th>Amount (Rs.)</th>
+                <td>0 /-</td>
+            </tr>
+            <tr>
+                <th>Finance Details</th>
+                <td>Financed By:-@Model.FinancedBy ,Downpayment: @Model.Downpayment,Monthly EMI:@Model.CashAmount,Installments: @Model.NoOfInstallments  </td>
+            </tr>
+            <tr>
+                <th>Service Reminder Date</th>
+                <td>@Model.DateOfSaleReminder.Value.ToString("dd-MM-yyyy")</td>
+            </tr>
+
+
         </tbody>
     </table>
 
@@ -55,3 +120,47 @@
         </button>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Edit click → textbox dikhao
+            $("#edit-regno").click(function () {
+                $("#regno-view").hide();
+                $("#regno-edit").show();
+            });
+
+            // Cancel click → wapas label dikhao
+            $("#cancel-regno").click(function () {
+                $("#regno-edit").hide();
+                $("#regno-view").show();
+            });
+
+            // Save click → DB update
+            $("#save-regno").click(function () {
+                var newRegNo = $("#regno-input").val();
+                var id = @Model.Id;
+
+                $.ajax({
+                    url: '@Url.Action("UpdateRegNo", "YourController")',
+                    type: 'POST',
+                    data: { id: id, regNo: newRegNo },
+                    success: function (res) {
+                        if (res.success) {
+                            toastr.success("Registration Number updated successfully");
+                            $("#regno-text").text(res.regNo);
+                            $("#regno-edit").hide();
+                            $("#regno-view").show();
+                            $("#edit-regno").remove(); // edit option hata do (sirf 1st time allowed)
+                        } else {
+                            toastr.error(res.message || "Error updating record");
+                        }
+                    },
+                    error: function () {
+                        toastr.error("Something went wrong");
+                    }
+                });
+            });
+        });
+    </script>
+}

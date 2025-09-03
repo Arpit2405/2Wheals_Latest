@@ -1,4 +1,4 @@
-﻿@model List<_2whealers.Models.UserTransactionViewModel>
+﻿@model List<_2whealers.Models.TransactionViewModel>
 @{
     ViewBag.Title = "Sales";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
@@ -34,7 +34,7 @@
                                 <th>Date of Sale</th>
                                 <th>Down Payment</th>
                                 <th>EMI Amount</th>
-                                <th>Date Of Service Reminder</th> 
+                                <th>Date Of Service Reminder</th>
                                 <th>actions</th>
                             </tr>
                         </thead>
@@ -49,17 +49,17 @@
                                     <tr>
                                         <td class="text-center">@rowNumber</td>
                                         <td class="text-center">
-                                            @item.Transaction.Name <br />
-                                            <small>@item.Transaction.MobileNo</small>
+                                            @item.Name <br />
+                                            <small>@item.MobileNo</small>
                                         </td>
-                                        <td class="text-center">@item.Transaction.ModelName</td>
-                                        <td class="text-center">@Convert.ToDateTime(@item.Transaction.dateofsale).ToString("dd-MM-yyyy")</td>
-                                        <td class="text-center">@item.Transaction.Downpayment</td>
-                                        <td class="text-center">@item.Transaction.CashAmount</td>
-                                        <td class="text-center">@Convert.ToDateTime(@item.Transaction.DateOfSaleReminder).ToString("dd-MM-yyyy")</td>
-                                   
+                                        <td class="text-center">@item.ModelName</td>
+                                        <td class="text-center">@Convert.ToDateTime(@item.dateofsale).ToString("dd-MM-yyyy")</td>
+                                        <td class="text-center">@item.Downpayment</td>
+                                        <td class="text-center">@item.CashAmount</td>
+                                        <td class="text-center">@Convert.ToDateTime(@item.DateOfSaleReminder).ToString("dd-MM-yyyy")</td>
+
                                         <td class="text-center">
-                                            <a href="@Url.Action("SaleDetails", "Admin", new { id = item.Transaction.Id })" class="btn btn-sm btn-primary">    <i class="fas fa-eye"></i></a>
+                                            <a href="@Url.Action("SaleDetails", "Admin", new { id = item.Id })" class="btn btn-sm btn-primary">    <i class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
                                     rowNumber++;
@@ -107,41 +107,39 @@
     </div>
 </div>
 
-<script src="/Scripts/jquery-3.7.0.min.js"></script>
+
 @section Scripts {
     <script>
-        $(function () {
-            toastr.options = {
-                "positionClass": "toast-bottom-right"
-            }
-            @if (TempData["Success"] != null)
-            {
-                <text>toastr.success("@TempData["Success"]");</text>
-            }
+            $(function () {
+                toastr.options = {
+                    "positionClass": "toast-bottom-right"
+                }
+        @if (TempData["Success"] != null)
+        {
+            <text>toastr.success("@TempData["Success"]");</text>
+        }
 
-            @if (TempData["Error"] != null)
-            {
-                <text>toastr.error("@TempData["Error"]");</text>
-            }
+        @if (TempData["Error"] != null)
+        {
+            <text>toastr.error("@TempData["Error"]");</text>
+        }
+
+            });
+
+        $(document).ready(function () {
+
+            new DataTable('#PreSalesTable', {
+                language: {
+                    emptyTable: "No Models found"
+                },
+                layout: {
+                    topStart: {
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+                    }
+                }
+            });
+
 
         });
     </script>
 }
-<script>
-    $(document).ready(function () {
-
-        new DataTable('#PreSalesTable', {
-            language: {
-                emptyTable: "No Models found"
-            },
-            layout: {
-                topStart: {
-                    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
-                }
-            }
-        });
-
-
-    });
-</script>
-
