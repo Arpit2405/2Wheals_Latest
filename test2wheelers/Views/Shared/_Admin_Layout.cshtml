@@ -25,23 +25,8 @@
     <link href="~/css/datatablebootstrap4.css" rel="stylesheet" />
     <link href="~/css/loader.css" rel="stylesheet" />
 
-    <style>
-        /* Submenu indentation */
-        .nav-sidebar .nav-treeview {
-            padding-left: 15px;
-        }
+    <link href="~/css/darkmode.css" rel="stylesheet" />
 
-            .nav-sidebar .nav-treeview > .nav-item > .nav-link {
-                padding-left: 35px;
-                font-size: 14px;
-            }
-
-        .brand-image {
-            background: #fff; /* white circle behind logo */
-            padding: 5px; /* spacing */
-            border-radius: 50%; /* make it round */
-        }
-    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div id="loader-overlay">
@@ -62,18 +47,11 @@
             </ul>
 
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                        <i class="fas fa-expand-arrows-alt"></i>
+                    <a class="nav-link" href="#" id="darkModeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon" id="themeIcon"></i>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
-                        <i class="fas fa-th-large"></i>
-                    </a>
-                </li>
-
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <img src="~/adminassets/dist/img/user2-160x160.jpg"
@@ -190,9 +168,23 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item @(currentAction=="Receipts" ? "menu-open" : "")">
+                        <a href="#" class="nav-link @(currentAction=="AddStock" ? "active" : "")">
+                            <i class="fas fa-receipt"></i>
+                            <p>Manage Stocks<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="@Url.Action("AddStock","Stock")" class="nav-link @(currentAction=="AddStock" ? "active" : "")">
+                                    <i class="fas fa-receipt"></i><p>Manage Stocks</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <!-- Download -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="@Url.Action("DownloadSales","Admin")" class="nav-link @(currentAction=="DownloadSales" ? "active" : "")">
                             <i class="nav-icon fas fa-file-download"></i><p>Download Transactions</p>
                         </a>
                     </li>
@@ -260,6 +252,42 @@
             $("#loader-overlay").hide();
         });
     </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const body = document.body;
+            const themeIcon = document.getElementById("themeIcon");
+            const toggleBtn = document.getElementById("darkModeToggle");
+
+            // ---- Load saved theme on page load ----
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                body.classList.add("dark-mode");
+                themeIcon.classList.replace("fa-moon", "fa-sun");
+            } else {
+                body.classList.add("light-mode");
+                themeIcon.classList.replace("fa-sun", "fa-moon");
+            }
+
+            // ---- Toggle on click ----
+            toggleBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                if (body.classList.contains("dark-mode")) {
+                    body.classList.remove("dark-mode");
+                    body.classList.add("light-mode");
+                    themeIcon.classList.replace("fa-sun", "fa-moon");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    body.classList.remove("light-mode");
+                    body.classList.add("dark-mode");
+                    themeIcon.classList.replace("fa-moon", "fa-sun");
+                    localStorage.setItem("theme", "dark");
+                }
+            });
+        });
+    </script>
+
 
     @RenderSection("scripts", required: false)
 </body>

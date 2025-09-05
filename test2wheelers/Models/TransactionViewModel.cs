@@ -79,10 +79,11 @@ namespace _2whealers.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Email Id is required")]
+
+   
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string?Email { get; set; }
 
 
         [Required(ErrorMessage = "Address 1 is required")]
@@ -101,10 +102,8 @@ namespace _2whealers.Models
     {
         public string RegNo { get; set; } = "A/F";
 
-        [Required(ErrorMessage = "Manufacturing Year is required")]
-        [RegularExpression(@"^(19|20)\d{2}$", ErrorMessage = "Enter a valid year (e.g.1900 - 2020)")]
-        [Range(1900, 2025, ErrorMessage = "Year must be between 1900 and current year")]
-        public int ManufacturingYear { get; set; }
+        [Display(Name = "Manufacturing Year")]
+        public string? ManufacturingYear { get; set; }
 
 
         [Required(ErrorMessage = "Daily Running Mileage is required")]
@@ -117,11 +116,7 @@ namespace _2whealers.Models
 
         [Required(ErrorMessage = "Date of Sale Reminder is required")]
         [DataType(DataType.Date)]
-        public DateTime? DateOfSaleReminder { get; set; }
-
-        [Required(ErrorMessage = "Vehicle Details is required")]
-        [StringLength(100, ErrorMessage = "Vehicle details cannot exceed 100 characters.")]
-        public string VehicleDetails { get; set; }
+        public DateTime? DateOfSaleReminder { get; set; } 
 
         [Required(ErrorMessage = "Regular Service is required")]
         public bool IsRegularService { get; set; }

@@ -11,7 +11,7 @@
 <div class="challan-wrapper">
     <div class="text-center mb-3">
         <img src="~/AdminAssets/dist/img/logo1.png" alt="Bike Nation Logo" class="challan-logo" />
-        <h2 class="company-name">Bike Nation Motors Pvt. Ltd.</h2>
+        <h2 class="company-name">Bike Nation Motors</h2>
         <p class="company-address">Near HDFC Bank, Main Bawana Road, Samaypur, Delhi-42</p>
         <h3 class="challan-title">Delivery Challan</h3>
     </div>
@@ -29,7 +29,11 @@
             </tr>
             <tr>
                 <th>Owner Details</th>
-                <td>@Model.Name @Model.Address1 @Model.Address2</td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <th>Owner Address</th>
+                <td> @Model.Address1  @Model.Address2</td>
             </tr>
             <tr>
                 <th>Contact Number</th>
@@ -38,11 +42,7 @@
             <tr>
                 <th>Model Name</th>
                 <td>@Model.ModelName</td>
-            </tr>
-            <tr>
-                <th>Vehicle Details</th>
-                <td>@Model.VehicleDetails</td>
-            </tr>
+            </tr> 
 
             <tr>
                 <th>Registration Number</th>

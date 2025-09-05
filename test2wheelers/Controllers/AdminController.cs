@@ -6,6 +6,7 @@ using System.Data;
 using _2whealers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Rotativa.AspNetCore;
+using System.Transactions;
 
 namespace test2wheelers.Controllers
 {
@@ -200,10 +201,9 @@ namespace test2wheelers.Controllers
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_GetTransactionCounts");
 
             if (dt.Rows.Count > 0)
-            {
-                var row = dt.Rows[0];
-                counts.PreSaleCount = Convert.ToInt32(row["PreSaleCount"]);
-                counts.SaleCount = Convert.ToInt32(row["SaleCount"]);
+            { 
+                counts.PreSaleCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
+                counts.SaleCount = Convert.ToInt32(dt.Rows[1]["TotalCount"]);
             }
 
             return counts;
@@ -588,12 +588,11 @@ namespace test2wheelers.Controllers
         new SqlParameter("@FinancedBy", model.FinancedBy ),
         new SqlParameter("@InsuranceDueDate", model.InsuranceDuDate),
         new SqlParameter("@MR", model.MeterReading),
-        new SqlParameter("@ManufacturingYear", model.ManufacturingYear ),
+        new SqlParameter("@ManufacturingYear", model.ManufacturingYear.ToString()),
         new SqlParameter("@ModelId", model.ModelId),
         new SqlParameter("@NoOfInstallments", model.NoOfInstallments),
         new SqlParameter("@Notes", model.Notes ),
-        new SqlParameter("@RegNo", model.RegNo ),
-        new SqlParameter("@VehicleDetails", model.VehicleDetails ),
+        new SqlParameter("@RegNo", model.RegNo ), 
         new SqlParameter("@IsRegularService", model.IsRegularService),
         new SqlParameter("@ServicingReminderDate", model.dateofsale)
     };
@@ -633,11 +632,11 @@ namespace test2wheelers.Controllers
                 model.DRM = Convert.ToInt32(row["DRM"]);
                 model.FinancedBy = row["FinancedBy"].ToString();
                 model.NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]);
-                model.CashAmount = Convert.ToDecimal(row["EMIAmount"]);
-                model.VehicleDetails = row["VehicleDetails"].ToString();
+                model.CashAmount = Convert.ToDecimal(row["EMIAmount"]); 
                 model.Notes = row["Notes"].ToString();
                 model.Downpayment = Convert.ToDecimal(row["Downpayment"].ToString());
                 model.DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"]);
+                model.CreatedDate = Convert.ToDateTime(row["CreatedDate"]);
             }
 
             return model;
@@ -679,7 +678,7 @@ namespace test2wheelers.Controllers
             }
 
             return Json(new { success = false, message = "Something went wrong" });
-        } 
+        }
 
 
 
@@ -770,6 +769,58 @@ namespace test2wheelers.Controllers
             var model = GetReceiptsById(id);
             return View("ReceiptsDetails", model);
         }
+
+        public ActionResult DownloadSales()
+        {
+            return View();
+        }
+
+        [HttpPost] 
+        public JsonResult DownloadSalesData(string dateRange)
+        {
+            if (string.IsNullOrEmpty(dateRange))
+                return Json(new { success = false, message = "Please select a date range." });
+
+            try
+            {
+                var dates = dateRange.Split(" to ");
+                DateTime startDate = DateTime.ParseExact(dates[0], "dd-MM-yyyy", null);
+                DateTime endDate = DateTime.ParseExact(dates[1], "dd-MM-yyyy", null);
+
+
+                SqlParameter[] parameters = {
+            new SqlParameter("@StartDate", startDate),
+            new SqlParameter("@EndDate", endDate),
+            new SqlParameter("@calltype", "GetSalesByDateRange")
+        };
+
+                var dt = _sqlHelper.ExecuteStoredProcedure("sp_Sales", parameters);
+
+                var salesList = dt.AsEnumerable()
+              .Select(row => new TransactionViewModel
+              {
+                  Id = Convert.ToInt32(row["TransactionId"]),
+                  Name = row["name"].ToString(),
+                  MobileNo = row["Mobile"].ToString(),
+                  ModelName = row["modelName"].ToString(), 
+                  Downpayment = Convert.ToDecimal(row["DownPayment"]),
+                  FinancedBy = row["Financedby"].ToString(),
+                  CashAmount = Convert.ToDecimal(row["EMIAmount"]),
+                  NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]),
+                  MeterReading = Convert.ToInt32(row["meterreading"]),
+                  InsuranceDuDate = Convert.ToDateTime(row["InsuranceDueDate"]),
+                  dateofsale = Convert.ToDateTime(row["DateOfSale"]),
+                  DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"])
+              }).ToList();
+
+                return Json(new { success = true, data = salesList });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error: " + ex.Message });
+            }
+        }
+
 
     }
 }

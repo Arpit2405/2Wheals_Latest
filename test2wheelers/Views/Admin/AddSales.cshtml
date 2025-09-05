@@ -49,13 +49,13 @@
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
                                 @Html.TextBoxFor(m => m.MobileNo, new
- {
-     @class = "form-control",
-     placeholder = "Enter Mobile Number",
-     maxlength = "10",
-     oninput = "this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)",
-  type = "tel"
- })
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter Mobile Number",
+                                        maxlength = "10",
+                                        oninput = "this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)",
+                                        type = "tel"
+                                    })
                             </div>
                             @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "text-danger" })
                         </div>
@@ -78,7 +78,7 @@
 
                                 <div class="col-md-3">
                                     <label class="form-label">
-                                        Email <span class="required-star">*</span>
+                                        Email
                                     </label>
                                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email", type = "email", maxlength = "50" })
                                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
@@ -111,15 +111,15 @@
                                         State <span class="required-star">*</span>
                                     </label>
                                     @Html.DropDownListFor(m => m.State,
-                                        new List<SelectListItem> {
-                                            new SelectListItem { Text = "-- Select State --", Value = "" },
-                                            new SelectListItem { Text = "Delhi", Value = "Delhi" },
-                                            new SelectListItem { Text = "Maharashtra", Value = "Maharashtra" },
-                                            new SelectListItem { Text = "Uttar Pradesh", Value = "UP" },
-                                            new SelectListItem { Text = "Haryana", Value = "Haryana" },
-                                            new SelectListItem { Text = "Punjab", Value = "Punjab" }
-                                        },
-                                        new { @class = "form-control", id = "StateDropdown" })
+                                             new List<SelectListItem> {
+                                new SelectListItem { Text = "-- Select State --", Value = "" },
+                                new SelectListItem { Text = "Delhi", Value = "Delhi" },
+                                new SelectListItem { Text = "Maharashtra", Value = "Maharashtra" },
+                                new SelectListItem { Text = "Uttar Pradesh", Value = "UP" },
+                                new SelectListItem { Text = "Haryana", Value = "Haryana" },
+                                new SelectListItem { Text = "Punjab", Value = "Punjab" }
+                                },
+                                             new { @class = "form-control", id = "StateDropdown" })
                                     @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
                                 </div>
 
@@ -136,13 +136,13 @@
                                         Pincode <span class="required-star">*</span>
                                     </label>
                                     @Html.TextBoxFor(m => m.Pincode, new
-                                    {
-                                        @class = "form-control",
-                                        placeholder = "Enter Pincode",
-                                        maxlength = "6",
-                                        pattern = @"\d{6}",
-                                        oninput = "this.value=this.value.replace(/[^0-9]/g,'')"
-                                    })
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Enter Pincode",
+                                            maxlength = "6",
+                                            pattern = @"\d{6}",
+                                            oninput = "this.value=this.value.replace(/[^0-9]/g,'')"
+                                        })
                                     @Html.ValidationMessageFor(m => m.Pincode, "", new { @class = "text-danger" })
                                 </div>
 
@@ -184,19 +184,17 @@
                                         Manufacturing Year <span class="required-star">*</span>
                                     </label>
                                     @Html.TextBoxFor(m => m.ManufacturingYear, new
-                                    {
-                                        @class = "form-control",
-                                        placeholder = "Enter Year (e.g. 2020)",
-                                        maxlength = "4",
-                                        pattern = @"\d{4}",
-                                     oninput = "this.value=this.value.replace(/[^0-9]/g,'')"
-                                    })
+                                        {
+                                            @class = "form-control",
+                                            @id = "manufacturingYear",
+                                            @readonly = "readonly"
+                                        })
                                     @Html.ValidationMessageFor(m => m.ManufacturingYear, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Registration Number <span class="required-star">*</span>
-                                    </label> 
+                                    </label>
                                     @Html.TextBox("RegNo", "A/F", new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.RegNo, "", new { @class = "text-danger" })
                                 </div>
@@ -259,15 +257,7 @@
                                     </label>
                                     @Html.TextBoxFor(m => m.InsuranceDuDate, new { @class = "form-control", @id = "insuranceDueDate", autocomplete = "off" })
                                     @Html.ValidationMessageFor(m => m.InsuranceDuDate, "", new { @class = "text-danger" })
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">
-                                        Vehicle Details <span class="required-star">*</span>
-                                    </label>
-                                    @Html.TextAreaFor(m => m.VehicleDetails, new { @class = "form-control", rows = 2, maxlength = "100", placeholder = "Enter vehicle details (max 100 characters)" })
-                                    @Html.ValidationMessageFor(m => m.VehicleDetails, "", new { @class = "text-danger" })
-                                </div>
-
+                                </div> 
 
                             </div>
                         </div>
@@ -303,13 +293,13 @@
                                         Down Payment <span class="required-star">*</span>
                                     </label>
                                     @Html.TextBoxFor(m => m.Downpayment, new
-                                    {
-                                        @class = "form-control",
-                                        type = "text",
-                                        maxlength = "12",
-                                        placeholder = "Down Payment",
-                                   oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
-                                    })
+                                        {
+                                            @class = "form-control",
+                                            type = "text",
+                                            maxlength = "12",
+                                            placeholder = "Down Payment",
+                                            oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
+                                        })
                                     @Html.ValidationMessageFor(m => m.Downpayment, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
@@ -317,13 +307,13 @@
                                         EMI Amount <span class="required-star">*</span>
                                     </label>
                                     @Html.TextBoxFor(m => m.CashAmount, new
-                                    {
-                                        @class = "form-control",
-                                        type = "text",
-                                        maxlength = "12",
-                                        placeholder = "Enter EMI Amount",
-                                   oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
-                                    })
+                                        {
+                                            @class = "form-control",
+                                            type = "text",
+                                            maxlength = "12",
+                                            placeholder = "Enter EMI Amount",
+                                            oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
+                                        })
                                     @Html.ValidationMessageFor(m => m.CashAmount, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
@@ -331,19 +321,19 @@
                                         No Of Installments <span class="required-star">*</span>
                                     </label>
                                     @Html.TextBoxFor(m => m.NoOfInstallments, new
-                                    {
-                                        @class = "form-control",
-                                        type = "text",
-                                        maxlength = "3",
-                                        placeholder = "Enter No Of Installments",
-                                   oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
-                                    })
+                                        {
+                                            @class = "form-control",
+                                            type = "text",
+                                            maxlength = "3",
+                                            placeholder = "Enter No Of Installments",
+                                            oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
+                                        })
                                     @Html.ValidationMessageFor(m => m.NoOfInstallments, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Notes  </label>
-                                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 2 }) 
+                                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 2 })
                             </div>
                         </div>
                     </div>
@@ -362,6 +352,9 @@
 @section scripts {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        var currentYear = new Date().getFullYear();
+          $("#manufacturingYear").val(currentYear);
+           $("#manufacturingYear").prop("readonly", true);
         document.addEventListener("DOMContentLoaded", function () {
             flatpickr("#dob", {
                 dateFormat: "d-m-Y",
