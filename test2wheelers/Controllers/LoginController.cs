@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.Data.SqlClient;
+using test2wheelers.Helpers;
 
 namespace test2wheelers.Controllers
 {
@@ -42,38 +43,59 @@ namespace test2wheelers.Controllers
                     new SqlParameter("@Password", model.Password)
                 };
 
-                DataTable dt = _db.ExecuteStoredProcedure("sp_LoginUser", parameters);
-                if (dt.Rows.Count > 0)
-                {
-                    // Create claims
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, dt.Rows[0]["Id"].ToString()),
-                        new Claim(ClaimTypes.Name, dt.Rows[0]["UserName"].ToString())
-                    };
+                DataSet ds = _db.ExecuteStoredProcedureWithDataSet("sp_LoginUser", parameters);
 
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTime.UtcNow.AddMinutes(20)
-                        });
-
-                    return Json(new
-                    {
-                        success = true,
-                        message = "Login Successful!",
-                        redirectUrl = Url.Action("Dashboard", "Admin")
-                    });
-                }
-                else
+                if (ds.Tables[0].Rows.Count == 0)
                 {
                     return Json(new { success = false, message = "Invalid Username or Password" });
                 }
+
+                var row = ds.Tables[0].Rows[0];
+                var menuTable = ds.Tables[1];
+
+                // Create claims
+                var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
+                        new Claim(ClaimTypes.Name, row["UserName"].ToString()),
+                        //new Claim(ClaimTypes.Role, row["RoleId"].ToString())
+                    };
+
+                foreach (DataRow m in menuTable.Rows)
+                {
+                    var menuId = m["MenuId"].ToString();
+                    var menuName = m["MenuName"].ToString();
+                    var url = m["Url"] == DBNull.Value ? "" : m["Url"].ToString();
+                    var parent = m["ParentId"] == DBNull.Value ? "" : m["ParentId"].ToString();
+                    var icon = m["Icon"] == DBNull.Value ? "" : m["Icon"].ToString();
+                    var canCreate = Convert.ToInt32(m["CanCreate"]) == 1 ? "1" : "0";
+                    var canEdit = Convert.ToInt32(m["CanEdit"]) == 1 ? "1" : "0";
+                    var canDelete = Convert.ToInt32(m["CanDelete"]) == 1 ? "1" : "0";
+                    var canView = Convert.ToInt32(m["CanView"]) == 1 ? "1" : "0";
+                    var sort = Convert.ToInt32(m["SortOrder"]) == 1 ? "1" : "0";
+
+                    string claimValue = string.Join("|", new[] { menuId, menuName, url, parent, icon, canCreate, canEdit, canDelete, canView, sort });
+                    claims.Add(new Claim("Menu", claimValue));
+                }
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(identity),
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(20)
+                    });
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Login Successful!",
+                    redirectUrl = Url.Action("Dashboard", "Admin")
+                });
             }
 
             return Json(new { success = false, message = "Invalid Request" });

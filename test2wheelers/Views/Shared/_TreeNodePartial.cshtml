@@ -1,0 +1,49 @@
+﻿@model test2wheelers.Models.RoleMenuPermissionModel
+
+<li data-id="@Model.MenuId" class="mb-1">
+
+    @if (Model.Children?.Any() == true)
+    {
+        <span class="toggle" data-bs-toggle="collapse" data-bs-target="#children-@Model.MenuId">📂</span>
+    }
+
+    <span>@Model.MenuName</span>
+
+    <span class="ml-2">
+        @* Root menus (ParentMenuId == null) → Add only *@
+        @if (Model.ParentMenuId == null)
+        {
+            <a href="javascript:void(0);" class="text-success ms-2 add-node" data-parent="@Model.MenuId" title="Add Child">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+        }
+        else
+        {
+            @* Child menus → Add + Edit + Delete *@
+            <a href="javascript:void(0);" class="text-success ms-2 add-node" data-parent="@Model.MenuId" title="Add Child">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+            <a href="javascript:void(0);"
+               class="edit-menu text-warning"
+               data-id="@Model.MenuId"
+               data-name="@Model.MenuName"
+               data-url="@Model.Url">
+                <i class="fas fa-pencil-alt"></i>
+            </a>
+            <a href="javascript:void(0);" class="delete-menu text-danger ms-2"
+               data-id="@Model.MenuId" title="Delete">
+                <i class="fas  fa-trash"></i>
+            </a>
+        }
+    </span>
+
+    @if (Model.Children != null && Model.Children.Any())
+    {
+        <ul id="children-@Model.MenuId" class="collapse ms-4">
+            @foreach (var child in Model.Children)
+            {
+                @Html.Partial("_TreeNodePartial", child)
+            }
+        </ul>
+    }
+</li>
