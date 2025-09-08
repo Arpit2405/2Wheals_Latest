@@ -4,11 +4,11 @@ using System.Configuration;
 
 namespace test2wheelers
 {
-    public class SqlHelper
+    public class SqlHelper1
     {
         private readonly string _connectionString;
 
-        public SqlHelper(IConfiguration configuration)
+        public SqlHelper1(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         } 

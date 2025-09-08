@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using test2wheelers;
-
+using test2wheelers.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<SqlHelper>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

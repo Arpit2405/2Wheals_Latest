@@ -1,0 +1,52 @@
+﻿@model RoleMenuPermissionModel
+
+<li class="mb-2">
+    <input type="hidden" asp-for="MenuId" />
+
+    <div class="d-flex flex-column">
+        <!-- Row: menu + permissions -->
+        <div class="d-flex align-items-center flex-wrap gap-3">
+            <label class="fw-bold me-2">@Model.MenuName</label>
+
+            @if (Model.Children.Any())
+            {
+                <div class="form-check form-check-inline ms-2">
+                    <input type="checkbox" asp-for="CanView" class="form-check-input parent-view" />
+                    <label class="form-check-label">View</label>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-wrap gap-3 ms-2">
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" asp-for="CanView" class="form-check-input" />
+                        <label class="form-check-label">View</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" asp-for="CanCreate" class="form-check-input" />
+                        <label class="form-check-label">Create</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" asp-for="CanEdit" class="form-check-input" />
+                        <label class="form-check-label">Edit</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" asp-for="CanDelete" class="form-check-input" />
+                        <label class="form-check-label">Delete</label>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Children (note the indexed for-loop) -->
+        @if (Model.Children.Any())
+        {
+            <ul class="ms-4 mt-2 list-unstyled">
+                @for (int j = 0; j < Model.Children.Count; j++)
+                {
+                    @Html.EditorFor(m => m.Children[j])
+                }
+            </ul>
+        }
+    </div>
+</li>

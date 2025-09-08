@@ -1,0 +1,97 @@
+﻿@model test2wheelers.Models.UserModel
+@{
+    ViewBag.Title = Model.UserName == "" ? "Create User" : "Edit User";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> @(Model.Id == null ? "Create User" : "Edit User") </li>
+</ol>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card card-primary">
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h3 class="card-title mb-0">@(Model.Id == null ? "Create User" : "Edit User")</h3>
+                </div>
+
+                <a href="javascript:history.back()" class="btn btn-danger ml-auto">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            <div class="card-body">
+                <form asp-action="Manage" method="post">
+                    <input type="hidden" asp-for="UserName" />
+
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label asp-for="UserName" class="form-label">UserName</label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-3">
+                            <label asp-for="RoleId" class="form-label">Role</label>
+                            <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control">
+                                <option value="">-- Select Role --</option>
+                            </select>
+                            <span asp-validation-for="RoleId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="PasswordHash" class="form-label">Password</label>
+                            <input asp-for="PasswordHash" class="form-control" />
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="PasswordHash" class="form-label">Password</label>
+                            <input asp-for="PasswordHash" class="form-control" />
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="Approved" class="form-check-input" />
+                        <label asp-for="Approved" class="form-check-label">Approved</label>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label">Active</label>
+                    </div>
+
+
+                    <div class="card-footer text-right">
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-undo"></i>Reset</a>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> @(Model.Id == null ? "Create" : "Update")</button>
+                    </div>
+
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+

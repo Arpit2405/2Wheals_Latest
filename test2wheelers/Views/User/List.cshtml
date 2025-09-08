@@ -1,0 +1,159 @@
+﻿@model List<UserModel>
+@using test2wheelers.Helpers
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Users </li>
+</ol>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="mb-4"><i class="nav-icon fas fa-user"></i> Users</h2>
+
+                <!-- Add Role Button -->
+                @if (User.HasPermissionForUrl("/Roles/List", "Edit"))
+                {
+                    <div class="mb-3 text-right">
+                        <a asp-action="Manage" class="btn btn-success btn-sm px-3"><i class="fa fa-plus"></i> Add Users</a>
+                    </div>
+
+                }
+
+
+                <div class="table-responsive">
+                    <table id="rolesTable" class="table table-striped table-hover table-bordered align-middle shadow-sm rounded overflow-hidden">
+                        <thead style="background: linear-gradient(90deg, #6c63ff, #4facfe); color: #fff;">
+                            <tr>
+                                <th style="width:60px;" class="text-center">SNo.</th>
+                                <th>UserName</th>
+                                <th>Role</th>
+                                <th>Active</th>
+                                <th style="width:160px;" class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int row = 1;
+                            }
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var u in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center fw-bold">@row</td>
+                                        <td>@u.UserName</td>
+                                        <td>@u.RoleName</td>
+                                        <td>@(u.IsActive ? "Yes" : "No")</td>
+                                        <td>
+                                            @if (User.HasPermissionForUrl("/Roles/List", "Edit"))
+                                            {
+                                                <a href="@Url.Action("Manage", "User", new { id = u.Id })" class="btn btn-sm btn-gradient me-1"> <i class="fa fa-edit"></i> Edit</a>
+                                            }
+                                            @if (User.HasPermissionForUrl("/Roles/List", "Delete"))
+                                            {
+                                                <form asp-action="Delete" asp-route-id="@u.UserName" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                                                </form>
+                                            }
+                                        </td>
+                                    </tr>
+                                    row++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">
+                                        🚫 No Users found
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <style>
+                    /* Gradient button */
+                    .btn-gradient {
+                        background: linear-gradient(45deg, #6c63ff, #4facfe);
+                        color: #fff;
+                        border: none;
+                    }
+
+                        .btn-gradient:hover {
+                            background: linear-gradient(45deg, #4facfe, #6c63ff);
+                            color: #fff;
+                        }
+
+                    /* Table striping */
+                    .table-striped tbody tr:nth-of-type(odd) {
+                        background-color: #f9f9ff;
+                    }
+
+                    /* Hover effect */
+                    .table-hover tbody tr:hover {
+                        background-color: #eef2ff;
+                        transition: 0.3s;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            toastr.options = { "positionClass": "toast-bottom-right" };
+
+            @if (TempData["Success"] != null)
+            {
+                            <text>toastr.success("@TempData["Success"]");</text>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                            <text>toastr.error("@TempData["Error"]");</text>
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#rolesTable').DataTable({
+                responsive: true,
+                lengthChange: true,
+                autoWidth: false,
+                buttons: ["copy", "csv", "excel", "pdf"]
+            }).buttons().container().appendTo('#rolesTable_wrapper .col-md-6:eq(0)');
+
+
+            $(document).on("click", ".deleteBtn", function () {
+                var url = $(this).data("url");
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won’t be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e3342f',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+}

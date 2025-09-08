@@ -1,6 +1,9 @@
-﻿@{
+﻿@using test2wheelers.Helpers
+@{
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var rootMenus = User.Identity.IsAuthenticated ? User.GetMenuTree() : new List<test2wheelers.Models.MenuItem>();
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,90 +115,10 @@
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
 
-                    <!-- Dashboard -->
-                    <li class="nav-item">
-                        <a href="@Url.Action("Dashboard","Admin")" class="nav-link @(currentAction=="Dashboard" ? "active" : "")">
-                            <i class="nav-icon fas fa-tachometer-alt"></i><p>Dashboard</p>
-                        </a>
-                    </li>
+                    
+                    <!-- Dynamic Menu -->
+                    @Html.Partial("_MenuPartial", rootMenus)
 
-                    <!-- Brands -->
-                    <li class="nav-item @(currentAction=="Brands" || currentAction=="Models" ? "menu-open" : "")">
-                        <a href="#" class="nav-link @(currentAction=="Brands" || currentAction=="Models" ? "active" : "")">
-                            <i class="nav-icon fas fa-tags"></i>
-                            <p>Brands<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="@Url.Action("Brands","Admin")" class="nav-link @(currentAction=="Brands" ? "active" : "")">
-                                    <i class="fas fa-plus-circle nav-icon"></i><p>Add Brands</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("Models","Admin")" class="nav-link @(currentAction=="Models" ? "active" : "")">
-                                    <i class="fas fa-motorcycle nav-icon"></i><p>Add Model</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Exchange -->
-                    <li class="nav-item @(currentAction=="PreSales" ? "menu-open" : "")">
-                        <a href="#" class="nav-link @(currentAction=="PreSales" ? "active" : "")">
-                            <i class="nav-icon fas fa-exchange-alt"></i>
-                            <p>Exchange<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="@Url.Action("PreSales","Admin")" class="nav-link @(currentAction=="PreSales" ? "active" : "")">
-                                    <i class="fas fa-clipboard-list nav-icon"></i><p>Pre Sales</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Insurance (external link, no active state) -->
-                    <li class="nav-item">
-                        <a href="https://pos.coverfox.com/two-wheeler-insurance/" class="nav-link">
-                            <i class="nav-icon fas fa-shield-alt"></i>
-                            <p>Insurance <span class="badge badge-danger right">New</span></p>
-                        </a>
-                    </li>
-
-                    <!-- Sales -->
-                    <li class="nav-item @(currentAction=="Sales" ? "menu-open" : "")">
-                        <a href="#" class="nav-link @(currentAction=="Sales" ? "active" : "")">
-                            <i class="nav-icon fas fa-store"></i>
-                            <p>Sales<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="@Url.Action("Sales","Admin")" class="nav-link @(currentAction=="Sales" ? "active" : "")">
-                                    <i class="fas fa-tags nav-icon"></i><p>Sales</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item @(currentAction=="Receipts" ? "menu-open" : "")">
-                        <a href="#" class="nav-link @(currentAction=="Receipts" ? "active" : "")">
-                            <i class="fas fa-receipt"></i>
-                            <p>Receipts<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="@Url.Action("Receipts","Admin")" class="nav-link @(currentAction=="Receipts" ? "active" : "")">
-                                    <i class="fas fa-receipt"></i><p>Receipts</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Download -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-file-download"></i><p>Download Transactions</p>
-                        </a>
-                    </li>
                 </ul>
             </nav>
         </aside>
