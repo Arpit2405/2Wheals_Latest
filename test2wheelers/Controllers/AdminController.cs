@@ -7,6 +7,7 @@ using _2whealers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Rotativa.AspNetCore;
 using System.Transactions;
+using test2wheelers.Helpers;
 
 namespace test2wheelers.Controllers
 {
@@ -140,7 +141,7 @@ namespace test2wheelers.Controllers
             new SqlParameter("@calltype", "UpdateBrands")
         };
 
-                _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
+                _sqlHelper.ExecuteNonQuery("sp_Users", parameters);
 
                 TempData["Success"] = "Brand updated successfully.";
             }
@@ -161,7 +162,7 @@ namespace test2wheelers.Controllers
             new SqlParameter("@calltype", "DeleteBrands")
         };
 
-                _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
+                _sqlHelper.ExecuteNonQuery("sp_Users", parameters);
 
                 TempData["Success"] = "Brand deleted successfully.";
             }
@@ -204,6 +205,10 @@ namespace test2wheelers.Controllers
             { 
                 counts.PreSaleCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
                 counts.SaleCount = Convert.ToInt32(dt.Rows[1]["TotalCount"]);
+            {
+                var row = dt.Rows[0];
+                //counts.PreSaleCount = Convert.ToInt32(row["PreSaleCount"]);
+                //counts.SaleCount = Convert.ToInt32(row["SaleCount"]);
             }
 
             return counts;
@@ -384,7 +389,7 @@ namespace test2wheelers.Controllers
             new SqlParameter("@calltype", "UpdateModel")
         };
 
-                _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
+                _sqlHelper.ExecuteNonQuery("sp_Users", parameters);
 
                 TempData["Success"] = "Model updated successfully.";
             }
@@ -405,7 +410,7 @@ namespace test2wheelers.Controllers
             new SqlParameter("@calltype", "DeleteModel")
         };
 
-                _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
+                _sqlHelper.ExecuteNonQuery("sp_Users", parameters);
 
                 TempData["Success"] = "Model deleted successfully.";
             }
@@ -482,7 +487,7 @@ namespace test2wheelers.Controllers
             new SqlParameter("@NocValid", model.NocValid ),
         };
 
-            _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Users", parameters);
+            _sqlHelper.ExecuteNonQuery("sp_Users", parameters);
 
             TempData["Success"] = "Pre-sale added successfully!";
             return RedirectToAction("PreSales");
@@ -597,7 +602,7 @@ namespace test2wheelers.Controllers
         new SqlParameter("@ServicingReminderDate", model.dateofsale)
     };
 
-            _sqlHelper.ExecuteStoredProcedureNonQuery("sp_Sales", parameters);
+            _sqlHelper.ExecuteNonQuery("sp_Sales", parameters);
 
             TempData["Success"] = "Sales added successfully!";
             return RedirectToAction("Sales");
