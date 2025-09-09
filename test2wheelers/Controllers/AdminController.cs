@@ -202,15 +202,20 @@ namespace test2wheelers.Controllers
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_GetTransactionCounts");
 
             if (dt.Rows.Count > 0)
-            { 
+            {
                 counts.PreSaleCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
                 counts.SaleCount = Convert.ToInt32(dt.Rows[1]["TotalCount"]);
-            {
-                var row = dt.Rows[0];
-                //counts.PreSaleCount = Convert.ToInt32(row["PreSaleCount"]);
-                //counts.SaleCount = Convert.ToInt32(row["SaleCount"]);
+                {
+                    var row = dt.Rows[0];
+                    counts.PreSaleCount = Convert.ToInt32(row["PreSaleCount"]);
+                    counts.SaleCount = Convert.ToInt32(row["SaleCount"]);
+                } 
             }
-
+            else
+            {
+                counts.PreSaleCount = 0;
+                counts.SaleCount = 0;
+            }
             return counts;
         }
 
@@ -597,7 +602,7 @@ namespace test2wheelers.Controllers
         new SqlParameter("@ModelId", model.ModelId),
         new SqlParameter("@NoOfInstallments", model.NoOfInstallments),
         new SqlParameter("@Notes", model.Notes ),
-        new SqlParameter("@RegNo", model.RegNo ), 
+        new SqlParameter("@RegNo", model.RegNo ),
         new SqlParameter("@IsRegularService", model.IsRegularService),
         new SqlParameter("@ServicingReminderDate", model.dateofsale)
     };
@@ -637,7 +642,7 @@ namespace test2wheelers.Controllers
                 model.DRM = Convert.ToInt32(row["DRM"]);
                 model.FinancedBy = row["FinancedBy"].ToString();
                 model.NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]);
-                model.CashAmount = Convert.ToDecimal(row["EMIAmount"]); 
+                model.CashAmount = Convert.ToDecimal(row["EMIAmount"]);
                 model.Notes = row["Notes"].ToString();
                 model.Downpayment = Convert.ToDecimal(row["Downpayment"].ToString());
                 model.DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"]);
@@ -780,7 +785,7 @@ namespace test2wheelers.Controllers
             return View();
         }
 
-        [HttpPost] 
+        [HttpPost]
         public JsonResult DownloadSalesData(string dateRange)
         {
             if (string.IsNullOrEmpty(dateRange))
@@ -807,7 +812,7 @@ namespace test2wheelers.Controllers
                   Id = Convert.ToInt32(row["TransactionId"]),
                   Name = row["name"].ToString(),
                   MobileNo = row["Mobile"].ToString(),
-                  ModelName = row["modelName"].ToString(), 
+                  ModelName = row["modelName"].ToString(),
                   Downpayment = Convert.ToDecimal(row["DownPayment"]),
                   FinancedBy = row["Financedby"].ToString(),
                   CashAmount = Convert.ToDecimal(row["EMIAmount"]),
