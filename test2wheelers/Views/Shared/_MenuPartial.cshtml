@@ -1,6 +1,7 @@
 ﻿@model List<test2wheelers.Models.MenuItem>
 @{
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
 }
 @foreach (var menu in Model)
 {
@@ -9,8 +10,7 @@
     if (menu.Children != null && menu.Children.Count > 0)
     {
         <li class="nav-item">
-            @* <a href="#" class="nav-link @(currentAction == "Brands" || currentAction == "Models" ? "active" : "")" id="menu_@menu.MenuId"> *@
-            <a href="#" class="nav-link" id="menu_@menu.MenuId">
+            <a href="#" class="nav-link " id="menu_@menu.MenuId">
                 <i class="nav-icon @(menu.Icon)"></i>
                 <p>@menu.MenuName<i class="right fas fa-angle-left"></i></p>
             </a>

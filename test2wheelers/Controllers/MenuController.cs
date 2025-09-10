@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 using test2wheelers.Helpers;
 using test2wheelers.Models;
 
@@ -30,6 +31,7 @@ namespace test2wheelers.Controllers
                     MenuId = (int)row["MenuId"],
                     MenuName = row["MenuName"].ToString(),
                     Url = row["Url"].ToString(),
+                    Icon = row["Icon"].ToString(),
                     ParentMenuId = row["ParentId"] == DBNull.Value ? null : (int?)row["ParentId"]
                 });
             }
@@ -41,84 +43,34 @@ namespace test2wheelers.Controllers
         [HttpPost]
         public IActionResult SaveMenu(MenuItem model)
         {
-            if (model.MenuId == 0)
+            if (model.Action == "InsertParent")
             {
                 // Insert new
                 var dt = _db.ExecuteStoredProcedure("sp_Menu", new[] {
                     new SqlParameter("@MenuName", model.MenuName),
                     new SqlParameter("@Url", model.Url),
                     new SqlParameter("@Icon", model.Icon),
-                    new SqlParameter("@CallType", "Insert")
+                    new SqlParameter("@CallType", "InsertParent")
                 });
-
-                //if (dt.Rows.Count > 0)
-                //{
-                //    var row = dt.Rows[0];
-                //    int result = Convert.ToInt32(row["Result"]);
-                //    string message = row["Message"].ToString();
-
-                //    if (result == -1)
-                //        TempData["Error"] = message;
-                //    else
-                //        TempData["Success"] = message;
-                //}
-
 
                 return Json(new { menuId = 0, menuName = model.MenuName });
             }
             else
             {
-                // Update existing
+                // Insert new
                 var dt = _db.ExecuteStoredProcedure("sp_Menu", new[] {
-                    new SqlParameter("@MenuId", model.MenuId),
                     new SqlParameter("@MenuName", model.MenuName),
+                    new SqlParameter("@MenuId", model.MenuId),
+                    new SqlParameter("@ParentId", model.ParentMenuId),
                     new SqlParameter("@Url", model.Url),
                     new SqlParameter("@Icon", model.Icon),
-                    new SqlParameter("@CallType", "Update")
+                    new SqlParameter("@CallType", "InsertChild")
                 });
 
-                if (dt.Rows.Count > 0)
-                {
-                    var row = dt.Rows[0];
-                    int result = Convert.ToInt32(row["Result"]);
-                    string message = row["Message"].ToString();
-
-                    if (result == -1)
-                        TempData["Error"] = message;
-                    else
-                        TempData["Success"] = message;
-                }
-
-                return Json(new { menuId = model.MenuId, menuName = model.MenuName });
-            }
+                return Json(new { menuId = 0, menuName = model.MenuName });
+            }    
         }
 
-        [HttpPost]
-        public IActionResult SaveTree([FromBody] List<MenuNodeDto> nodes)
-        {
-            SaveHierarchy(nodes, null);
-            return Ok();
-        }
-
-        private void SaveHierarchy(List<MenuNodeDto> nodes, int? parentId)
-        {
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                var node = nodes[i];
-                _db.ExecuteNonQuery(
-                    "UPDATE Menus SET ParentId=@ParentId, SortOrder=@SortOrder WHERE MenuId=@MenuId",
-                    new[]
-                    {
-                    new SqlParameter("@ParentId", (object?)parentId ?? DBNull.Value),
-                    new SqlParameter("@SortOrder", i),
-                    new SqlParameter("@MenuId", node.MenuId)
-                    }
-                );
-
-                if (node.Children != null && node.Children.Any())
-                    SaveHierarchy(node.Children, node.MenuId);
-            }
-        }
 
         private List<RoleMenuPermissionModel> BuildMenuTree(List<RoleMenuPermissionModel> flatList, int? parentId)
         {
@@ -130,6 +82,7 @@ namespace test2wheelers.Controllers
                     MenuName = x.MenuName,
                     ParentMenuId = x.ParentMenuId,
                     Url = x.Url,
+                    Icon = x.Icon,
                     // initialize default permissions (unchecked)
                     CanView = false,
                     CanCreate = false,
@@ -145,16 +98,13 @@ namespace test2wheelers.Controllers
         {
             if (model == null) return BadRequest();
 
-            _db.ExecuteNonQuery(@"
-        UPDATE Menus 
-        SET MenuName = @MenuName, Url = @Url 
-        WHERE MenuId = @MenuId", new[]
-                    {
-                new SqlParameter("@MenuId", model.MenuId),
-                new SqlParameter("@MenuName", model.MenuName),
-                new SqlParameter("@Url", (object)model.Url ?? DBNull.Value)
-            }
-                );
+            _db.ExecuteStoredProcedure("sp_Menu", new[] {
+                    new SqlParameter("@MenuName", model.MenuName),
+                    new SqlParameter("@MenuId", model.MenuId),
+                    new SqlParameter("@Url", (object)model.Url ?? DBNull.Value),
+                    new SqlParameter("@Icon", model.Icon),
+                    new SqlParameter("@CallType", "Update")
+                });
 
             return Ok(new { success = true });
         }
@@ -164,8 +114,11 @@ namespace test2wheelers.Controllers
         {
             try
             {
-                string sql = "DELETE FROM Menus WHERE MenuId = @p0";
-                _db.ExecuteNonQuery(sql, new[] { new SqlParameter("@p0", id) });
+                _db.ExecuteStoredProcedure("sp_Menu", new[] {
+                    new SqlParameter("@MenuId", id),
+                    new SqlParameter("@CallType", "Delete")
+                });
+
                 return Json(new { success = true });
             }
             catch (Exception ex)

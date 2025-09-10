@@ -56,8 +56,8 @@
                                             }
                                             @if (User.HasPermissionForUrl("/Roles/List", "Delete"))
                                             {
-                                                <form asp-action="Delete" asp-route-id="@role.RoleId" method="post" style="display:inline;">
-                                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                                                <form asp-action="Delete" asp-route-id="@role.RoleId" method="post" class="delete-form" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm btn-danger "><i class="fa fa-trash"></i> Delete</button>
                                                 </form>
                                             }
                                         </td>
@@ -110,7 +110,7 @@
 @section Scripts {
     <script>
         $(function () {
-            toastr.options = { "positionClass": "toast-bottom-right" };
+            toastr.options = { "positionClass": "toast-top-right" };
 
             @if (TempData["Success"] != null)
             {
@@ -133,21 +133,23 @@
             }).buttons().container().appendTo('#rolesTable_wrapper .col-md-6:eq(0)');
 
 
-            $(document).on("click", ".deleteBtn", function () {
-                var url = $(this).data("url");
+            $(document).on("submit", ".delete-form", function (e) {
+                e.preventDefault(); // stop normal form submit
+
+                let form = this; // reference to the form
 
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won’t be able to revert this!",
-                    icon: 'warning',
+                    title: "Are you sure?",
+                    text: "This will delete the role permanently and all its permissions.",
+                    icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#e3342f',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel'
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "Cancel"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = url;
+                        form.submit(); // ✅ manually submit after confirmation
                     }
                 });
             });

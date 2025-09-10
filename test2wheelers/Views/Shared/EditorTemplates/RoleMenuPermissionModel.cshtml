@@ -1,52 +1,49 @@
 ﻿@model RoleMenuPermissionModel
 
-<li class="mb-2">
+<li data-id="@Model.MenuId" class="mb-1">
     <input type="hidden" asp-for="MenuId" />
+    <input type="hidden" asp-for="ParentMenuId" />
+    <input type="hidden" asp-for="MenuName" />
 
-    <div class="d-flex flex-column">
-        <!-- Row: menu + permissions -->
-        <div class="d-flex align-items-center flex-wrap gap-3">
-            <label class="fw-bold me-2">@Model.MenuName</label>
+    @if (Model.Children?.Any() == true)
+    {
+        <span class="toggle" style="cursor:pointer;" data-bs-toggle="collapse" data-target="#children-@Model.MenuId">📂</span>
+    }
 
-            @if (Model.Children.Any())
-            {
-                <div class="form-check form-check-inline ms-2">
-                    <input type="checkbox" asp-for="CanView" class="form-check-input parent-view" />
-                    <label class="form-check-label">View</label>
-                </div>
-            }
-            else
-            {
-                <div class="d-flex flex-wrap gap-3 ms-2">
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" asp-for="CanView" class="form-check-input" />
-                        <label class="form-check-label">View</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" asp-for="CanCreate" class="form-check-input" />
-                        <label class="form-check-label">Create</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" asp-for="CanEdit" class="form-check-input" />
-                        <label class="form-check-label">Edit</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" asp-for="CanDelete" class="form-check-input" />
-                        <label class="form-check-label">Delete</label>
-                    </div>
-                </div>
-            }
-        </div>
+    <span class="mr-4">@Model.MenuName</span>
 
-        <!-- Children (note the indexed for-loop) -->
-        @if (Model.Children.Any())
+    <span class="ml-2">
+        @* Root menus (ParentMenuId == null) → Add only *@
+        @if (Model.ParentMenuId == null)
         {
-            <ul class="ms-4 mt-2 list-unstyled">
-                @for (int j = 0; j < Model.Children.Count; j++)
-                {
-                    @Html.EditorFor(m => m.Children[j])
-                }
-            </ul>
+            <input type="checkbox" asp-for="CanView" class="form-check-input parent-view" />
+            <label class="form-check-label">View</label>
         }
-    </div>
+        else
+        {
+            <input type="checkbox" asp-for="CanView" class="form-check-input" />
+        
+            <label class="form-check-label me-2 mr-4">View</label>
+            <input type="checkbox" asp-for="CanCreate" class="form-check-input" />
+        
+            <label class="form-check-label me-2 mr-4">Create</label>
+            <input type="checkbox" asp-for="CanEdit" class="form-check-input" />
+        
+            <label class="form-check-label me-2 mr-4">Edit</label>
+            <input type="checkbox" asp-for="CanDelete" class="form-check-input" />
+        
+            <label class="form-check-label me-2 mr-4">Delete</label>
+
+        }
+    </span>
+
+    @if (Model.Children != null && Model.Children.Any())
+    {
+        <ul id="children-@Model.MenuId" class="collapse ms-4">
+            @for (int i = 0; i < Model.Children.Count; i++)
+            {
+                @Html.EditorFor(m => m.Children[i])
+            }
+        </ul>
+    }
 </li>

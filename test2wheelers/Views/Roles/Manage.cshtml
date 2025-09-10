@@ -45,12 +45,8 @@
                         <div class="col-md-6">
                             <label class="form-label">Permissions</label>
 
-                            <ul class="list-unstyled">
-                                @for (int i = 0; i < Model.Permissions.Count; i++)
-                                {
-                                    @Html.EditorFor(m => m.Permissions[i])
-                                }
-                               @*  @Html.EditorFor(m => m.Permissions) *@
+                            <ul id="menuTree" class="sortable">
+                                @Html.EditorFor(m => m.Permissions)   @* kicks off recursion *@
                             </ul>
 
                         </div>
@@ -67,3 +63,70 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+
+    <script>
+        $(function () {
+            toastr.options = { "positionClass": "toast-top-right" };
+
+            @if (TempData["Success"] != null)
+            {
+                        <text>toastr.success("@TempData["Success"]");</text>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                        <text>toastr.error("@TempData["Error"]");</text>
+            }
+        });
+    </script>
+    <script>
+        $(function () {
+
+               // Delete click
+               $(document).on("click", ".delete-menu", function () {
+                   var menuId = $(this).data("id");
+                   var titlemsg = $(this).data("titlemsg");
+
+
+                   Swal.fire({
+                       title: "Are you sure?",
+                       text: titlemsg,
+                       icon: "warning",
+                       showCancelButton: true,
+                       confirmButtonColor: "#3085d6",
+                       cancelButtonColor: "#d33",
+                       confirmButtonText: "Yes, delete it!"
+                       }).then((result) => {
+                           if (result.isConfirmed) {
+                               $.ajax({
+                                   url: '/Menu/Delete',   // adjust to your controller
+                                   type: 'POST',
+                                   data: { id: menuId },
+                                   success: function (res) {
+                                       if (res.success) {
+                                           toastr.success("Menu Deleted successfully!");
+                                           setTimeout(function () {
+                                               location.reload(); // reload after toast is visible
+                                           }, 1500);
+                                       } else {
+                                           toastr.success("Delete failed: " + res.message);
+
+                                       }
+                                   },
+                                   error: function () {
+                                       alert("Error while deleting.");
+                                   }
+                               });
+                           }
+                   });
+               });
+
+               $(".toggle").on("click", function () {
+                   var target = $(this).data("target");
+                   $(target).slideToggle(200); // smooth expand/collapse
+               });
+           });
+    </script>
+}

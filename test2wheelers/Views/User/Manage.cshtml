@@ -27,7 +27,8 @@
             </div>
             <div class="card-body">
                 <form asp-action="Manage" method="post">
-                    <input type="hidden" asp-for="UserName" />
+                    @* <input type="hidden" asp-for="UserName" /> *@
+                    <input type="hidden" asp-for="Id" />
 
                     <div class="row g-3">
                         <div class="col-md-3">
@@ -83,15 +84,32 @@
 
 
                     <div class="card-footer text-right">
-                        <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-undo"></i>Reset</a>
+                      @*   <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-undo"></i>Reset</a> *@
                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> @(Model.Id == null ? "Create" : "Update")</button>
                     </div>
 
-                   
+
                 </form>
             </div>
         </div>
     </div>
 </section>
 
+section Scripts {
 
+<script>
+    $(function () {
+        toastr.options = { "positionClass": "toast-top-right" };
+
+        @if (TempData["Success"] != null)
+        {
+                        <text>toastr.success("@TempData["Success"]");</text>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+                        <text>toastr.error("@TempData["Error"]");</text>
+        }
+    });
+</script>
+}

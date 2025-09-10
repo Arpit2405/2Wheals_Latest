@@ -205,10 +205,6 @@ namespace test2wheelers.Controllers
             { 
                 counts.PreSaleCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
                 counts.SaleCount = Convert.ToInt32(dt.Rows[1]["TotalCount"]);
-            {
-                var row = dt.Rows[0];
-                //counts.PreSaleCount = Convert.ToInt32(row["PreSaleCount"]);
-                //counts.SaleCount = Convert.ToInt32(row["SaleCount"]);
             }
 
             return counts;
