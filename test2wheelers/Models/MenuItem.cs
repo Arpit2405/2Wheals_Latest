@@ -17,6 +17,8 @@ namespace test2wheelers.Models
 
         public int SortOrder { get; set; }
 
+        public string Action { get; set; }
+
         public List<MenuItem> Children { get; set; } = new List<MenuItem>();
     }
     public class MenuUpdateModel
@@ -24,5 +26,6 @@ namespace test2wheelers.Models
         public int MenuId { get; set; }
         public string MenuName { get; set; }
         public string Url { get; set; }
+        public string Icon { get; set; }
     }
 }

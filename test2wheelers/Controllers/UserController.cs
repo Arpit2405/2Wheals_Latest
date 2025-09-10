@@ -80,10 +80,11 @@ namespace test2wheelers.Controllers
         {
             //if (!ModelState.IsValid) return View(model);
 
-            if (model.UserName == "") // Create
+            if (model.Id == null) // Create
             {
+                Guid Id = Guid.NewGuid();
                 var sql = _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
-                    new SqlParameter("@Id", model.Id),
+                    new SqlParameter("@Id", Id),
                     new SqlParameter("@UserName",  model.UserName),
                     new SqlParameter("@Email",  model.Email),
                     new SqlParameter("@PhoneNumber",  model.PhoneNumber),
@@ -93,10 +94,11 @@ namespace test2wheelers.Controllers
                     new SqlParameter("@RoleId",  model.RoleId),
                     new SqlParameter("@CallType",  "Insert")
                 });
-
+                TempData["Success"] = "User created successfully!";
             }
             else // Update
             {
+               
                 var sql = _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
                     new SqlParameter("@Id", model.Id),
                     new SqlParameter("@UserName",  model.UserName),
@@ -107,7 +109,8 @@ namespace test2wheelers.Controllers
                     new SqlParameter("@Approved",  model.Approved),
                     new SqlParameter("@RoleId",  model.RoleId),
                     new SqlParameter("@CallType",  "Update")
-                });   
+                });
+                TempData["Success"] = "User updated successfully!";
             }
 
             return RedirectToAction("List");

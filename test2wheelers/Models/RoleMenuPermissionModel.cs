@@ -6,6 +6,7 @@
         public string MenuName { get; set; }
         public int? ParentMenuId { get; set; }
         public string Url { get; set; }
+        public string Icon { get; set; }
 
         public bool CanView { get; set; } = false;
         public bool CanCreate { get; set; } = false;

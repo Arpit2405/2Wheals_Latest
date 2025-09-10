@@ -1,5 +1,6 @@
 ﻿@using test2wheelers.Helpers
 @{
+    
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
     var rootMenus = User.Identity.IsAuthenticated ? User.GetMenuTree() : new List<test2wheelers.Models.MenuItem>();
 }
@@ -194,6 +195,15 @@
                     localStorage.setItem("theme", "dark");
                 }
             });
+        });
+
+        let currentAction = "";
+
+        $(document).on("click", "nav-link", function (e) {
+            currentAction = $(this).data("action");
+
+            $(".nav-item").removeClass("menu-open");
+            $(this).closest(".nav-item").addClass("menu-open");
         });
     </script>
 
