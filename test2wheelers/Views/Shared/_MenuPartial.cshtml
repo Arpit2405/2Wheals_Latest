@@ -2,6 +2,15 @@
 @{
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 }
+
+<li class="nav-item @(currentAction == "Dashboard" ? "menu-open" : "")">
+    <a class="nav-link @(currentAction == "Dashboard" ? "active" : "")"
+       asp-controller="Admin" asp-action="Dashboard">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>Dashboard</p>
+    </a>
+</li>
+
 @foreach (var menu in Model)
 {
     if (!menu.CanView) continue; // skip non-viewable
