@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 using test2wheelers.Helpers;
 using test2wheelers.Models;
 
@@ -95,6 +96,8 @@ namespace test2wheelers.Controllers
                 int roleId = (int)roleIdParam.Value;
 
                 SavePermissions(roleId, model.Permissions);
+
+                TempData["Success"] = "Role saved successfully!";
             }
             else
             {
@@ -111,7 +114,23 @@ namespace test2wheelers.Controllers
                 });
 
                 SavePermissions(model.RoleId, model.Permissions);
+
+                TempData["Success"] = "Role updated successfully!";
             }
+            
+            //return RedirectToAction("Manage");
+            return RedirectToAction("List");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _db.ExecuteStoredProcedure("sp_Role", new[] {
+                    new SqlParameter("@RoleId", id),
+                    new SqlParameter("@CallType", "Delete")
+                });
+
+            TempData["Success"] = "Role deleted successfully!";
 
             return RedirectToAction("List");
         }
