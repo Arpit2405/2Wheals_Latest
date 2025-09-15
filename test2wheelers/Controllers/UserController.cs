@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 using test2wheelers.Helpers;
 using test2wheelers.Models;
 
@@ -98,7 +99,7 @@ namespace test2wheelers.Controllers
             }
             else // Update
             {
-               
+
                 var sql = _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
                     new SqlParameter("@Id", model.Id),
                     new SqlParameter("@UserName",  model.UserName),
@@ -115,5 +116,7 @@ namespace test2wheelers.Controllers
 
             return RedirectToAction("List");
         }
+
+     
     }
 }

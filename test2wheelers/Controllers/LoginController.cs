@@ -58,7 +58,7 @@ namespace test2wheelers.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
                         new Claim(ClaimTypes.Name, row["UserName"].ToString()),
-                        //new Claim(ClaimTypes.Role, row["RoleId"].ToString())
+                        new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
 
                 foreach (DataRow m in menuTable.Rows)
@@ -105,6 +105,11 @@ namespace test2wheelers.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Login");
+        }
+
+           public IActionResult Profile()
+        {
+            return View();
         }
     }
 }
