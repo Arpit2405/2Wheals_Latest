@@ -49342,3 +49342,18 @@ li.breadcrumb-item a {
     color: white;
 }
 /*# sourceMappingURL=adminlte.min.css.map */
+
+
+
+ol.breadcrumb.mb-0 {
+    background: #dd485c;
+    color: #ffffff !important;
+}
+
+li.breadcrumb-item.active {
+    color: #fff;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #ffffff;
+}

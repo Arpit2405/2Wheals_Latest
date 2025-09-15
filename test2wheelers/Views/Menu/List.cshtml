@@ -37,87 +37,7 @@
                     </button>
                 </div>
 
-                <!-- Add Modal -->
-                <div class="modal fade" id="menuModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content  shadow-lg rounded-lg">
-                            <form id="menuForm">
-                                <div class="modal-header bg-success text-white">
-                                    <h5 class="modal-title" id="addBrandsModalLabel">Add Menu</h5>
-                                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="MenuId" name="MenuId" value="0" />
-                                    <input type="hidden" id="ParentMenuId" name="ParentMenuId" value="" />
-                                    <input type="hidden" id="Action" name="Action" value="" />
-
-                                    <div class="mb-3">
-                                        <label for="MenuName" class="form-label">Menu Name</label>
-                                        <input type="text" class="form-control" id="MenuName" name="MenuName" required />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="Url" class="form-label">Url</label>
-                                        <input type="text" class="form-control" id="Url" name="Url" />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="Icon" class="form-label">Icon</label>
-                                        <input type="text" class="form-control" id="Icon" name="Icon" required />
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fa fa-save"></i> Save
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Edit Modal -->
-
-                <div class="modal fade" id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content shadow-lg rounded-lg">
-
-                            <div class="modal-header bg-success text-white">
-                                <h5 class="modal-title" id="editmenuModalLabel">Edit Menu</h5>
-                                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" id="editMenuId" />
-                                <input type="hidden" id="Action" name="Action" value="" />
-
-                                <div class="mb-3">
-                                    <label for="MenuName" class="form-label">Menu Name</label>
-                                    <input type="text" class="form-control" id="editMenuName" name="MenuName" required />
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="Url" class="form-label">URL</label>
-                                    <input type="text" class="form-control" id="editMenuUrl" name="Url" />
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="Icon" class="form-label">Icon</label>
-                                    <input type="text" class="form-control" id="editMenuIcon" name="Icon" required />
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" id="saveEditMenu">
-                                    <i class="fa fa-save" ></i> Update
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
 
                 <ul id="menuTree" class="sortable ">
                     @foreach (var menu in Model.Where(m => m.ParentMenuId == null))
@@ -159,6 +79,88 @@
                         </li>
                     }
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="menuModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content  shadow-lg rounded-lg">
+            <form id="menuForm">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="addBrandsModalLabel">Add Menu</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="MenuId" name="MenuId" value="0" />
+                    <input type="hidden" id="ParentMenuId" name="ParentMenuId" value="" />
+                    <input type="hidden" id="Action" name="Action" value="" />
+
+                    <div class="mb-3">
+                        <label for="MenuName" class="form-label">Menu Name</label>
+                        <input type="text" class="form-control" id="MenuName" name="MenuName" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Url" class="form-label">Url</label>
+                        <input type="text" class="form-control" id="Url" name="Url" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Icon" class="form-label">Icon</label>
+                        <input type="text" class="form-control" id="Icon" name="Icon" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+
+<div class="modal fade" id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg rounded-lg">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editmenuModalLabel">Edit Menu</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editMenuId" />
+                <input type="hidden" id="Action" name="Action" value="" />
+
+                <div class="mb-3">
+                    <label for="MenuName" class="form-label">Menu Name</label>
+                    <input type="text" class="form-control" id="editMenuName" name="MenuName" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Url" class="form-label">URL</label>
+                    <input type="text" class="form-control" id="editMenuUrl" name="Url" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Icon" class="form-label">Icon</label>
+                    <input type="text" class="form-control" id="editMenuIcon" name="Icon" required />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="saveEditMenu">
+                    <i class="fa fa-save"></i> Update
+                </button>
             </div>
         </div>
     </div>
