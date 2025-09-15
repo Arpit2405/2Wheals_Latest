@@ -59,7 +59,7 @@
                             <span asp-validation-for="RoleId" class="text-danger"></span>
                         </div>
 
-                        <div class="col-md-3">
+                        @* <div class="col-md-3">
                             <label asp-for="PasswordHash" class="form-label">Password</label>
                             <input asp-for="PasswordHash" class="form-control" />
                             <span asp-validation-for="PasswordHash" class="text-danger"></span>
@@ -69,7 +69,7 @@
                             <label asp-for="PasswordHash" class="form-label">Password</label>
                             <input asp-for="PasswordHash" class="form-control" />
                             <span asp-validation-for="PasswordHash" class="text-danger"></span>
-                        </div>
+                        </div> *@
                     </div>
 
                     <div class="form-check mb-3">
@@ -95,7 +95,7 @@
     </div>
 </section>
 
-section Scripts {
+@section Scripts {
 
 <script>
     $(function () {

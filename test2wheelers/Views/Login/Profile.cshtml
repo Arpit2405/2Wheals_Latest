@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "Menu Tree Management";
+﻿@model test2wheelers.Models.UserModel
+@{
+    ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
 }
 <ol class="breadcrumb mb-0">
@@ -24,69 +25,71 @@
                 <h5 class="mb-3">Account</h5>
                 <hr />
                 <!-- Profile Picture -->
-                <div class="d-flex align-items-center justify-content-between">
-                    <img src="/adminassets/dist/img/user2-160x160.jpg" class="rounded-circle me-3" alt="Profile" width="95" height="95">
-                    <div class="d-flex gap-2">
+                <div>
+                    <div class="d-flex align-items-center">
+                        @* <img src="/adminassets/dist/img/user2-160x160.jpg" class="rounded-circle me-3" alt="Profile" width="95" height="95"> *@
+                        <img src="@Model.ProfileImage" class="rounded-circle me-3" alt="Profile" width="95" height="95">
+                        <div>
+                            <h5 class="mb-1">@Model.UserName</h5>
+                            <span class="badge bg-primary">@Model.RoleName</span>
+                        </div>
+
+                    </div>
+                    <div class="mb-3 text-right">
                         <button class="btn btn-primary">Upload new picture</button>
                     </div>
                 </div>
+                
                 <hr />
 
-                <!-- Full Name -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">First name</label>
-                        <input type="text" class="form-control" value="Bryan">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Last name</label>
-                        <input type="text" class="form-control" value="Cranston">
-                    </div>
-                </div>
-
-                <!-- Contact Email -->
-                <div class="mb-4">
-                    <label class="form-label">Contact email</label>
-                    <input type="email" class="form-control" value="bryan.cranston@mail.com" />
-                </div>
-                <hr />
-                <!-- Password -->
-                <h6 class="mt-4">Password</h6>
-                <p class="text-muted small mb-1">Enter new password to update.</p>
-                <div class="row mb-4">
-                    <div class="col-md-6 mb-2">
-                        <label class="form-label">New password</label>
-                        <input type="password" class="form-control" value="**********">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <label class="form-label">Confirm new password</label>
-                        <input type="password" class="form-control" value="**********">
-                    </div>
-                </div>
-
-                <!-- Integrated Accounts -->
-                <h6 class="mt-4">Integrated account</h6>
-                <p class="text-muted small mb-2">Manage your current integrated accounts.</p>
-                <div class="border rounded p-3 d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Analytics_logo.svg" width="24" class="me-2" alt="GA">
-                        <div>
-                            <strong>Google Analytics</strong><br>
-                            <span class="small text-muted">Navigate the Google Analytics interface and reports.</span>
+                <form method="post">
+                    <!-- Full Name -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">First name</label>
+                            <input type="text" asp-for="FirstName" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last name</label>
+                            <input type="text" asp-for="LastName" class="form-control">
                         </div>
                     </div>
-                    <span class="badge bg-success">Connected</span>
-                </div>
 
-                @*       </div>
+                    <!-- Contact Email -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Contact email</label>
+                            <input type="email" asp-for="Email" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mobile No.</label>
+                            <input type="text" asp-for="PhoneNumber" class="form-control">
+                        </div>
                     </div>
-                </div> *@
+
+                    <hr />
+                    <!-- Password -->
+                    <h6 class="mt-4">Password</h6>
+                    <p class="text-muted small mb-1">Enter new password to update.</p>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">New password</label>
+                            <input type="password" asp-for="Password" class="form-control" value="">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Confirm new password</label>
+                            <input type="password" asp-for="ConfirmPassword" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+                    </div>
+                </form>
+                
             </div>
 
 
-            <div class="card-footer text-right">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
-            </div>
+            
         </div>
     </div>
 </div>
