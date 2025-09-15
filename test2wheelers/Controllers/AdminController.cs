@@ -203,8 +203,8 @@ namespace test2wheelers.Controllers
 
             if (dt.Rows.Count > 0)
             { 
-                counts.PreSaleCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
-                counts.SaleCount = Convert.ToInt32(dt.Rows[1]["TotalCount"]);
+                counts.PreSaleCount = Convert.ToInt32(dt.Rows[0]["PreSaleCount"]);
+                counts.SaleCount = Convert.ToInt32(dt.Rows[0]["SaleCount"]);
             }
 
             return counts;

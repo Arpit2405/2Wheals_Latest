@@ -3,6 +3,7 @@
     
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
     var rootMenus = User.Identity.IsAuthenticated ? User.GetMenuTree() : new List<test2wheelers.Models.MenuItem>();
+    string userName = User.Identity?.Name;
 }
 
 
@@ -64,18 +65,18 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <!-- User image -->
-                        <li class="user-header bg-primary">
+                        <li class="user-header" style="border-bottom: 3px solid #da1c39;">
                             <img src="~/adminassets/dist/img/user2-160x160.jpg"
                                  class="img-circle elevation-2"
                                  alt="User Image">
                             <p>
-                                Alexander Pierce - Admin
+                                @userName
                                 <small>Member since Jan. 2024</small>
                             </p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <a href="@Url.Action("Profile","Account")" class="btn btn-default btn-flat">Profile</a>
+                            <a href="@Url.Action("Profile", "Login")" class="btn btn-default btn-flat">Profile</a>
                             <a href="@Url.Action("Logout","Login")" class="btn btn-default btn-flat float-right">Logout</a>
                         </li>
                     </ul>
