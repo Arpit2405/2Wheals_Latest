@@ -94,6 +94,7 @@ namespace test2wheelers.Controllers
                     new SqlParameter("@IsActive",  model.IsActive),
                     new SqlParameter("@Approved",  model.Approved),
                     new SqlParameter("@RoleId",  model.RoleId),
+                    new SqlParameter("@ProfileImage",  "/adminassets/dist/img/user2-160x160.jpg"),
                     new SqlParameter("@CallType",  "Insert")
                 });
                 TempData["Success"] = "User created successfully!";
