@@ -1,9 +1,11 @@
-﻿@using test2wheelers.Helpers
+﻿@using System.Security.Claims
+@using test2wheelers.Helpers
 @{
 
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
     var rootMenus = User.Identity.IsAuthenticated ? User.GetMenuTree() : new List<test2wheelers.Models.MenuItem>();
     string userName = User.Identity?.Name;
+    string thumbprint = User.FindFirst(ClaimTypes.Thumbprint)?.Value;
 }
 
 
@@ -59,14 +61,14 @@
                 </li>
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                        <img src="~/adminassets/dist/img/user2-160x160.jpg"
+                        <img src="/Uploads/Photos/@thumbprint"
                              class="user-image img-circle elevation-2"
                              alt="User Image">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <!-- User image -->
                         <li class="user-header" style="border-bottom: 3px solid #da1c39;">
-                            <img src="~/adminassets/dist/img/user2-160x160.jpg"
+                            <img src="/Uploads/Photos/@thumbprint"
                                  class="img-circle elevation-2"
                                  alt="User Image">
                             <p>
