@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 using test2wheelers.Helpers;
 using test2wheelers.Models;
 
@@ -82,13 +83,14 @@ namespace test2wheelers.Controllers
 
             if (model.Id == null) // Create
             {
+                string hashedPassword = PasswordHelper.HashPassword("Admin@123");
                 Guid Id = Guid.NewGuid();
                 var sql = _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
                     new SqlParameter("@Id", Id),
                     new SqlParameter("@UserName",  model.UserName),
                     new SqlParameter("@Email",  model.Email),
                     new SqlParameter("@PhoneNumber",  model.PhoneNumber),
-                    new SqlParameter("@Password",  model.PasswordHash),
+                    new SqlParameter("@Password",  hashedPassword),
                     new SqlParameter("@IsActive",  model.IsActive),
                     new SqlParameter("@Approved",  model.Approved),
                     new SqlParameter("@RoleId",  model.RoleId),
@@ -98,7 +100,7 @@ namespace test2wheelers.Controllers
             }
             else // Update
             {
-               
+
                 var sql = _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
                     new SqlParameter("@Id", model.Id),
                     new SqlParameter("@UserName",  model.UserName),
@@ -115,5 +117,7 @@ namespace test2wheelers.Controllers
 
             return RedirectToAction("List");
         }
+
+     
     }
 }

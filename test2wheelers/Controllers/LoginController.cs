@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc; 
-using System.Data;
-using test2wheelers.Models;
-using _2whealers.Models;
+﻿using _2whealers.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
+using System.Security.Claims;
 using test2wheelers.Helpers;
+using test2wheelers.Models;
 
 namespace test2wheelers.Controllers
 {
@@ -39,13 +40,19 @@ namespace test2wheelers.Controllers
 
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@UserName", model.UserName),
-                    new SqlParameter("@Password", model.Password)
+                    new SqlParameter("@UserName", model.UserName)
                 };
 
                 DataSet ds = _db.ExecuteStoredProcedureWithDataSet("sp_LoginUser", parameters);
 
                 if (ds.Tables[0].Rows.Count == 0)
+                {
+                    return Json(new { success = false, message = "Invalid Username or Password" });
+                }
+
+
+                bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
+                if (isValid == false)
                 {
                     return Json(new { success = false, message = "Invalid Username or Password" });
                 }
@@ -58,7 +65,7 @@ namespace test2wheelers.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
                         new Claim(ClaimTypes.Name, row["UserName"].ToString()),
-                        //new Claim(ClaimTypes.Role, row["RoleId"].ToString())
+                        new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
 
                 foreach (DataRow m in menuTable.Rows)
@@ -105,6 +112,59 @@ namespace test2wheelers.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Login");
+        }
+
+        public IActionResult Profile()
+        {
+            UserModel model = new UserModel();
+            var dt = _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
+                    new SqlParameter("@Id", User.FindFirst(ClaimTypes.NameIdentifier)?.Value),
+                    new SqlParameter("@CallType", "GetById")
+                });
+
+            if (dt.Rows.Count > 0)
+            {
+                model.Id = Guid.Parse(dt.Rows[0]["Id"].ToString());
+                model.UserName = dt.Rows[0]["UserName"].ToString();
+                model.Email = dt.Rows[0]["Email"].ToString();
+                model.PhoneNumber = dt.Rows[0]["PhoneNumber"].ToString();
+                model.PasswordHash = dt.Rows[0]["PasswordHash"].ToString();
+                model.FirstName = dt.Rows[0]["FirstName"].ToString();
+                model.LastName = dt.Rows[0]["LastName"].ToString();
+                model.ProfileImage = dt.Rows[0]["ProfileImage"].ToString();
+                model.RoleId = dt.Rows[0]["RoleId"] != DBNull.Value ? (int?)dt.Rows[0]["RoleId"] : null;
+                model.RoleName = dt.Rows[0]["RoleName"].ToString();
+                model.IsActive = (bool)dt.Rows[0]["IsActive"];
+                model.Approved = (bool)dt.Rows[0]["Approved"];
+            }
+            return View(model);
+
+            
+        }
+
+        [HttpPost]
+        public IActionResult Profile(UserModel model)
+        {
+            //bool isValid = PasswordHelper.VerifyPassword(loginModel.Password, userFromDb.HashedPassword);
+            string hashedPassword = PasswordHelper.HashPassword(model.Password);
+            // Only check username for now
+            var dt = _db.ExecuteStoredProcedureWithDataSet("sp_AspNetUsers", new[]
+            {
+                new SqlParameter("@Id", User.FindFirst(ClaimTypes.NameIdentifier)?.Value),
+                new SqlParameter("@UserName", model.UserName),
+                new SqlParameter("@FirstName", model.FirstName),
+                new SqlParameter("@LastName", model.LastName),
+                new SqlParameter("@Email", model.Email),
+                new SqlParameter("@PhoneNumber", model.PhoneNumber),
+                new SqlParameter("@Password", hashedPassword),
+                new SqlParameter("@IsActive", model.IsActive),
+                new SqlParameter("@Approved", model.Approved),
+                new SqlParameter("@CallType", "UpdateProfile")
+            });
+
+            TempData["Success"] = "User created successfully!";
+
+            return RedirectToAction("Profile");
         }
     }
 }
