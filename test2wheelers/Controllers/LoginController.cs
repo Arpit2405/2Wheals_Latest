@@ -1,6 +1,7 @@
 ﻿using _2whealers.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
@@ -15,11 +16,13 @@ namespace test2wheelers.Controllers
     {
         private readonly ILogger<LoginController> _logger;
         private readonly SqlHelper _db;
+        private readonly IWebHostEnvironment _env;
 
-        public LoginController(ILogger<LoginController> logger, SqlHelper db)
+        public LoginController(ILogger<LoginController> logger, SqlHelper db, IWebHostEnvironment env)
         {
             _logger = logger;
             _db = db;
+            _env = env;
         }
 
         public IActionResult Index()
@@ -65,6 +68,7 @@ namespace test2wheelers.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
                         new Claim(ClaimTypes.Name, row["UserName"].ToString()),
+                        new Claim(ClaimTypes.Thumbprint, row["ProfileImage"].ToString()),
                         new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
 
@@ -139,7 +143,7 @@ namespace test2wheelers.Controllers
             }
             return View(model);
 
-            
+
         }
 
         [HttpPost]
@@ -163,6 +167,45 @@ namespace test2wheelers.Controllers
             });
 
             TempData["Success"] = "User created successfully!";
+
+            return RedirectToAction("Profile");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(IFormFile photoFile)
+        {
+            if (photoFile != null && photoFile.Length > 0)
+            {
+                // Ensure "Uploads/Photos" folder exists inside wwwroot
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "Uploads", "Photos");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                // Generate unique filename
+                var fileName = Path.GetFileName(photoFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                // Save file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photoFile.CopyToAsync(stream);
+                }
+
+
+                var dt = _db.ExecuteStoredProcedureWithDataSet("sp_AspNetUsers", new[]
+                {
+                    new SqlParameter("@Id", User.FindFirst(ClaimTypes.NameIdentifier)?.Value),
+                    new SqlParameter("@ProfilePic", filePath),
+                    new SqlParameter("@CallType", "UpdatePhoto")
+                });
+
+                // TODO: Save relative path to DB (e.g., "/Uploads/Photos/filename.jpg")
+                TempData["Success"] = "Profile Pic uploaded successfully!";
+            }
+            else
+            {
+                TempData["Danger"] = "Please select a valid file.";
+            }
 
             return RedirectToAction("Profile");
         }
