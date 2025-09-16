@@ -38,9 +38,7 @@ namespace _2whealers.Models
         [DataType(DataType.Date)]
         public DateTime? dateofsale { get; set; }
 
-
-     
-
+         
         [Required(ErrorMessage = "Engine number is required")]
         [StringLength(20, MinimumLength = 5, ErrorMessage = "Engine number must be between 5 and 30 characters")]
         [RegularExpression(@"^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+$", ErrorMessage = "Engine number must contain both letters and numbers")]

@@ -8,5 +8,6 @@ namespace _2whealers.Models
         public int BrandsId { get; set; }
         public int ModelId { get; set; }
         public int Quantity { get; set; }  
+        public DateTime LastUpdated { get; set; }  
     }
 }

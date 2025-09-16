@@ -27,15 +27,15 @@
                 @Html.AntiForgeryToken()
                 <div class="card-body row g-3">
 
-                     
-                    <div class="col-md-4">
+
+                    <div class="col-md-3">
                         <label class="form-label">
-                            Brands <span class="required-star">*</span>
+                            Bike <span class="required-star">*</span>
                         </label>
-                        @Html.DropDownListFor(m => m.BrandsId, new SelectList(ViewBag.BrandsList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BrandsDropdown" })
-                        @Html.ValidationMessageFor(m => m.BrandsId, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => m.BranchId, new SelectList(ViewBag.BikeList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BikeDropdown" })
+                        @Html.ValidationMessageFor(m => m.BranchId, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">
                             Model <span class="required-star">*</span>
                         </label>
@@ -43,6 +43,17 @@
                         @Html.ValidationMessageFor(m => m.ModelId, "", new { @class = "text-danger" })
                     </div>
 
+                    <div class="col-md-3">
+                        <label class="form-label">Quantity <span class="required-star">*</span></label>
+                        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number", min = "1", placeholder = "Enter Quantity" })
+                        @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Stock Date</label>
+                        @Html.TextBoxFor(m => m.LastUpdated, new { @class = "form-control", @id = "receiptDate", placeholder = "Select Date" })
+                        @Html.ValidationMessageFor(m => m.LastUpdated, "", new { @class = "text-danger" })
+                    </div>
 
                 </div>
 
@@ -66,25 +77,26 @@
             });
         });
 
-          $('#BrandsDropdown').change(function () {
-                var bikeId = $(this).val();
-                if (bikeId) {
-                    $.ajax({
-                        url: '/Admin/GetModelsByBike',
-                        type: 'GET',
-                        data: { bikeId: bikeId },
-                        success: function (data) {
-                            var modelDropdown = $('#ModelDropdown');
-                            modelDropdown.empty();
-                                modelDropdown.append($('<option>').val('').text('-- Select Model --'));
-                           $.each(data, function (i, model) {
-            modelDropdown.append($('<option>').val(model.value).text(model.text));
+                $('#BikeDropdown').change(function () {
+            var bikeId = $(this).val();
+            if (bikeId) {
+                $.ajax({
+                    url: '/Stock/GetModelsByBike',
+                    type: 'GET',
+                    data: { bikeId: bikeId },
+                    success: function (data) {
+                        var modelDropdown = $('#ModelDropdown');
+                        modelDropdown.empty();
+                        modelDropdown.append($('<option>').val('').text('-- Select Model --'));
+                        $.each(data, function (i, model) {
+                            modelDropdown.append($('<option>').val(model.value).text(model.text));
+                        });
+                    }
+                });
+            } else {
+                $('#ModelDropdown').empty().append($('<option>').val('').text('-- Select Model --'));
+            }
         });
-                        }
-                    });
-                } else {
-                    $('#ModelDropdown').empty().append($('<option>').val('').text('-- Select Model--'));
-                }
-            });
+
     </script>
 }

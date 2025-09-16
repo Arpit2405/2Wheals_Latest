@@ -829,5 +829,61 @@ namespace test2wheelers.Controllers
         }
 
 
+        ///////////Add Services/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        public ActionResult Services()
+        {
+            SqlParameter[] parameters = { new SqlParameter("@calltype", "GetAllServices") };
+
+            var dt = _sqlHelper.ExecuteStoredProcedure("sp_Services", parameters);
+
+            var receiptList = dt.AsEnumerable().Select(row => new Services
+            {
+                Id = Convert.ToInt32(row["Id"]),
+                //CustomerName = row["CustomerName"].ToString(),
+                //MobileNo = row["MobileNo"].ToString(),
+                //Amount = Convert.ToDecimal(row["Amount"]),
+                //ReceiptDate = Convert.ToDateTime(row["ReceiptDate"]),
+                //PaymentMode = row["PaymentMode"].ToString(),
+                IsActive = Convert.ToBoolean(row["IsActive"])
+            }).ToList();
+
+            return View(receiptList);
+        }
+
+
+        public ActionResult AddServices()
+        {
+            ViewBag.BrandsList = GetBrands();
+            return View(new Services());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddServices(Services model)
+        {
+            if (ModelState.IsValid)
+            {
+                SqlParameter[] parameters = {
+            new SqlParameter("@calltype", "InsertReceipts"),
+            //new SqlParameter("@CustomerName", model.CustomerName),
+            //new SqlParameter("@MobileNo", model.MobileNo),
+            //new SqlParameter("@Amount", model.Amount),
+            //new SqlParameter("@ReceiptDate", model.ReceiptDate),
+            //new SqlParameter("@BrandsId", model.BrandsId),
+            //new SqlParameter("@ModelId", model.ModelId),
+            //new SqlParameter("@PaymentMode", model.PaymentMode),
+        };
+
+                var result = _sqlHelper.ExecuteStoredProcedure("sp_Receipts", parameters);
+
+                TempData["Success"] = "Receipt added successfully!";
+                return RedirectToAction("Receipts");
+            }
+
+            TempData["Error"] = "Please check the form fields.";
+            return View(model);
+        }
     }
 }
