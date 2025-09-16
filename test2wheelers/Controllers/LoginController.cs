@@ -67,7 +67,7 @@ namespace test2wheelers.Controllers
                 var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
-                        new Claim(ClaimTypes.Name, row["UserName"].ToString()),
+                        new Claim(ClaimTypes.Name, row["Name"].ToString()),
                         new Claim(ClaimTypes.Thumbprint, row["ProfileImage"].ToString()),
                         new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
@@ -195,7 +195,7 @@ namespace test2wheelers.Controllers
                 var dt = _db.ExecuteStoredProcedureWithDataSet("sp_AspNetUsers", new[]
                 {
                     new SqlParameter("@Id", User.FindFirst(ClaimTypes.NameIdentifier)?.Value),
-                    new SqlParameter("@ProfilePic", filePath),
+                    new SqlParameter("@ProfileImage", fileName),
                     new SqlParameter("@CallType", "UpdatePhoto")
                 });
 
