@@ -867,23 +867,57 @@ namespace test2wheelers.Controllers
             {
                 SqlParameter[] parameters = {
             new SqlParameter("@calltype", "InsertReceipts"),
-            //new SqlParameter("@CustomerName", model.CustomerName),
-            //new SqlParameter("@MobileNo", model.MobileNo),
-            //new SqlParameter("@Amount", model.Amount),
-            //new SqlParameter("@ReceiptDate", model.ReceiptDate),
-            //new SqlParameter("@BrandsId", model.BrandsId),
-            //new SqlParameter("@ModelId", model.ModelId),
-            //new SqlParameter("@PaymentMode", model.PaymentMode),
+            new SqlParameter("@UserId_fk", model.UserId_fk),
+            new SqlParameter("@BrandId_Fk", model.BrandId_Fk),
+            new SqlParameter("@ModelId_Fk", model.ModelId_Fk),
+            new SqlParameter("@ManufacturingYear", model.ManufacturingYear),
+            new SqlParameter("@RegistrationNumber", model.RegistrationNumber ?? (object)DBNull.Value),
+            new SqlParameter("@EngineNumber", model.EngineNo ?? (object)DBNull.Value),
+            new SqlParameter("@ChasisNumber", model.ChassisNo ?? (object)DBNull.Value),
+            new SqlParameter("@DRM", model.DRM),
+            new SqlParameter("@DateOfServicing", model.DateOfServicing),
+            new SqlParameter("@SerivceDetails", model.SerivceDetails ?? (object)DBNull.Value),
+            new SqlParameter("@MeterReading", model.MeterReading),
+            new SqlParameter("@Amount", model.Amount),
+            new SqlParameter("@DateOfServiceReminder", model.DateOfServiceReminder),
+            new SqlParameter("@InsuranceDueDate", model.InsuranceDuDate),
+            new SqlParameter("@Notes", model.Notes ?? (object)DBNull.Value),
+            new SqlParameter("@CustomerComplaints", model.CustomerComplaints),
+            new SqlParameter("@RegularService", model.RegularService),
+            new SqlParameter("@WashingPolishing", model.WashingPolishing),
+            new SqlParameter("@Brake", model.Brake),
+            new SqlParameter("@SparkPlug", model.SparkPlug),
+            new SqlParameter("@ChainServices", model.ChainServices),
+            new SqlParameter("@Engine", model.Engine),
+            new SqlParameter("@ElectricalIssues", model.ElectricalIssues),
+            new SqlParameter("@Suspension", model.Suspension),
+            new SqlParameter("@Clutch", model.Clutch),
+            new SqlParameter("@Accident", model.Accident),
+            new SqlParameter("@OilChange", model.OilChange),
+            new SqlParameter("@RunningRepair", model.RunningRepair),
+            new SqlParameter("@Gear", model.Gear),
+            new SqlParameter("@PaintRepair", model.PaintRepair),
+            new SqlParameter("@Accessories", model.Accessories),
+            new SqlParameter("@GeneralCheckup", model.GeneralCheckup),
+            new SqlParameter("@Complaints", model.Complaints),
+            new SqlParameter("@Filters", model.Filters),
+            new SqlParameter("@Labour", model.Labour),
+            new SqlParameter("@FlushingTreatement", model.FlushingTreatement),
+            new SqlParameter("@Petrol", model.Petrol),
+            new SqlParameter("@SpareParts", model.SpareParts),
+            new SqlParameter("@CreatedDate", model.CreatedDate ?? DateTime.Now),
+            new SqlParameter("@IsActive", model.IsActive)
         };
 
                 var result = _sqlHelper.ExecuteStoredProcedure("sp_Receipts", parameters);
 
-                TempData["Success"] = "Receipt added successfully!";
+                TempData["Success"] = "Service added successfully!";
                 return RedirectToAction("Receipts");
             }
 
             TempData["Error"] = "Please check the form fields.";
             return View(model);
         }
+
     }
 }

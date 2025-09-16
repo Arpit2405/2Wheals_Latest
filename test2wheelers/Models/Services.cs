@@ -67,9 +67,9 @@ namespace _2whealers.Models
         public int MeterReading { get; set; }
         public int? Amount { get; set; }
 
-        [Required(ErrorMessage = "Date of Sale Reminder is required")]
+        [Required(ErrorMessage = "Date of Service Reminder is required")]
         [DataType(DataType.Date)]
-        public DateTime? DateOfSaleReminder { get; set; }
+        public DateTime? DateOfServiceReminder { get; set; }
 
 
         [Required(ErrorMessage = "Insurance Due Date is required")]

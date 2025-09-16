@@ -35,7 +35,7 @@
                 </a>
             </div>
 
-            @using (Html.BeginForm("AddSales", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+            @using (Html.BeginForm("AddServices", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="container-fluid my-3">
@@ -191,14 +191,7 @@
                                             @readonly = "readonly"
                                         })
                                     @Html.ValidationMessageFor(m => m.ManufacturingYear, "", new { @class = "text-danger" })
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">
-                                        Registration Number <span class="required-star">*</span>
-                                    </label>
-                                    @Html.TextBox("RegNo", "A/F", new { @class = "form-control", @readonly = "readonly" })
-                                    @Html.ValidationMessageFor(m => m.RegistrationNumber, "", new { @class = "text-danger" })
-                                </div>
+                                </div> 
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Engine No <span class="required-star">*</span>
@@ -347,8 +340,8 @@
                                     <label class="form-label">
                                         Date Of Sale Reminder <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.DateOfSaleReminder, new { @class = "form-control", @id = "dateOfSaleReminder", autocomplete = "off" })
-                                    @Html.ValidationMessageFor(m => m.DateOfSaleReminder, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.DateOfServiceReminder, new { @class = "form-control", @id = "DateOfServiceReminder", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(m => m.DateOfServiceReminder, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
@@ -438,17 +431,17 @@
                 allowInput: false
             });
 
-            flatpickr("#dateOfSaleReminder", {
+            flatpickr("#DateOfServiceReminder", {
                 dateFormat: "Y-m-d",
                 minDate: "today",
                 allowInput: false
             });
                    flatpickr("#InsuranceDueDate", {
-            enableTime: true,              // Time bhi allow hoga
-            dateFormat: "d-m-Y h:i K",     // d-m-Y date + 12-hour time + AM/PM
-            time_24hr: false,              // 12-hour format
-            minuteIncrement: 1,            // minute step
-            allowInput: false              // readonly input (sirf calendar se choose hoga)
+            enableTime: true,               
+            dateFormat: "d-m-Y h:i K",     
+            time_24hr: false,              
+            minuteIncrement: 1,          
+            allowInput: false    
         });
         });
     </script>

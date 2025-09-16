@@ -68,7 +68,7 @@ namespace test2wheelers.Controllers
                         new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
 
-                foreach (DataRow m in menuTable.Rows)
+                foreach (DataRow m in   menuTable.Rows)
                 {
                     var menuId = m["MenuId"].ToString();
                     var menuName = m["MenuName"].ToString();
