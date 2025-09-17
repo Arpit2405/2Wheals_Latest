@@ -272,11 +272,11 @@ namespace test2wheelers.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetModelsByBike(int bikeId)
+        public IActionResult GetModelsByBrand(int brandId)
         {
             SqlParameter[] parameters = {
         new SqlParameter("@calltype", "GetAllBikeModelsById"),
-        new SqlParameter("@brand_Id_Fk", bikeId)
+        new SqlParameter("@brand_Id_Fk", brandId)
     };
 
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Users", parameters);
@@ -871,14 +871,14 @@ namespace test2wheelers.Controllers
             new SqlParameter("@BrandId_Fk", model.BrandId_Fk),
             new SqlParameter("@ModelId_Fk", model.ModelId_Fk),
             new SqlParameter("@ManufacturingYear", model.ManufacturingYear),
-            new SqlParameter("@RegistrationNumber", model.RegistrationNumber ?? (object)DBNull.Value),
+            new SqlParameter("@RegistrationNumber", model.RegistrationNumber),
             new SqlParameter("@EngineNumber", model.EngineNo ?? (object)DBNull.Value),
             new SqlParameter("@ChasisNumber", model.ChassisNo ?? (object)DBNull.Value),
             new SqlParameter("@DRM", model.DRM),
             new SqlParameter("@DateOfServicing", model.DateOfServicing),
             new SqlParameter("@SerivceDetails", model.SerivceDetails ?? (object)DBNull.Value),
             new SqlParameter("@MeterReading", model.MeterReading),
-            new SqlParameter("@Amount", model.Amount),
+            new SqlParameter("@Amount", model.CashAmount),
             new SqlParameter("@DateOfServiceReminder", model.DateOfServiceReminder),
             new SqlParameter("@InsuranceDueDate", model.InsuranceDuDate),
             new SqlParameter("@Notes", model.Notes ?? (object)DBNull.Value),
@@ -899,14 +899,12 @@ namespace test2wheelers.Controllers
             new SqlParameter("@PaintRepair", model.PaintRepair),
             new SqlParameter("@Accessories", model.Accessories),
             new SqlParameter("@GeneralCheckup", model.GeneralCheckup),
-            new SqlParameter("@Complaints", model.Complaints),
+            new SqlParameter("@Complaints", model.CustomerComplaints),
             new SqlParameter("@Filters", model.Filters),
             new SqlParameter("@Labour", model.Labour),
             new SqlParameter("@FlushingTreatement", model.FlushingTreatement),
             new SqlParameter("@Petrol", model.Petrol),
-            new SqlParameter("@SpareParts", model.SpareParts),
-            new SqlParameter("@CreatedDate", model.CreatedDate ?? DateTime.Now),
-            new SqlParameter("@IsActive", model.IsActive)
+            new SqlParameter("@SpareParts", model.SpareParts)
         };
 
                 var result = _sqlHelper.ExecuteStoredProcedure("sp_Receipts", parameters);

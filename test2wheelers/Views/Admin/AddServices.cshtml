@@ -8,7 +8,7 @@
         color: red;
         font-weight: bold;
     }
-</style> 
+</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 
@@ -170,15 +170,15 @@
                                     <label class="form-label">
                                         Brands <span class="required-star">*</span>
                                     </label>
-                                    @Html.DropDownListFor(m => m.BrandId_Fk, new SelectList(ViewBag.BrandsList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BikeDropdown" })
+                                    @Html.DropDownListFor(m => m.BrandId_Fk, new SelectList(ViewBag.BrandsList, "Value", "Text"), "-- Select Brands --", new { @class = "form-control", id = "BrandDropdown" })
                                     @Html.ValidationMessageFor(m => m.BrandId_Fk, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Model <span class="required-star">*</span>
                                     </label>
-                                    @Html.DropDownListFor(m => m.ModelId, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Select Model --", new { @class = "form-control", id = "ModelDropdown" })
-                                    @Html.ValidationMessageFor(m => m.ModelId, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(m => m.ModelId_Fk, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Select Model --", new { @class = "form-control", id = "ModelDropdown" })
+                                    @Html.ValidationMessageFor(m => m.ModelId_Fk, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
@@ -191,7 +191,14 @@
                                             @readonly = "readonly"
                                         })
                                     @Html.ValidationMessageFor(m => m.ManufacturingYear, "", new { @class = "text-danger" })
-                                </div> 
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        Registration No <span class="required-star">*</span>
+                                    </label>
+                                    @Html.TextBoxFor(m => m.RegistrationNumber, new { @class = "form-control", placeholder = "Enter Registration No", maxlength = "20", style = "text-transform:uppercase;" })
+                                    @Html.ValidationMessageFor(m => m.RegistrationNumber, "", new { @class = "text-danger" })
+                                </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
                                         Engine No <span class="required-star">*</span>
@@ -315,7 +322,7 @@
                                     <label class="form-label">
                                         Date Of Service <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.DateOfServicing, new { @class = "form-control", @id = "dateOfSale", autocomplete = "off" })
+                                    @Html.TextBoxFor(m => m.DateOfServicing, new { @class = "form-control", @id = "DateOfServicing", autocomplete = "off" })
                                     @Html.ValidationMessageFor(m => m.DateOfServicing, "", new { @class = "text-danger" })
                                 </div>
 
@@ -357,12 +364,22 @@
                                     <label class="form-label">
                                         Insurance Due Date <span class="required-star">*</span>
                                     </label>
-                                    @Html.TextBoxFor(m => m.InsuranceDuDate,new { @class = "form-control", @id = "InsuranceDueDate", autocomplete = "off", @readonly = "readonly" })
+                                    @Html.TextBoxFor(m => m.InsuranceDuDate, new { @class = "form-control", @id = "InsuranceDueDate", autocomplete = "off", @readonly = "readonly" })
 
 
                                     @Html.ValidationMessageFor(m => m.InsuranceDuDate, "", new { @class = "text-danger" })
                                 </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        Amount <span class="required-star">*</span>
+                                    </label>
+                                    @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", @id = "Amount", autocomplete = "off" })
 
+
+                                    @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -374,31 +391,16 @@
                         </div>
                         <div class="card-body">
 
-                            <div id="bankDetails" class="row g-3 mt-3">
-                                <div class="col-md-3">
-                                    <label class="form-label">
-                                        EMI Amount <span class="required-star">*</span>
-                                    </label>
-                                    @Html.TextBoxFor(m => m.CashAmount, new
-                                        {
-                                            @class = "form-control",
-                                            type = "text",
-                                            maxlength = "12",
-                                            placeholder = "Enter EMI Amount",
-                                            oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
-                                        })
-                                    @Html.ValidationMessageFor(m => m.CashAmount, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
                             <div class="col-12">
                                 <label class="form-label">Notes  </label>
                                 @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 2 })
                             </div>
+                            <div class="col-12">
+                                <label class="form-label">Customer Complaints  </label>
+                                @Html.TextAreaFor(m => m.CustomerComplaints, new { @class = "form-control", rows = 2 })
+                            </div>
                         </div>
                     </div>
-
-
-
 
                     <div class="card-footer text-right">
                         <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</button>
@@ -412,7 +414,7 @@
 </section>
 
 @section scripts {
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         var currentYear = new Date().getFullYear();
           $("#manufacturingYear").val(currentYear);
@@ -425,9 +427,9 @@
                 clickOpens: true
             });
 
-            flatpickr("#dateOfSale", {
+            flatpickr("#DateOfServicing", {
                 dateFormat: "Y-m-d",
-                minDate: "today",   // ⚡ Past block ho gaya
+                minDate: "today",
                 allowInput: false
             });
 
@@ -437,11 +439,11 @@
                 allowInput: false
             });
                    flatpickr("#InsuranceDueDate", {
-            enableTime: true,               
-            dateFormat: "d-m-Y h:i K",     
-            time_24hr: false,              
-            minuteIncrement: 1,          
-            allowInput: false    
+            enableTime: true,
+            dateFormat: "d-m-Y h:i K",
+            time_24hr: false,
+            minuteIncrement: 1,
+            allowInput: false
         });
         });
     </script>
@@ -462,39 +464,25 @@
             }
         });
 
-        $('#BikeDropdown').change(function () {
-            var bikeId = $(this).val();
-            if (bikeId) {
+          $('#BrandDropdown').change(function () {
+            var brandId = $(this).val();
+            if (brandId) {
                 $.ajax({
-                    url: '/Admin/GetModelsByBike',
+                    url: '/Admin/GetModelsByBrand',
                     type: 'GET',
-                    data: { bikeId: bikeId },
+                    data: { brandId: brandId },
                     success: function (data) {
                         var modelDropdown = $('#ModelDropdown');
                         modelDropdown.empty();
-                            modelDropdown.append($('<option>').val('').text('-- Select Model --'));
-                           $.each(data, function (i, model) {
-            modelDropdown.append($('<option>').val(model.value).text(model.text));
-        });
+                        modelDropdown.append($('<option>').val('').text('-- Select Model --'));
+                        $.each(data, function (i, model) {
+                            modelDropdown.append($('<option>').val(model.value).text(model.text));
+                        });
                     }
                 });
             } else {
-                $('#ModelDropdown').empty().append($('<option>').val('').text('-- Select Model--'));
+                $('#ModelDropdown').empty().append($('<option>').val('').text('-- Select Model --'));
             }
         });
-
-        $("input[name='FinanceType']").change(function () {
-            toggleFinanceFields();
-        });
-
-        toggleFinanceFields();
-
-        function toggleFinanceFields() {
-            if ($("#BankFinanced").is(":checked")) {
-                $("#bankDetails").show();
-            } else {
-                $("#bankDetails").hide();
-            }
-        }
     </script>
 }
