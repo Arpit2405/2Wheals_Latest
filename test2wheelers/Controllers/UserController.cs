@@ -57,11 +57,16 @@ namespace test2wheelers.Controllers
                     model.RoleId = dt.Rows[0]["RoleId"] != DBNull.Value ? (int?)dt.Rows[0]["RoleId"] : null;
                     model.IsActive = (bool)dt.Rows[0]["IsActive"];
                     model.Approved = (bool)dt.Rows[0]["Approved"];
+                    model.RegionId = dt.Rows[0]["RegionId"] != DBNull.Value ? (int?)dt.Rows[0]["RegionId"] : null;
                 }
             }
 
             var roles = _db.ExecuteStoredProcedure("sp_Role", new[] {
                     new SqlParameter("@RoleId", model.RoleId),
+                    new SqlParameter("@CallType", "GetAllExpectSuperAdmin")
+                });
+
+            var regions = _db.ExecuteStoredProcedure("sp_Region", new[] {
                     new SqlParameter("@CallType", "GetAll")
                 });
 
@@ -72,6 +77,15 @@ namespace test2wheelers.Controllers
                     Text = r["RoleName"].ToString()
                 })
                 .ToList();
+
+            ViewBag.Regions = regions.AsEnumerable()
+                .Select(r => new SelectListItem
+                {
+                    Value = r["Id"].ToString(),
+                    Text = r["RegionName"].ToString()
+                })
+                .ToList();
+
             return View(model);
         }
 
@@ -95,6 +109,7 @@ namespace test2wheelers.Controllers
                     new SqlParameter("@Approved",  model.Approved),
                     new SqlParameter("@RoleId",  model.RoleId),
                     new SqlParameter("@ProfileImage",  "/adminassets/dist/img/user2-160x160.jpg"),
+                    new SqlParameter("@RegionId",  model.RegionId),
                     new SqlParameter("@CallType",  "Insert")
                 });
                 TempData["Success"] = "User created successfully!";
@@ -111,6 +126,7 @@ namespace test2wheelers.Controllers
                     new SqlParameter("@IsActive",  model.IsActive),
                     new SqlParameter("@Approved",  model.Approved),
                     new SqlParameter("@RoleId",  model.RoleId),
+                    new SqlParameter("@RegionId",  model.RegionId),
                     new SqlParameter("@CallType",  "Update")
                 });
                 TempData["Success"] = "User updated successfully!";

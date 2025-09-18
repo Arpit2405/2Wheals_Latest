@@ -24,5 +24,10 @@
         //Only For Update Profile
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+
+
+        //For Regions
+        public int? RegionId { get; set; }
+        public string RegionName { get; set; }
     }
 }

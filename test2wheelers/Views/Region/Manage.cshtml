@@ -1,0 +1,96 @@
+﻿@model test2wheelers.Models.RegionModel
+@{
+    ViewBag.Title = Model.Id == 0 ? "Create User" : "Edit User";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> @(Model.Id == 0  ? "Create Region" : "Edit Region") </li>
+</ol>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card card-primary">
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h3 class="card-title mb-0">@(Model.Id == 0  ? "Create Region" : "Edit Region")</h3>
+                </div>
+
+                <a href="javascript:history.back()" class="btn btn-danger ml-auto">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            <div class="card-body">
+                <form asp-action="Manage" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="RegionLogo" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="RegionName" class="form-label">Name</label>
+                            <input asp-for="RegionName" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="MobileNo" class="form-label">Mobile No</label>
+                            <input asp-for="MobileNo" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <label asp-for="AddressLine1" class="form-label">Address Line 1</label>
+                            <input asp-for="AddressLine1" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <label asp-for="AddressLine2" class="form-label">Address Line 2</label>
+                            <input asp-for="AddressLine2" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <label asp-for="RegionLogo" class="form-label">Logo</label>
+                            <input asp-for="RegionLogo" type="file" class="form-control" accept="image/*" />
+                            @if (!string.IsNullOrEmpty(Model.RegionLogo))
+                            {
+                                <img src="/Uploads/Regions/@Url.Content(Model.RegionLogo)" class="img-thumbnail mt-2" style="max-height:100px;" />
+                            }
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center mt-4">
+                            <div class="form-check mt-4">
+                                <input asp-for="IsActive" class="form-check-input" />
+                                <label asp-for="IsActive" class="form-check-label"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-right mt-3">
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            @(Model.Id == 0 ? "Create" : "Update")
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+
+    <script>
+        $(function () {
+            toastr.options = { "positionClass": "toast-top-right" };
+
+            @if (TempData["Success"] != null)
+            {
+                                <text>toastr.success("@TempData["Success"]");</text>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                                <text>toastr.error("@TempData["Error"]");</text>
+            }
+        });
+    </script>
+}

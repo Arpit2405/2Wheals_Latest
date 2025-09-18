@@ -69,6 +69,8 @@ namespace test2wheelers.Controllers
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
                         new Claim(ClaimTypes.Name, row["Name"].ToString()),
                         new Claim(ClaimTypes.Thumbprint, row["ProfileImage"].ToString()),
+                        new Claim("RegionLogo", row["RegionLogo"].ToString()),
+                        new Claim("RegionName", row["RegionName"].ToString()),
                         new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
 
