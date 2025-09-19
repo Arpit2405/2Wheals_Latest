@@ -866,8 +866,17 @@ namespace test2wheelers.Controllers
             if (ModelState.IsValid)
             {
                 SqlParameter[] parameters = {
-            new SqlParameter("@calltype", "InsertReceipts"),
-            new SqlParameter("@UserId_fk", model.UserId_fk),
+            new SqlParameter("@calltype", "InsertServices"),
+            new SqlParameter("@Name", model.Name),
+            new SqlParameter("@MobileNo", model.MobileNo),
+            new SqlParameter("@Address1", model.Address1 ),
+            new SqlParameter("@Address2", model.Address2 ),
+            new SqlParameter("@DateOfBirth", model.DateOfBirth),
+            new SqlParameter("@Email", model.Email ),
+            new SqlParameter("@Location", model.Location ),
+            new SqlParameter("@Pincode", model.Pincode ),
+            new SqlParameter("@State", model.State ),
+            new SqlParameter("@City", model.City ), 
             new SqlParameter("@BrandId_Fk", model.BrandId_Fk),
             new SqlParameter("@ModelId_Fk", model.ModelId_Fk),
             new SqlParameter("@ManufacturingYear", model.ManufacturingYear),
@@ -878,39 +887,39 @@ namespace test2wheelers.Controllers
             new SqlParameter("@DateOfServicing", model.DateOfServicing),
             new SqlParameter("@SerivceDetails", model.SerivceDetails ?? (object)DBNull.Value),
             new SqlParameter("@MeterReading", model.MeterReading),
-            new SqlParameter("@Amount", model.CashAmount),
+            new SqlParameter("@Amount", model.Amount),
             new SqlParameter("@DateOfServiceReminder", model.DateOfServiceReminder),
             new SqlParameter("@InsuranceDueDate", model.InsuranceDuDate),
             new SqlParameter("@Notes", model.Notes ?? (object)DBNull.Value),
             new SqlParameter("@CustomerComplaints", model.CustomerComplaints),
-            new SqlParameter("@RegularService", model.RegularService),
-            new SqlParameter("@WashingPolishing", model.WashingPolishing),
-            new SqlParameter("@Brake", model.Brake),
-            new SqlParameter("@SparkPlug", model.SparkPlug),
-            new SqlParameter("@ChainServices", model.ChainServices),
-            new SqlParameter("@Engine", model.Engine),
-            new SqlParameter("@ElectricalIssues", model.ElectricalIssues),
-            new SqlParameter("@Suspension", model.Suspension),
-            new SqlParameter("@Clutch", model.Clutch),
-            new SqlParameter("@Accident", model.Accident),
-            new SqlParameter("@OilChange", model.OilChange),
-            new SqlParameter("@RunningRepair", model.RunningRepair),
-            new SqlParameter("@Gear", model.Gear),
-            new SqlParameter("@PaintRepair", model.PaintRepair),
-            new SqlParameter("@Accessories", model.Accessories),
-            new SqlParameter("@GeneralCheckup", model.GeneralCheckup),
-            new SqlParameter("@Complaints", model.CustomerComplaints),
-            new SqlParameter("@Filters", model.Filters),
-            new SqlParameter("@Labour", model.Labour),
-            new SqlParameter("@FlushingTreatement", model.FlushingTreatement),
-            new SqlParameter("@Petrol", model.Petrol),
-            new SqlParameter("@SpareParts", model.SpareParts)
+        new SqlParameter("@RegularService", SqlDbType.Bit) { Value = model.RegularService },
+new SqlParameter("@WashingPolishing", SqlDbType.Bit) { Value = model.WashingPolishing },
+new SqlParameter("@Brake", SqlDbType.Bit) { Value = model.Brake },
+new SqlParameter("@SparkPlug", SqlDbType.Bit) { Value = model.SparkPlug },
+new SqlParameter("@ChainServices", SqlDbType.Bit) { Value = model.ChainServices },
+new SqlParameter("@Engine", SqlDbType.Bit) { Value = model.Engine },
+new SqlParameter("@ElectricalIssues", SqlDbType.Bit) { Value = model.ElectricalIssues },
+new SqlParameter("@Suspension", SqlDbType.Bit) { Value = model.Suspension },
+new SqlParameter("@Clutch", SqlDbType.Bit) { Value = model.Clutch },
+new SqlParameter("@Accident", SqlDbType.Bit) { Value = model.Accident },
+new SqlParameter("@OilChange", SqlDbType.Bit) { Value = model.OilChange },
+new SqlParameter("@RunningRepair", SqlDbType.Bit) { Value = model.RunningRepair },
+new SqlParameter("@Gear", SqlDbType.Bit) { Value = model.Gear },
+new SqlParameter("@PaintRepair", SqlDbType.Bit) { Value = model.PaintRepair },
+new SqlParameter("@Accessories", SqlDbType.Bit) { Value = model.Accessories },
+new SqlParameter("@GeneralCheckup", SqlDbType.Bit) { Value = model.GeneralCheckup },
+new SqlParameter("@Complaints", SqlDbType.Bit) { Value = model.Complaints },
+new SqlParameter("@Filters", SqlDbType.Bit) { Value = model.Filters },
+new SqlParameter("@Labour", SqlDbType.Bit) { Value = model.Labour },
+new SqlParameter("@FlushingTreatement", SqlDbType.Bit) { Value = model.FlushingTreatement },
+new SqlParameter("@Petrol", SqlDbType.Bit) { Value = model.Petrol },
+new SqlParameter("@SpareParts", SqlDbType.Bit) { Value = model.SpareParts },
         };
 
-                var result = _sqlHelper.ExecuteStoredProcedure("sp_Receipts", parameters);
+                var result = _sqlHelper.ExecuteStoredProcedure("sp_Services", parameters);
 
                 TempData["Success"] = "Service added successfully!";
-                return RedirectToAction("Receipts");
+                return RedirectToAction("Services");
             }
 
             TempData["Error"] = "Please check the form fields.";

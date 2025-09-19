@@ -2,7 +2,7 @@
 
 namespace _2whealers.Models
 {
-    public class Services:CommonVm
+    public class Services
     {
 
         public int Id { get; set; }
@@ -34,7 +34,8 @@ namespace _2whealers.Models
         [Required(ErrorMessage = "Location is required")]
         public string Location { get; set; }
 
-        public DateTime ManufacturingYear { get; set; }
+        [Required(ErrorMessage = "Manufacturing Year is required")] 
+        public int ManufacturingYear { get; set; }
 
         [Required(ErrorMessage = "Registration Number is required")]
         [StringLength(20, ErrorMessage = "Registration No cannot exceed 20 characters.")]
@@ -78,7 +79,34 @@ namespace _2whealers.Models
         public DateTime? InsuranceDuDate { get; set; }
         public string Notes { get; set; }
         public string CustomerComplaints { get; set; }
-         
+
+
+        [Required(ErrorMessage = "Mobile number is required")]
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Mobile number must be 10 digits")]
+        [RegularExpression("^[0-9]{10}$", ErrorMessage = "Enter a valid 10-digit number")]
+        [Display(Name = "Mobile No")]
+        public string MobileNo { get; set; }
+
+        [Required(ErrorMessage = "Name is required")]
+        [StringLength(30, ErrorMessage = "Name cannot be longer than 50 characters")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can contain only letters and spaces")]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+
+
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [Display(Name = "Email")]
+        public string? Email { get; set; }
+
+
+        [Required(ErrorMessage = "Address 1 is required")]
+        [Display(Name = "Address 1")]
+        public string Address1 { get; set; }
+
+        [Display(Name = "Address 2")]
+        public string? Address2 { get; set; }
+ 
         public bool RegularService { get; set; }
         public bool WashingPolishing { get; set; }
         public bool Brake { get; set; }
