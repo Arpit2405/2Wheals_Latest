@@ -1,0 +1,160 @@
+﻿@model List<_2whealers.Models.ManageStockViewModel>
+@{
+    ViewBag.Title = "Stocks";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+
+<style>
+    .badge {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+        border-radius: 12px;
+    }
+</style>
+
+
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Stocks </li>
+</ol>
+
+<div class="row gx-4">
+    <div class="col-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="mb-4">Stocks</h2>
+
+                <div class="mb-3 text-right">
+                    <a href="@Url.Action("AddStock", "Stock")" class="btn btn-success">
+                        + Add Stocks
+                    </a>
+                </div>
+
+
+                <div class="table-responsive">
+                    <table id="StocksTable" class="table table-striped table-hover table-bordered align-middle shadow-sm rounded overflow-hidden">
+                        <thead style="background: linear-gradient(90deg, #6c63ff, #4facfe); color: #fff;">
+                            <tr>
+                                <th style="width:60px;" class="text-center">SNo.</th>
+                                <th>Brand Name</th>
+                                <th>Model Name</th>
+                                <th>Quantity</th>
+                                <th>Last Updated Date</th> 
+                                <th>Status</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rowNumber = 1;
+                            }
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">@rowNumber</td>
+                                        <td class="text-center">
+                                            @item.BrandName <br /> 
+                                        </td>
+                                        <td class="text-center">@item.ModelName</td>
+                                        <td class="text-center">
+                                            @if (item.Quantity == 0)
+                                            {
+                                                <span class="badge bg-red">Out of Stock</span>
+                                            }
+                                            else if (item.Quantity < 10)
+                                            {
+                                                <span class="badge bg-yellow">Low Stock (@item.Quantity)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-green">@item.Quantity</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">@Convert.ToDateTime(item.LastUpdated).ToString("dd-MM-yyyy")</td>
+                                        <td class="text-center">
+                                            @if (item.Status == true)    
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Inactive</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    rowNumber++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                <style>
+                    /* Gradient button */
+                    .btn-gradient {
+                        background: linear-gradient(45deg, #6c63ff, #4facfe);
+                        color: #fff;
+                        border: none;
+                    }
+
+                        .btn-gradient:hover {
+                            background: linear-gradient(45deg, #4facfe, #6c63ff);
+                            color: #fff;
+                        }
+
+                    /* Table striping */
+                    .table-striped tbody tr:nth-of-type(odd) {
+                        background-color: #f9f9ff;
+                    }
+
+                    /* Hover effect */
+                    .table-hover tbody tr:hover {
+                        background-color: #eef2ff;
+                        transition: 0.3s;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+            $(function () {
+                toastr.options = {
+                    "positionClass": "toast-bottom-right"
+                }
+        @if (TempData["Success"] != null)
+        {
+            <text>toastr.success("@TempData["Success"]");</text>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <text>toastr.error("@TempData["Error"]");</text>
+        }
+
+            });
+
+        $(document).ready(function () {
+
+            new DataTable('#StocksTable', {
+                language: {
+                    emptyTable: "No Models found"
+                },
+                layout: {
+                    topStart: {
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+                    }
+                }
+            });
+
+
+        });
+    </script>
+}

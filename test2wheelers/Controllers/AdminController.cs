@@ -205,9 +205,8 @@ namespace test2wheelers.Controllers
             if (dt.Rows.Count > 0)
             {
                 var row = dt.Rows[0];
-                counts.PreSaleCount = Convert.ToInt32(row["PreSaleCount"]);
-                counts.SaleCount = Convert.ToInt32(row["SaleCount"]);
-
+                counts.PreSaleCount = row["PreSaleCount"] == DBNull.Value ? 0 : Convert.ToInt32(row["PreSaleCount"]);
+                counts.SaleCount = row["SaleCount"] == DBNull.Value ? 0 : Convert.ToInt32(row["SaleCount"]);
             }
             else
             {
@@ -474,7 +473,7 @@ namespace test2wheelers.Controllers
                 return View("PreSales", model);
             }
             SqlParameter[] parameters = {
-            new SqlParameter("@calltype", "InsertPreSales"),
+           new SqlParameter("@callType", "InsertPreSales"),
             new SqlParameter("@userName", model.Name ),
             new SqlParameter("@MobileNo", model.MobileNo ),
             new SqlParameter("@Address", model.Address1 ),

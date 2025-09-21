@@ -9,20 +9,20 @@
     <li class="breadcrumb-item">
         <a href="/"><i class="fas fa-home"></i> Home</a>
     </li>
-    <li class="breadcrumb-item active"> Add Receipts </li>
+    <li class="breadcrumb-item active"> Add Stocks </li>
 </ol>
 
 <section class="content">
     <div class="container-fluid">
         <div class="card card-primary">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title mb-0">Receipts</h3>
-                <a href="@Url.Action("Receipts","Admin")" class="btn btn-danger ml-auto">
+                <h3 class="card-title mb-0">Stocks</h3>
+                <a href="@Url.Action("Stocks","Stock")" class="btn btn-danger ml-auto">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
 
-            @using (Html.BeginForm("AddReceipts", "Admin", FormMethod.Post))
+            @using (Html.BeginForm("AddStock", "Stock", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 <div class="card-body row g-3">
@@ -32,8 +32,8 @@
                         <label class="form-label">
                             Bike <span class="required-star">*</span>
                         </label>
-                        @Html.DropDownListFor(m => m.BranchId, new SelectList(ViewBag.BikeList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BikeDropdown" })
-                        @Html.ValidationMessageFor(m => m.BranchId, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => m.BrandsId, new SelectList(ViewBag.BikeList, "Value", "Text"), "-- Select Bike --", new { @class = "form-control", id = "BikeDropdown" })
+                        @Html.ValidationMessageFor(m => m.BrandsId, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">
@@ -48,12 +48,7 @@
                         @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number", min = "1", placeholder = "Enter Quantity" })
                         @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
                     </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label">Stock Date</label>
-                        @Html.TextBoxFor(m => m.LastUpdated, new { @class = "form-control", @id = "receiptDate", placeholder = "Select Date" })
-                        @Html.ValidationMessageFor(m => m.LastUpdated, "", new { @class = "text-danger" })
-                    </div>
+                     
 
                 </div>
 
@@ -70,12 +65,7 @@
 @section scripts {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            flatpickr("#receiptDate", {
-                dateFormat: "d-m-Y",
-                allowInput: false
-            });
-        });
+       
 
                 $('#BikeDropdown').change(function () {
             var bikeId = $(this).val();

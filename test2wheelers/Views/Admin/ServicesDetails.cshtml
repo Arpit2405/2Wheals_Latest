@@ -37,6 +37,7 @@
             @{
                 int sno = 1;
             }
+
             @if (Model.RegularService)
             {
                 <tr>
@@ -53,7 +54,125 @@
                     <td>✔</td>
                 </tr>
             }
-            <!-- baki jobs same -->
+            @if (Model.Brake)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Brake</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.SparkPlug)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Spark Plug Check</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.ChainServices)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Chain Services</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.Engine)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Engine Check</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.ElectricalIssues)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Electrical Issues</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.Suspension)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Suspension Check</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.Clutch)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Clutch Check</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.Accident)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Accident Repair</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.OilChange)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Oil Change</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.RunningRepair)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Running Repair</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.Gear)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Gear Check</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.PaintRepair)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Paint Repair</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.Accessories)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>Accessories Fitment</td>
+                    <td>✔</td>
+                </tr>
+            }
+            @if (Model.GeneralCheckup)
+            {
+                <tr>
+                    <td>@(sno++)</td>
+                    <td>General Checkup</td>
+                    <td>✔</td>
+                </tr>
+            }
+            <tr style="font-weight:bold; background-color:#f2f2f2;">
+                <td colspan="2" class="text-right">Total Amount</td>
+                <td>
+                    @(Model.Amount.HasValue ? Model.Amount.Value.ToString("C") : "₹0.00")
+                </td>
+
+            </tr>
         </tbody>
     </table>
 
