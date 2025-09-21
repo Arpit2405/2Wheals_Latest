@@ -522,6 +522,12 @@ namespace test2wheelers.Controllers
                 model.CashAmount = Convert.ToDecimal(row["CashAmount"]);
                 model.ModelName = row["ModelName"].ToString();
                 model.FinancedBy = row["BankName"].ToString();
+
+                model.RegionLogo = row["RegionLogo"].ToString();
+                model.RegionName = row["RegionName"].ToString();
+                model.AddressLine1 = row["AddressLine1"].ToString();
+                model.AddressLine2 = row["AddressLine2"].ToString();
+                model.MobileNo = row["MobileNo"].ToString();
             }
 
             return View("PreSaleDetails", model);

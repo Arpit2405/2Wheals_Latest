@@ -13,6 +13,7 @@
         public bool CanEdit { get; set; } = false;
         public bool CanDelete { get; set; } = false;
 
+        public int SortOrder { get; set; }
         public List<RoleMenuPermissionModel> Children { get; set; } = new List<RoleMenuPermissionModel>();
     }
 }

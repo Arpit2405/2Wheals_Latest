@@ -23,7 +23,7 @@
                 @if (User.HasPermissionForUrl("/Roles/List", "Edit"))
                 {
                     <div class="mb-3 text-right">
-                        <a asp-action="Manage" class="btn btn-success btn-sm px-3"><i class="fa fa-plus"></i> Add Users</a>
+                        <a asp-action="Manage" class="btn btn-success btn-sm px-3"><i class="fa fa-plus"></i> Add User</a>
                     </div>
 
                 }
@@ -33,9 +33,10 @@
                     <table id="rolesTable" class="table table-striped table-hover table-bordered align-middle shadow-sm rounded overflow-hidden">
                         <thead style="background: linear-gradient(90deg, #6c63ff, #4facfe); color: #fff;">
                             <tr>
-                                <th style="width:60px;" class="text-center">SNo.</th>
+                                <th style="width:60px;" class="text-center">#</th>
                                 <th>UserName</th>
                                 <th>Role</th>
+                                <th>Region</th>
                                 <th>Active</th>
                                 <th style="width:160px;" class="text-center">Actions</th>
                             </tr>
@@ -52,13 +53,23 @@
                                         <td class="text-center fw-bold">@row</td>
                                         <td>@u.UserName</td>
                                         <td>@u.RoleName</td>
-                                        <td>@(u.IsActive ? "Yes" : "No")</td>
+                                        <td>@u.RegionName</td>
                                         <td>
-                                            @if (User.HasPermissionForUrl("/Roles/List", "Edit"))
+                                            @if (@u.IsActive)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Inactive</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (User.HasPermissionForUrl("/User/List", "Edit"))
                                             {
                                                 <a href="@Url.Action("Manage", "User", new { id = u.Id })" class="btn btn-sm btn-gradient me-1"> <i class="fa fa-edit"></i> Edit</a>
                                             }
-                                            @if (User.HasPermissionForUrl("/Roles/List", "Delete"))
+                                            @if (User.HasPermissionForUrl("/User/List", "Delete"))
                                             {
                                                 <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="delete-form" style="display:inline;">
                                                     <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
@@ -79,36 +90,40 @@
                             }
                         </tbody>
                     </table>
-                </div>
-
-                <style>
-                    /* Gradient button */
-                    .btn-gradient {
-                        background: linear-gradient(45deg, #6c63ff, #4facfe);
-                        color: #fff;
-                        border: none;
-                    }
-
-                        .btn-gradient:hover {
-                            background: linear-gradient(45deg, #4facfe, #6c63ff);
-                            color: #fff;
-                        }
-
-                    /* Table striping */
-                    .table-striped tbody tr:nth-of-type(odd) {
-                        background-color: #f9f9ff;
-                    }
-
-                    /* Hover effect */
-                    .table-hover tbody tr:hover {
-                        background-color: #eef2ff;
-                        transition: 0.3s;
-                    }
-                </style>
+                </div>       
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Gradient button */
+    .btn-gradient {
+        background: linear-gradient(45deg, #6c63ff, #4facfe);
+        color: #fff;
+        border: none;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #4facfe, #6c63ff);
+            color: #fff;
+        }
+
+    /* Table striping */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9ff;
+    }
+
+    /* Hover effect */
+    .table-hover tbody tr:hover {
+        background-color: #eef2ff;
+        transition: 0.3s;
+    }
+
+    #rolesTable thead tr th {
+        color: white;
+    }
+</style>
 
 @section Scripts {
     <script>

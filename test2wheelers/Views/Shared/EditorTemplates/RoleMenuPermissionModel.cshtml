@@ -16,22 +16,21 @@
         @* Root menus (ParentMenuId == null) → Add only *@
         @if (Model.ParentMenuId == null)
         {
-            <input type="checkbox" asp-for="CanView" class="form-check-input parent-view" />
-            <label class="form-check-label">View</label>
+            <input type="checkbox" asp-for="CanView" class="form-check-input parent-view parent" />
         }
         else
         {
-            <input type="checkbox" asp-for="CanView" class="form-check-input" />
-        
+            <input type="checkbox" asp-for="CanView" class="form-check-input child" />
+
             <label class="form-check-label me-2 mr-4">View</label>
-            <input type="checkbox" asp-for="CanCreate" class="form-check-input" />
-        
+            <input type="checkbox" asp-for="CanCreate" class="form-check-input child" />
+
             <label class="form-check-label me-2 mr-4">Create</label>
-            <input type="checkbox" asp-for="CanEdit" class="form-check-input" />
-        
+            <input type="checkbox" asp-for="CanEdit" class="form-check-input child" />
+
             <label class="form-check-label me-2 mr-4">Edit</label>
-            <input type="checkbox" asp-for="CanDelete" class="form-check-input" />
-        
+            <input type="checkbox" asp-for="CanDelete" class="form-check-input child" />
+
             <label class="form-check-label me-2 mr-4">Delete</label>
 
         }

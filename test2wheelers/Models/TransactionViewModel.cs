@@ -15,6 +15,13 @@ namespace _2whealers.Models
 
         public bool NocValid { get; set; }
 
+        //Region Details
+        public string RegionLogo { get; set; }
+        public string RegionName { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string MobileNo { get; set; }
+
     }
 
     public class CommonVm
@@ -156,6 +163,9 @@ namespace _2whealers.Models
 
         [Required(ErrorMessage = "Location is required")]
         public string Location { get; set; }
+
+
+       
 
     }
 }
