@@ -46,6 +46,7 @@ namespace test2wheelers.Helpers
         {
             using var conn = new SqlConnection(_connectionString);
             using var cmd = new SqlCommand(query, conn);
+            cmd.CommandType = CommandType.StoredProcedure;
             if (parameters != null)
                 cmd.Parameters.AddRange(parameters);
 

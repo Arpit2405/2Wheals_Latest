@@ -368,8 +368,14 @@
 
 
                                     @Html.ValidationMessageFor(m => m.InsuranceDuDate, "", new { @class = "text-danger" })
-                                </div>
-
+                                </div> 
+                                      <div class="col-md-3">
+                                            <label class="form-label">
+                                                Amount <span class="required-star">*</span>
+                                            </label>
+                                    @Html.TextBoxFor(m => m.amount, new { @class = "form-control", type = "number", min = "1", max = "999999", placeholder = "Enter Meter Reading" })
+                                    @Html.ValidationMessageFor(m => m.amount, "", new { @class = "text-danger" })
+                                        </div>
                             </div>
                         </div>
                     </div>

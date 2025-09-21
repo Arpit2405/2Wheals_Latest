@@ -17,16 +17,63 @@ namespace _2whealers.Controllers
             _env = env;
             _sqlHelper = sqlHelper;
         }
+
+        public IActionResult Stocks()
+        {
+            SqlParameter[] parameters = {
+                 new SqlParameter("@calltype", "GetAllStocks")
+                  };
+
+            var dt = _sqlHelper.ExecuteStoredProcedure("sp_stock", parameters);
+
+            var stockList = dt.AsEnumerable()
+               .Select(row => new ManageStockViewModel
+               {
+                   Id = Convert.ToInt32(row["Id"]),
+                   BrandName = row["BrandName"].ToString(),
+                   ModelName = row["ModelName"].ToString(),
+                   Quantity = row["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(row["Quantity"]),
+                   LastUpdated = row["LastUpdated"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["LastUpdated"]),
+                   Status = row["Isactive"] == DBNull.Value ? false : Convert.ToBoolean(row["Isactive"])
+               }).ToList();
+
+            return View(stockList);
+        }
+
         public IActionResult AddStock()
         {
             var model = new ManageStockViewModel();
-             
+
             ViewBag.BikeList = GetBrands();
-            return View(model); 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddStock(ManageStockViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                SqlParameter[] parameters = {
+                        new SqlParameter("@calltype", "Insert"),
+                        new SqlParameter("@BrandsId", model.BrandsId),
+                        new SqlParameter("@ModelId", model.ModelId),
+                        new SqlParameter("@Quantity", model.Quantity),
+                        new SqlParameter("@LastUpdated", DateTime.Now)
+                    };
+
+                var dt = _sqlHelper.ExecuteStoredProcedure("sp_stock", parameters);
+                TempData["SuccessMessage"] = "Stock updated successfully!";
+
+                return RedirectToAction("Stocks");  
+            }
+
+            TempData["ErrorMessage"] = "Something went wrong, please try again.";
+            return RedirectToAction("Stocks");
         }
 
         private List<SelectListItem> GetBrands()
-            {
+        {
             SqlParameter[] parameters = {
         new SqlParameter("@calltype", "GetAllBrands")
     };
