@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Rotativa.AspNetCore;
 using System.Transactions;
 using test2wheelers.Helpers;
+using System.Reflection;
 
 namespace test2wheelers.Controllers
 {
@@ -838,18 +839,18 @@ namespace test2wheelers.Controllers
 
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Services", parameters);
 
-            var receiptList = dt.AsEnumerable().Select(row => new Services
+            var ServicesList = dt.AsEnumerable().Select(row => new Services
             {
                 Id = Convert.ToInt32(row["Id"]),
-                //CustomerName = row["CustomerName"].ToString(),
-                //MobileNo = row["MobileNo"].ToString(),
-                //Amount = Convert.ToDecimal(row["Amount"]),
-                //ReceiptDate = Convert.ToDateTime(row["ReceiptDate"]),
-                //PaymentMode = row["PaymentMode"].ToString(),
-                IsActive = Convert.ToBoolean(row["IsActive"])
+                Name = row["name"].ToString(),
+                MobileNo = row["mobile"].ToString(),
+                ModelName = row["modelName"].ToString(),
+                Amount = Convert.IsDBNull(row["Amount"]) ? 0 : Convert.ToInt32(row["Amount"]),
+                dateOfSale = Convert.ToDateTime(row["dateofservicing"]),
+                DateOfServiceReminder = Convert.ToDateTime(row["dateofservicereminder"])
             }).ToList();
 
-            return View(receiptList);
+            return View(ServicesList);
         }
 
 
@@ -866,16 +867,25 @@ namespace test2wheelers.Controllers
             if (ModelState.IsValid)
             {
                 SqlParameter[] parameters = {
-            new SqlParameter("@calltype", "InsertReceipts"),
-            new SqlParameter("@UserId_fk", model.UserId_fk),
-            new SqlParameter("@BrandId_Fk", model.BrandId_Fk),
+            new SqlParameter("@calltype", "InsertServices"),
+            new SqlParameter("@Address1", model.Address1),
+            new SqlParameter("@Address2", model.Address2),
+            new SqlParameter("@DateOfBirth", model.DateOfBirth),
+            new SqlParameter("@Email", model.Email),
+            new SqlParameter("@Location", model.Location),
+            new SqlParameter("@MobileNo", model.MobileNo),
+            new SqlParameter("@Name", model.Name),
+            new SqlParameter("@Pincode", model.Pincode),
+            new SqlParameter("@state", model.State),
+            new SqlParameter("@city", model.City),
+            new SqlParameter("@BrandId_Fk", model.BikeId),
             new SqlParameter("@ModelId_Fk", model.ModelId_Fk),
             new SqlParameter("@ManufacturingYear", model.ManufacturingYear),
             new SqlParameter("@RegistrationNumber", model.RegistrationNumber ?? (object)DBNull.Value),
             new SqlParameter("@EngineNumber", model.EngineNo ?? (object)DBNull.Value),
             new SqlParameter("@ChasisNumber", model.ChassisNo ?? (object)DBNull.Value),
             new SqlParameter("@DRM", model.DRM),
-            new SqlParameter("@DateOfServicing", model.DateOfServicing),
+            new SqlParameter("@DateOfServicing", model.dateOfSale),
             new SqlParameter("@SerivceDetails", model.SerivceDetails ?? (object)DBNull.Value),
             new SqlParameter("@MeterReading", model.MeterReading),
             new SqlParameter("@Amount", model.Amount),
@@ -909,15 +919,58 @@ namespace test2wheelers.Controllers
             new SqlParameter("@IsActive", model.IsActive)
         };
 
-                var result = _sqlHelper.ExecuteStoredProcedure("sp_Receipts", parameters);
+                var result = _sqlHelper.ExecuteStoredProcedure("sp_Services", parameters);
 
                 TempData["Success"] = "Service added successfully!";
-                return RedirectToAction("Receipts");
+                return RedirectToAction("Services");
             }
 
             TempData["Error"] = "Please check the form fields.";
             return View(model);
         }
 
+
+        private Services GetServicesById(int id)
+        {
+            SqlParameter[] parameters = {
+        new SqlParameter("@calltype", "GetServicesById"),
+        new SqlParameter("@id", id)
+    };
+
+            var dt = _sqlHelper.ExecuteStoredProcedure("sp_Services", parameters);
+
+            if (dt.Rows.Count > 0)
+            {
+                var row = dt.Rows[0];
+                return new Services
+                {
+                    RegularService = Convert.ToBoolean(row["RegularService"]),
+                    WashingPolishing = Convert.ToBoolean(row["WashingPolishing"]),
+                    Brake = Convert.ToBoolean(row["Brake"]),
+                    SparkPlug = Convert.ToBoolean(row["SparkPlug"]),
+                    ChainServices = Convert.ToBoolean(row["ChainServices"]),
+                    Engine = Convert.ToBoolean(row["Engine"]),
+                    ElectricalIssues = Convert.ToBoolean(row["ElectricalIssues"]),
+                    Suspension = Convert.ToBoolean(row["Suspension"]),
+                    Clutch = Convert.ToBoolean(row["Clutch"]),
+                    Accident = Convert.ToBoolean(row["Accident"]),
+                    OilChange = Convert.ToBoolean(row["OilChange"]),
+                    RunningRepair = Convert.ToBoolean(row["RunningRepair"]),
+                    Gear = Convert.ToBoolean(row["Gear"]),
+                    PaintRepair = Convert.ToBoolean(row["PaintRepair"]),
+                    Accessories = Convert.ToBoolean(row["Accessories"]),
+                    GeneralCheckup = Convert.ToBoolean(row["GeneralCheckup"])
+                };
+            }
+
+            return null;
+        }
+
+
+        public ActionResult ServicesDetails(int id)
+        {
+            var model = GetServicesById(id);
+            return View("ServicesDetails", model);
+        }
     }
 }

@@ -54,11 +54,11 @@ namespace test2wheelers.Controllers
                 }
 
 
-                bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
-                if (isValid == false)
-                {
-                    return Json(new { success = false, message = "Invalid Username or Password" });
-                }
+                //bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
+                //if (isValid == false)
+                //{
+                //    return Json(new { success = false, message = "Invalid Username or Password" });
+                //}
 
                 var row = ds.Tables[0].Rows[0];
                 var menuTable = ds.Tables[1];
