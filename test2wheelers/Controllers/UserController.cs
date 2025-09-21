@@ -29,8 +29,9 @@ namespace test2wheelers.Controllers
                 UserName = r.Field<string>("UserName"),
                 RoleName = r.Field<string>("RoleName"),
                 IsActive = r.Field<bool>("IsActive"),
-                RoleId = null // Only if needed for listing
-            }).ToList();
+                RoleId = null, // Only if needed for listing
+                RegionName = r.Field<string>("RegionName"),
+            }).OrderBy(x => x.UserName).ToList();
 
             return View(users);
         }
@@ -135,6 +136,17 @@ namespace test2wheelers.Controllers
             return RedirectToAction("List");
         }
 
-     
+        [HttpPost]
+        public IActionResult Delete(Guid id)
+        {
+            _db.ExecuteStoredProcedure("sp_AspNetUsers", new[] {
+                    new SqlParameter("@Id", id),
+                    new SqlParameter("@CallType", "Delete")
+                });
+
+            TempData["Success"] = "User deleted successfully!";
+
+            return RedirectToAction("List");
+        }
     }
 }

@@ -24,7 +24,8 @@ namespace test2wheelers.Controllers
             var roles = dt.AsEnumerable().Select(r => new RoleModel
             {
                 RoleId = (int)r["RoleId"],
-                RoleName = r["RoleName"].ToString()
+                RoleName = r["RoleName"].ToString(),
+                IsActive = (bool)r["IsActive"]
             }).ToList();
 
             return View(roles);

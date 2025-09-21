@@ -32,6 +32,7 @@ namespace test2wheelers.Controllers
                     MenuName = row["MenuName"].ToString(),
                     Url = row["Url"].ToString(),
                     Icon = row["Icon"].ToString(),
+                    SortOrder = (int)row["SortOrder"],
                     ParentMenuId = row["ParentId"] == DBNull.Value ? null : (int?)row["ParentId"]
                 });
             }
@@ -89,7 +90,7 @@ namespace test2wheelers.Controllers
                     CanEdit = false,
                     CanDelete = false,
                     Children = BuildMenuTree(flatList, x.MenuId)
-                })
+                }).OrderBy(x => x.SortOrder)
                 .ToList();
         }
 
