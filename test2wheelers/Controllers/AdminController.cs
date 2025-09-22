@@ -817,11 +817,7 @@ namespace test2wheelers.Controllers
                   MobileNo = row["Mobile"].ToString(),
                   ModelName = row["modelName"].ToString(),
                   Downpayment = Convert.ToDecimal(row["DownPayment"]),
-                  FinancedBy = row["Financedby"].ToString(),
-                  CashAmount = Convert.ToDecimal(row["EMIAmount"]),
-                  NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]),
-                  MeterReading = Convert.ToInt32(row["meterreading"]),
-                  InsuranceDuDate = Convert.ToDateTime(row["InsuranceDueDate"]),
+                  CashAmount = Convert.ToDecimal(row["EMIAmount"]),   
                   dateofsale = Convert.ToDateTime(row["DateOfSale"]),
                   DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"])
               }).ToList();
@@ -952,6 +948,7 @@ namespace test2wheelers.Controllers
                     RegularService = Convert.ToBoolean(row["RegularService"]),
                     WashingPolishing = Convert.ToBoolean(row["WashingPolishing"]),
                     Brake = Convert.ToBoolean(row["Brake"]),
+                    Amount = Convert.ToInt32(row["Amount"]),
                     SparkPlug = Convert.ToBoolean(row["SparkPlug"]),
                     ChainServices = Convert.ToBoolean(row["ChainServices"]),
                     Engine = Convert.ToBoolean(row["Engine"]),

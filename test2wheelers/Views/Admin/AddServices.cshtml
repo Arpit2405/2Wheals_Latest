@@ -373,8 +373,8 @@
                                             <label class="form-label">
                                                 Amount <span class="required-star">*</span>
                                             </label>
-                                    @Html.TextBoxFor(m => m.amount, new { @class = "form-control", type = "number", min = "1", max = "999999", placeholder = "Enter Meter Reading" })
-                                    @Html.ValidationMessageFor(m => m.amount, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", type = "number", min = "1", max = "99999", placeholder = "Enter Amount" })
+                                    @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
                                         </div>
                             </div>
                         </div>

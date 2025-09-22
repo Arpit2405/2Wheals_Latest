@@ -36,6 +36,24 @@
 
     <link href="~/css/darkmode.css" rel="stylesheet" />
 
+    <style>
+        .breadcrumb-item + .breadcrumb-item::before {
+            display: inline-block;
+            padding-right: .5rem;
+            color: #ffffff;
+            content: "/"
+        }
+
+        .table thead th {
+            background: transparent;
+            color: #ffffff;
+            font-weight: 600;
+            border-bottom: none;
+            padding: .7rem .9rem
+        }
+
+    </style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div id="loader-overlay">
