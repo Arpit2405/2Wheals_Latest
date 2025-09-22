@@ -10,20 +10,20 @@
     <li class="breadcrumb-item">
         <a href="/"><i class="fas fa-home"></i> Home</a>
     </li>
-    <li class="breadcrumb-item active"> Regions </li>
+    <li class="breadcrumb-item active"> Branch </li>
 </ol>
 
 <div class="row">
     <div class="col-12">
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <h2 class="mb-4"><i class="nav-icon fas fa-map-marker-alt"></i> Regions</h2>
+                <h2 class="mb-4"><i class="nav-icon fas fa-map-marker-alt"></i> Branch</h2>
 
                 <!-- Add Role Button -->
                 @if (User.HasPermissionForUrl("/Roles/List", "Edit"))
                 {
                     <div class="mb-3 text-right">
-                        <a asp-action="Manage" class="btn btn-success btn-sm px-3"><i class="fa fa-plus"></i> Add Regions</a>
+                        <a asp-action="Manage" class="btn btn-success btn-sm px-3"><i class="fa fa-plus"></i> Add Branch</a>
                     </div>
 
                 }
@@ -33,7 +33,7 @@
                     <table id="regionTable" class="table table-striped table-hover table-bordered align-middle shadow-sm rounded overflow-hidden">
                         <thead style="background: linear-gradient(90deg, #6c63ff, #4facfe); color: #fff;">
                             <tr>
-                                <th style="width:60px;" class="text-center">SNo.</th>
+                                <th style="width:60px;" class="text-center">#</th>
                                 <th style="width:60px;">Logo</th>
                                 <th>Name</th>
                                 <th>Active</th>
@@ -54,7 +54,16 @@
                                             <img src="/Uploads/regions/@u.RegionLogo" class="user-image img-circle elevation-2" alt="User Image" style="width:60%;">
                                         </td>
                                         <td>@u.RegionName</td>
-                                        <td>@(u.IsActive ? "Yes" : "No")</td>
+                                        <td>
+                                            @if (@u.IsActive)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Inactive</span>
+                                            }
+                                        </td>
                                         <td>
                                             @if (User.HasPermissionForUrl("/Region/List", "Edit"))
                                             {
@@ -75,42 +84,46 @@
                             {
                                 <tr>
                                     <td colspan="6" class="text-center text-muted py-4">
-                                        🚫 No regions found
+                                        🚫 No branch found
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-
-                <style>
-                    /* Gradient button */
-                    .btn-gradient {
-                        background: linear-gradient(45deg, #6c63ff, #4facfe);
-                        color: #fff;
-                        border: none;
-                    }
-
-                        .btn-gradient:hover {
-                            background: linear-gradient(45deg, #4facfe, #6c63ff);
-                            color: #fff;
-                        }
-
-                    /* Table striping */
-                    .table-striped tbody tr:nth-of-type(odd) {
-                        background-color: #f9f9ff;
-                    }
-
-                    /* Hover effect */
-                    .table-hover tbody tr:hover {
-                        background-color: #eef2ff;
-                        transition: 0.3s;
-                    }
-                </style>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Gradient button */
+    .btn-gradient {
+        background: linear-gradient(45deg, #6c63ff, #4facfe);
+        color: #fff;
+        border: none;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #4facfe, #6c63ff);
+            color: #fff;
+        }
+
+    /* Table striping */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9ff;
+    }
+
+    /* Hover effect */
+    .table-hover tbody tr:hover {
+        background-color: #eef2ff;
+        transition: 0.3s;
+    }
+
+    #regionTable thead tr th {
+        color: white;
+    }
+</style>
 
 @section Scripts {
     <script>
