@@ -6,12 +6,10 @@ namespace test2wheelers.Helpers
     {
         public static string HashPassword(string password)
         {
-            // Generate a salt
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            byte[] salt = RandomNumberGenerator.GetBytes(16);
 
-            // Create PBKDF2 hash
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000); // 10,000 iterations
+            // Derive key using PBKDF2 (HMAC-SHA1, 10000 iterations, 20 bytes length)
+            using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA1);
             byte[] hash = pbkdf2.GetBytes(20);
 
             // Combine salt + hash
@@ -19,28 +17,29 @@ namespace test2wheelers.Helpers
             Array.Copy(salt, 0, hashBytes, 0, 16);
             Array.Copy(hash, 0, hashBytes, 16, 20);
 
-            // Convert to Base64 string
+            // Convert to Base64 for storage
             return Convert.ToBase64String(hashBytes);
         }
 
         // Verify entered password
         public static bool VerifyPassword(string enteredPassword, string storedHash)
         {
-            // Extract bytes
+            // Decode Base64 string
             byte[] hashBytes = Convert.FromBase64String(storedHash);
 
-            // Get salt
+            // Extract salt
             byte[] salt = new byte[16];
             Array.Copy(hashBytes, 0, salt, 0, 16);
 
-            // Compute hash with stored salt
-            var pbkdf2 = new Rfc2898DeriveBytes(enteredPassword, salt, 10000);
+            // Recompute hash with same parameters
+            using var pbkdf2 = new Rfc2898DeriveBytes(enteredPassword, salt, 10000, HashAlgorithmName.SHA1);
             byte[] hash = pbkdf2.GetBytes(20);
 
-            // Compare
+            // Compare stored hash and new hash securely
             for (int i = 0; i < 20; i++)
             {
-                if (hashBytes[i + 16] != hash[i]) return false;
+                if (hashBytes[i + 16] != hash[i])
+                    return false;
             }
 
             return true;

@@ -54,11 +54,11 @@ namespace test2wheelers.Controllers
                 }
 
 
-                //bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
-                //if (isValid == false)
-                //{
-                //    return Json(new { success = false, message = "Invalid Username or Password" });
-                //}
+                bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
+                if (isValid == false)
+                {
+                    return Json(new { success = false, message = "Invalid Username or Password" });
+                }
 
                 var row = ds.Tables[0].Rows[0];
                 var menuTable = ds.Tables[1];
@@ -69,6 +69,7 @@ namespace test2wheelers.Controllers
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
                         new Claim(ClaimTypes.Name, row["Name"].ToString()),
                         new Claim(ClaimTypes.Thumbprint, row["ProfileImage"].ToString()),
+                        new Claim("RegionId", row["RegionId"].ToString()),
                         new Claim("RegionLogo", row["RegionLogo"].ToString()),
                         new Claim("RegionName", row["RegionName"].ToString()),
                         new Claim(ClaimTypes.Role, row["RoleId"].ToString())
