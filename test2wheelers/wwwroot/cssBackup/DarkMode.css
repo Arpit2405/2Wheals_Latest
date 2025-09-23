@@ -1,0 +1,171 @@
+﻿ 
+body.light-mode .main-header.navbar {
+    background-color: #ffffff !important;
+    color: #333 !important;
+}
+
+body.light-mode .main-header .nav-link {
+    color: #333 !important;
+}
+
+/* DARK MODE HEADER */
+body.dark-mode .main-header.navbar {
+    background-color: #1f1f1f !important;
+    color: #fff !important;
+}
+
+body.dark-mode .main-header .nav-link {
+    color: #fff !important;
+}
+
+/* Submenu indentation */
+.nav-sidebar .nav-treeview {
+    padding-left: 15px;
+}
+
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+
+.brand-image {
+    background: #fff; /* white circle behind logo */
+    padding: 5px; /* spacing */
+    border-radius: 50%; /* make it round */
+}
+ 
+body.dark-mode .table .btn i {
+    color: #fff !important; /* white icon */
+    font-size: 14px;
+}
+
+body.dark-mode .table .btn.btn-primary {
+    background-color: #4facfe !important;
+    border: none !important;
+}
+
+    body.dark-mode .table .btn.btn-primary:hover {
+        background-color: #6c63ff !important;
+    }
+
+/* Delivery Challan Table - Dark Mode */
+body.dark-mode .challan-wrapper {
+    background-color: #1e1e1e !important;
+    color: #f1f1f1 !important;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+    body.dark-mode .challan-wrapper h2,
+    body.dark-mode .challan-wrapper h3,
+    body.dark-mode .challan-wrapper p {
+        color: #f1f1f1 !important;
+    }
+
+body.dark-mode .table {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+}
+
+    body.dark-mode .table th {
+        background-color: #333 !important;
+        color: #ffffff !important;
+        border: 1px solid #555 !important;
+    }
+
+    body.dark-mode .table td {
+        background-color: #2a2a2a !important;
+        color: #f1f1f1 !important;
+        border: 1px solid #444 !important;
+    }
+
+    body.dark-mode .table a {
+        color: #4facfe !important;
+        text-decoration: none;
+    }
+
+        body.dark-mode .table a:hover {
+            color: #6c63ff !important;
+        }
+
+/* Buttons inside Challan */
+body.dark-mode .challan-wrapper .btn {
+    background-color: #4facfe !important;
+    border: none !important;
+    color: #fff !important;
+}
+
+    body.dark-mode .challan-wrapper .btn:hover {
+        background-color: #6c63ff !important;
+    }
+
+/* Signature Section */
+body.dark-mode .signature-box {
+    border: 2px dashed #aaa !important;
+}
+
+/* Dark Mode Table Overrides */
+body.dark-mode .table thead {
+    background: linear-gradient(90deg, #6c63ff, #4facfe) !important;
+    color: #fff !important;
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #2a2a2a !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(even) {
+    background-color: #1e1e1e !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .table-hover tbody tr:hover {
+    background-color: #333 !important;
+    color: #fff !important;
+    transition: 0.3s;
+}
+
+/* Buttons */
+body.dark-mode .btn-primary {
+    background-color: #4facfe !important;
+    border: none !important;
+}
+
+    body.dark-mode .btn-primary:hover {
+        background-color: #6c63ff !important;
+    }
+
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+    body.dark-mode .main-header {
+        background-color: #1f1f1f !important;
+    }
+
+    body.dark-mode .main-sidebar {
+        background-color: #181818 !important;
+    }
+
+    body.dark-mode .nav-link.active {
+        background-color: #ff5722 !important;
+        color: #fff !important;
+    }
+
+/* Submenu indentation */
+.nav-sidebar .nav-treeview {
+    padding-left: 15px;
+}
+
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+
+.brand-image {
+    background: #fff;
+    padding: 5px;
+    border-radius: 50%;
+} 

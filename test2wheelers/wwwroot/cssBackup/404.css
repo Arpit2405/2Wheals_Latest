@@ -1,0 +1,39 @@
+﻿body {
+    background: #0d0d0d;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 50px;
+}
+
+h1 {
+    font-size: 120px;
+    margin: 0;
+    color: #e63946;
+}
+
+p {
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.bike img {
+    width: 200px;
+    margin-top: 30px;
+}
+
+a {
+    display: inline-block;
+    margin-top: 30px;
+    background: #e63946;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+    a:hover {
+        background: #d62828;
+    }
