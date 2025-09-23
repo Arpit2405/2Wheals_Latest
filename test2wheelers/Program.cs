@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using test2wheelers.Helpers;
+using _2whealers.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<SqlHelper>();

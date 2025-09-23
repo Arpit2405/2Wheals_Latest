@@ -1,6 +1,6 @@
-﻿using test2wheelers.Models;
+﻿using _2whealers.Models;
 
-namespace test2wheelers.Models
+namespace _2whealers.Models
 {
     public class RoleModel
     {

@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace test2wheelers
+namespace _2whealers
 {
     public class SqlHelper1
     {

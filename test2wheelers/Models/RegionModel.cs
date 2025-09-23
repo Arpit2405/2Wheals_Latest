@@ -1,8 +1,9 @@
-﻿namespace test2wheelers.Models
+﻿namespace _2whealers.Models
 {
     public class RegionModel
     {
         public int Id { get; set; }
+        public int RegionId { get; set; }
         public string RegionName { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }

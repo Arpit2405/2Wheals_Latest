@@ -1,11 +1,11 @@
-﻿using test2wheelers.Models;
+﻿using _2whealers.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace test2wheelers.Helpers
+namespace _2whealers.Helpers
 {
     public static class ClaimsPrincipalExtensions
     {

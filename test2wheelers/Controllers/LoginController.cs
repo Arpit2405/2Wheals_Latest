@@ -7,10 +7,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Security.Claims;
-using test2wheelers.Helpers;
-using test2wheelers.Models;
+using _2whealers.Helpers;
+using _2whealers.Models;
 
-namespace test2wheelers.Controllers
+namespace _2whealers.Controllers
 {
     public class LoginController : Controller
     {
@@ -71,7 +71,8 @@ namespace test2wheelers.Controllers
                         new Claim(ClaimTypes.Thumbprint, row["ProfileImage"].ToString()),
                         new Claim("RegionLogo", row["RegionLogo"].ToString()),
                         new Claim("RegionName", row["RegionName"].ToString()),
-                        new Claim(ClaimTypes.Role, row["RoleId"].ToString())
+                        new Claim("RegionId", row["RegionId"].ToString()),
+                        new Claim(ClaimTypes.Role, row["RoleId"].ToString()) 
                     };
 
                 foreach (DataRow m in   menuTable.Rows)

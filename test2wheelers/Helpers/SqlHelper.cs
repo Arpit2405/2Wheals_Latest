@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace test2wheelers.Helpers
+namespace _2whealers.Helpers
 {
     public class SqlHelper
     {
