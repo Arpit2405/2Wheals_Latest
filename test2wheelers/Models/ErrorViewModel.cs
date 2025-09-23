@@ -1,4 +1,4 @@
-namespace test2wheelers.Models
+namespace _2whealers.Models
 {
     public class ErrorViewModel
     {

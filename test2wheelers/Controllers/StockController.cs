@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Data.SqlClient;
-using test2wheelers.Helpers;
+using _2whealers.Helpers;
 
 namespace _2whealers.Controllers
 {

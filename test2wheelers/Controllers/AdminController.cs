@@ -7,10 +7,12 @@ using _2whealers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Rotativa.AspNetCore;
 using System.Transactions;
-using test2wheelers.Helpers;
+using _2whealers.Helpers;
 using System.Reflection;
+using System.Security.Claims;
+using _2whealers.Models;
 
-namespace test2wheelers.Controllers
+namespace _2whealers.Controllers
 {
     [Authorize]
     public class AdminController : Controller
@@ -27,13 +29,69 @@ namespace test2wheelers.Controllers
 
         public ActionResult Dashboard()
         {
-            var counts = GetCounts();
-            ViewBag.PreSaleCount = counts.PreSaleCount;
-            ViewBag.SaleCount = counts.SaleCount;
-            ViewBag.TotalVisitors = counts.SaleCount;
+            var roleId = User.FindFirst(ClaimTypes.Role)?.Value;
+            var regionName = User.FindFirst("RegionName")?.Value;
+            var regionLogo = User.FindFirst("RegionLogo")?.Value;
+            var RegionId = User.FindFirst("RegionId")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
 
+            if (roleId == "1")
+            {
+                var regions = GetRegions();
+                ViewBag.Regions = regions; 
+            }
+            else
+            {
+                var counts = GetCountsByRegion(Convert.ToInt32(RegionId));
+                ViewBag.PreSaleCount = counts.PreSaleCount;
+                ViewBag.SaleCount = counts.SaleCount;
+                ViewBag.TotalVisitors = counts.SaleCount;
+            }
             return View();
         }
+
+        public DashboardCounts GetCountsByRegion(int regionId)
+        {
+            var counts = new DashboardCounts();
+            SqlParameter[] parameters = {
+        new SqlParameter("@regionId", regionId)
+    };
+
+
+            var dt = _sqlHelper.ExecuteStoredProcedure("sp_GetTransactionCounts", parameters);
+
+            if (dt.Rows.Count > 0)
+            {
+                var row = dt.Rows[0];
+                counts.PreSaleCount = row["PreSaleCount"] == DBNull.Value ? 0 : Convert.ToInt32(row["PreSaleCount"]);
+                counts.SaleCount = row["SaleCount"] == DBNull.Value ? 0 : Convert.ToInt32(row["SaleCount"]);
+            }
+            else
+            {
+                counts.PreSaleCount = 0;
+                counts.SaleCount = 0;
+            }
+            return counts;
+        }
+
+        public List<RegionModel> GetRegions()
+        {
+            var regions = new List<RegionModel>();
+            var dt = _sqlHelper.ExecuteStoredProcedure("sp_GetRegions");
+
+            foreach (DataRow row in dt.Rows)
+            {
+                regions.Add(new RegionModel
+                {
+                    RegionId = Convert.ToInt32(row["id"]),
+                    RegionName = row["RegionName"].ToString(),
+                    RegionLogo = row["RegionLogo"] == DBNull.Value ? "" : row["RegionLogo"].ToString()
+                });
+            }
+
+            return regions;
+        }
+
 
         /////// Brands /////////////////////////////////////////////////////////////////////
         public ActionResult Brands()
@@ -196,25 +254,7 @@ namespace test2wheelers.Controllers
 
             return brands;
         }
-        public DashboardCounts GetCounts()
-        {
-            var counts = new DashboardCounts();
 
-            var dt = _sqlHelper.ExecuteStoredProcedure("sp_GetTransactionCounts");
-
-            if (dt.Rows.Count > 0)
-            {
-                var row = dt.Rows[0];
-                counts.PreSaleCount = row["PreSaleCount"] == DBNull.Value ? 0 : Convert.ToInt32(row["PreSaleCount"]);
-                counts.SaleCount = row["SaleCount"] == DBNull.Value ? 0 : Convert.ToInt32(row["SaleCount"]);
-            }
-            else
-            {
-                counts.PreSaleCount = 0;
-                counts.SaleCount = 0;
-            }
-            return counts;
-        }
 
         public ActionResult LoadBrandDropdown()
         {
@@ -817,7 +857,7 @@ namespace test2wheelers.Controllers
                   MobileNo = row["Mobile"].ToString(),
                   ModelName = row["modelName"].ToString(),
                   Downpayment = Convert.ToDecimal(row["DownPayment"]),
-                  CashAmount = Convert.ToDecimal(row["EMIAmount"]),   
+                  CashAmount = Convert.ToDecimal(row["EMIAmount"]),
                   dateofsale = Convert.ToDateTime(row["DateOfSale"]),
                   DateOfSaleReminder = Convert.ToDateTime(row["ServicingReminderDate"])
               }).ToList();

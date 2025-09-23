@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Data.SqlClient;
-using test2wheelers.Helpers;
-using test2wheelers.Models;
+using _2whealers.Helpers;
+using _2whealers.Models;
 
-namespace test2wheelers.Controllers
+namespace _2whealers.Controllers
 {
     public class RegionController : Controller
     {

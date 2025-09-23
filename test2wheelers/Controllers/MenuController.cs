@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
-using test2wheelers.Helpers;
-using test2wheelers.Models;
+using _2whealers.Helpers;
+using _2whealers.Models;
 
-namespace test2wheelers.Controllers
+namespace _2whealers.Controllers
 {
     public class MenuController : Controller
     {

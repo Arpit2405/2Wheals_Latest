@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace test2wheelers.Helpers
+namespace _2whealers.Helpers
 {
     public class PasswordHelper
     {

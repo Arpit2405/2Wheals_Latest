@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace test2wheelers.Models
+namespace _2whealers.Models
 {
     public class MenuItem
     {
