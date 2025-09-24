@@ -34,14 +34,17 @@
                         <div class="col-md-6">
                             <label asp-for="RegionName" class="form-label">Name</label>
                             <input asp-for="RegionName" class="form-control" />
+                            <span asp-validation-for="RegionName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label asp-for="MobileNo" class="form-label">Mobile No</label>
                             <input asp-for="MobileNo" class="form-control" />
+                            <span asp-validation-for="MobileNo" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mt-4">
                             <label asp-for="AddressLine1" class="form-label">Address Line 1</label>
                             <input asp-for="AddressLine1" class="form-control" />
+                            <span asp-validation-for="AddressLine1" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mt-4">
                             <label asp-for="AddressLine2" class="form-label">Address Line 2</label>
@@ -54,6 +57,7 @@
                             {
                                 <img src="/Uploads/Regions/@Url.Content(Model.RegionLogo)" class="img-thumbnail mt-2" style="max-height:100px;" />
                             }
+                            <span asp-validation-for="RegionLogo" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center mt-4">
                             <div class="form-check mt-4">
