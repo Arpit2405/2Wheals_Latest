@@ -1,13 +1,22 @@
-﻿namespace _2whealers.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace _2whealers.Models
 {
     public class UserModel
     {
         public Guid? Id { get; set; }
+        [Required(ErrorMessage = "Username is required")]
+        [RegularExpression(@"^\S+$", ErrorMessage = "Username cannot contain spaces")]
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits")]
         public string PhoneNumber { get; set; }
         public string ProfileImage { get; set; }
 

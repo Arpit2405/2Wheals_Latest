@@ -19,9 +19,11 @@ namespace _2whealers.Models
 
         [StringLength(100, ErrorMessage = "Address Line 2 cannot be longer than 100 characters.")]
         public string AddressLine2 { get; set; }
-        public string MobileNo { get; set; }
 
-        [Url(ErrorMessage = "Region Logo must be a valid URL.")]
+        [Required(ErrorMessage = "Mobile number is required")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Mobile number must be 10 digits")]
+        public string MobileNo { get; set; }
+         
         [RegularExpression(@".+\.(jpg|png)$", ErrorMessage = "Region Logo must end with .jpg or .png")]
         public string? RegionLogo { get; set; }
         public bool IsActive { get; set; }

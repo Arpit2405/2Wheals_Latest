@@ -8,7 +8,7 @@
     <li class="breadcrumb-item">
         <a href="/"><i class="fas fa-home"></i> Home</a>
     </li>
-    <li class="breadcrumb-item active"> @(Model.Id == 0  ? "Create Region" : "Edit Region") </li>
+    <li class="breadcrumb-item active"> @(Model.Id == 0 ? "Create Region" : "Edit Region") </li>
 </ol>
 
 <section class="content">
@@ -18,11 +18,11 @@
             <div class="card-header d-flex justify-content-between align-items-center">
 
                 <div>
-                    <h3 class="card-title mb-0">@(Model.Id == 0  ? "Create Region" : "Edit Region")</h3>
+                    <h3 class="card-title mb-0">@(Model.Id == 0 ? "Create Region" : "Edit Region")</h3>
                 </div>
 
                 <a href="javascript:history.back()" class="btn btn-danger ml-auto">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i> Backs
                 </a>
             </div>
             <div class="card-body">
@@ -38,7 +38,8 @@
                         </div>
                         <div class="col-md-6">
                             <label asp-for="MobileNo" class="form-label">Mobile No</label>
-                            <input asp-for="MobileNo" class="form-control" />
+                            <input asp-for="MobileNo" type="tel" pattern="\d*" maxlength="10" class="form-control" />
+
                             <span asp-validation-for="MobileNo" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mt-4">
@@ -86,14 +87,20 @@
         $(function () {
             toastr.options = { "positionClass": "toast-top-right" };
 
-            @if (TempData["Success"] != null)
-            {
-                                <text>toastr.success("@TempData["Success"]");</text>
-            }
+        @if (TempData["Success"] != null)
+        {
+            <text>toastr.success("@TempData["Success"]");</text>
+        }
 
-            @if (TempData["Error"] != null)
-            {
-                                <text>toastr.error("@TempData["Error"]");</text>
+        @if (TempData["Error"] != null)
+        {
+            <text>toastr.error("@TempData["Error"]");</text>
+        }
+        });
+
+        document.getElementById("MobileNo").addEventListener("keypress", function (e) { 
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault(); 
             }
         });
     </script>

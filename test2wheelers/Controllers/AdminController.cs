@@ -470,7 +470,12 @@ namespace _2whealers.Controllers
 
         public ActionResult PreSales()
         {
-            SqlParameter[] parameters = { new SqlParameter("@calltype", "GetAllPreSales") };
+            var RegionId = User.FindFirst("RegionId")?.Value;
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@calltype", "GetAllPreSales"),
+                new SqlParameter("@id", RegionId)
+            };
 
             var dt = _sqlHelper.ExecuteStoredProcedure("sp_Users", parameters);
 
