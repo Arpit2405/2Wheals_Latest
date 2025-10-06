@@ -10,8 +10,7 @@
 <ol class="breadcrumb mb-0">
     <li class="breadcrumb-item">
         <a href="/Admin/Dashboard">
-            <i class="fas fa-home"> </i>
-            Home
+            <i class="fas fa-home"></i> Home
         </a>
     </li>
 </ol>
@@ -20,34 +19,38 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0"> <i class="nav-icon fas fa-tachometer-alt"> Dashboard </i> </h1>
+                <h1 class="m-0 d-flex align-items-center gap-2">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    Dashboard
+                </h1>
             </div>
         </div>
     </div>
 </div>
+
 <section class="content">
     <div class="container-fluid">
         <!-- Welcome Header -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="alert alert-info shadow-sm" role="alert">
-                    <h4 class="mb-1">Welcome back, <strong>@userName</strong>!</h4>
-                    <p class="mb-0">Here is your dashboard overview.</p>
+                <div class="welcome-banner shadow-sm">
+                    <h4 class="mb-1">👋 Welcome back, <strong>@userName</strong>!</h4>
+                    <p class="mb-0">Here’s your personalized dashboard overview.</p>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
             @* SuperAdmin Regions *@
             @if (roleId == "1")
             {
-                <h5 class="col-12 mb-3 text-primary">Branch Overview</h5>
+                <h5 class="col-12 mb-3 text-primary fw-bold">🌍 Branch Overview</h5>
                 @foreach (var region in ViewBag.Regions as List<RegionModel>)
                 {
-                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                        <a href="@Url.Action("RegionDashboard", "Admin", new { regionId = region.RegionId })" style="text-decoration:none;">
-                            <div class="small-box bg-info text-white shadow-sm hover-shadow">
-                                <div class="inner p-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="@Url.Action("BranchDetails", "Branch", new { branchId = region.RegionId })" class="card-link">
+                            <div class="dash-card gradient-card text-white">
+                                <div class="inner">
                                     <h3>@region.RegionName</h3>
                                     <p>Click to view Sales & Pre-Sales</p>
                                 </div>
@@ -61,32 +64,31 @@
             }
             else
             {
-                @* Normal User Cards *@
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="small-box bg-success text-white shadow-sm">
-                        <div class="inner p-3">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="dash-card bg-success text-white">
+                        <div class="inner">
                             <h3>@ViewBag.SaleCount</h3>
                             <p>Sales</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="@Url.Action("Sales", "Admin")" class="small-box-footer">
+                        <a href="@Url.Action("Sales", "Admin")" class="dash-footer">
                             More info <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="small-box bg-warning text-white shadow-sm">
-                        <div class="inner p-3">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="dash-card bg-warning text-white">
+                        <div class="inner">
                             <h3>@ViewBag.PreSaleCount</h3>
                             <p>Pre-Sales</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="@Url.Action("PreSales", "Admin")" class="small-box-footer">
+                        <a href="@Url.Action("PreSales", "Admin")" class="dash-footer">
                             More info <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -97,28 +99,89 @@
 </section>
 
 <style>
-    .hover-shadow:hover {
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        transition: 0.3s;
-    }
-
-    .small-box {
-        border-radius: 0.5rem;
-        position: relative;
-        display: block;
+    /* Welcome Banner */
+    .welcome-banner {
+        background: linear-gradient(90deg, #17a2b8, #0d6efd);
         color: #fff;
-        padding: 20px;
+        padding: 1.5rem;
+        border-radius: 1rem;
     }
 
-        .small-box .icon {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 2.5rem;
-            opacity: 0.4;
+    /* Dashboard Card */
+    .dash-card {
+        border-radius: 1rem;
+        position: relative;
+        overflow: hidden;
+        padding: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+        min-height: 150px;
+    }
+
+        .dash-card .inner h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
         }
 
-    .alert-info {
-        border-radius: 0.5rem;
+        .dash-card .inner p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .dash-card .icon {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 4rem;
+            opacity: 0.15;
+            transform: rotate(-15deg);
+            transition: 0.3s;
+        }
+
+        .dash-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+            .dash-card:hover .icon {
+                opacity: 0.3;
+                transform: rotate(0deg);
+            }
+
+    /* Gradient Style */
+    .gradient-card {
+        background: linear-gradient(135deg, #17a2b8, #0d6efd);
+    }
+
+    /* Footer Link */
+    .dash-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.5rem;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.1);
+        font-size: 0.85rem;
+        color: #fff;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+        text-decoration: none;
+        display: block;
+        transition: background 0.3s;
+    }
+
+        .dash-footer:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+  
+
+    .dash-card .icon {
+        font-size: 3rem;
+    }
+
     }
 </style>

@@ -3397,7 +3397,7 @@ body .top-bar {
     filter: invert(1) brightness(200.5);
 }
 .header{
-   background-image: url(../images/header3.png);
+   background-image: url(../images/header3.webp);
    background-size: cover;
    background-position: -753px 351px;
    background-color: #ffffff;

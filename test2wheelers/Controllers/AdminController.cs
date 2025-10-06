@@ -9,8 +9,7 @@ using Rotativa.AspNetCore;
 using System.Transactions;
 using _2whealers.Helpers;
 using System.Reflection;
-using System.Security.Claims;
-using _2whealers.Models;
+using System.Security.Claims; 
 
 namespace _2whealers.Controllers
 {

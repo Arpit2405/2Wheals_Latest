@@ -52,6 +52,84 @@
             padding: .7rem .9rem
         }
 
+        /* User Dropdown */
+.user-dropdown {
+    width: 250px;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1f4037, #162447);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    opacity: 0;
+    transform: scale(0.95);
+    transform-origin: top right;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Show animation */
+.nav-item.dropdown.show .user-dropdown {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Header */
+.user-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 2px solid #ff416c;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+}
+
+.user-header img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border: 2px solid #fff;
+}
+
+/* User info text */
+.user-info p {
+    margin: 0;
+    font-weight: 600;
+    color: #fff;
+}
+
+.user-info small {
+    font-size: 0.75rem;
+    color: #e0e0e0;
+}
+
+/* Footer buttons */
+.user-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: #162447;
+}
+
+.user-footer .btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.user-footer .btn-primary {
+                background: linear-gradient(45deg, #495057, #2b49ff);
+    border: none;
+}
+
+.user-footer .btn-outline-light {
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.user-footer .btn-outline-light:hover {
+    background: #ff416c;
+    border-color: #ff416c;
+}
+
+
     </style>
 
 </head>
@@ -81,6 +159,24 @@
                 </li>
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <img src="/Uploads/Photos/574d899779cbd1033db1cd186b523644.jpg" class="user-image img-circle elevation-2" alt="User Image">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right user-dropdown">
+                        <li class="user-header">
+                            <img src="/Uploads/Photos/574d899779cbd1033db1cd186b523644.jpg" class="img-circle elevation-2" alt="User Image">
+                            <div class="user-info">
+                                <p>Arpit2 Kumar</p>
+                                <small>Member since Jan. 2024</small>
+                            </div>
+                        </li>
+                        <li class="user-footer">
+                            <a href="/Login/Profile" class="btn btn-primary btn-sm">Profile</a>
+                            <a href="/Login/Logout" class="btn btn-danger btn-sm float-right">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+               @*  <li class="nav-item dropdown user-menu">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <img src="/Uploads/Photos/@thumbprint"
                              class="user-image img-circle elevation-2"
                              alt="User Image">
@@ -102,7 +198,7 @@
                             <a href="@Url.Action("Logout","Login")" class="btn btn-default btn-flat float-right">Logout</a>
                         </li>
                     </ul>
-                </li>
+                </li> *@
             </ul>
         </nav>
         <!-- /.navbar -->

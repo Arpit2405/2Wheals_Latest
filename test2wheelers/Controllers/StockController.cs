@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Data.SqlClient;
 using _2whealers.Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace _2whealers.Controllers
 {
@@ -18,26 +20,37 @@ namespace _2whealers.Controllers
             _sqlHelper = sqlHelper;
         }
 
-        public IActionResult Stocks()
+        public  IActionResult Stocks()
         {
-            SqlParameter[] parameters = {
+            var regionIdClaim = User.Claims.FirstOrDefault(x => x.Type == "RegionId");
+            string RegionId = regionIdClaim?.Value;
+            if (!string.IsNullOrEmpty(RegionId))
+            {
+
+                SqlParameter[] parameters = {
                  new SqlParameter("@calltype", "GetAllStocks")
                   };
 
-            var dt = _sqlHelper.ExecuteStoredProcedure("sp_stock", parameters);
+                var dt = _sqlHelper.ExecuteStoredProcedure("sp_stock", parameters);
 
-            var stockList = dt.AsEnumerable()
-               .Select(row => new ManageStockViewModel
-               {
-                   Id = Convert.ToInt32(row["Id"]),
-                   BrandName = row["BrandName"].ToString(),
-                   ModelName = row["ModelName"].ToString(),
-                   Quantity = row["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(row["Quantity"]),
-                   LastUpdated = row["LastUpdated"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["LastUpdated"]),
-                   Status = row["Isactive"] == DBNull.Value ? false : Convert.ToBoolean(row["Isactive"])
-               }).ToList();
+                var stockList = dt.AsEnumerable()
+                   .Select(row => new ManageStockViewModel
+                   {
+                       Id = Convert.ToInt32(row["Id"]),
+                       BrandName = row["BrandName"].ToString(),
+                       ModelName = row["ModelName"].ToString(),
+                       Quantity = row["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(row["Quantity"]),
+                       LastUpdated = row["LastUpdated"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["LastUpdated"]),
+                       Status = row["Isactive"] == DBNull.Value ? false : Convert.ToBoolean(row["Isactive"])
+                   }).ToList();
 
-            return View(stockList);
+                return View(stockList);
+            }
+            else
+            {
+                 //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         public IActionResult AddStock()
@@ -65,7 +78,7 @@ namespace _2whealers.Controllers
                 var dt = _sqlHelper.ExecuteStoredProcedure("sp_stock", parameters);
                 TempData["SuccessMessage"] = "Stock updated successfully!";
 
-                return RedirectToAction("Stocks");  
+                return RedirectToAction("Stocks");
             }
 
             TempData["ErrorMessage"] = "Something went wrong, please try again.";

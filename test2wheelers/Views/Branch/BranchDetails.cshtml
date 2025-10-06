@@ -1,0 +1,156 @@
+﻿@model BranchDetailsViewModel
+@using System.Security.Claims
+@{
+    ViewBag.Title = "Branch Details";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <!-- Premium Heading -->
+    <div class="text-center mb-5">
+        <span class="badge bg-gradient px-3 py-2 mb-2">Branch Dashboard</span>
+        <h2 class="fw-bold gradient-text heading-animate">Pre-Sales & Sales Details</h2>
+        <div class="heading-underline mx-auto mt-2"></div>
+        <p class="text-muted mt-3">Overview of all records with quick download options</p>
+    </div>
+
+    <!-- Cards Row -->
+    <div class="row mb-3">
+        <!-- Sales -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-lg hover-card">
+                <div class="card-body text-center">
+                    <h5 class="fw-bold text-primary">Sales</h5>
+                    <p class="fs-5">Total Sales Records: <strong>@Model.SalesCount</strong></p>
+                    @if (Model.SalesCount > 0)
+                    {
+                        <a href="@Url.Action("DownloadSales", "Branch", new { branchId = Model.BranchId })"
+                           class="btn btn-gradient-primary btn-sm">
+                            <i class="fas fa-download me-2"></i> Download Sales 
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted mt-2">No records available</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Pre-Sales -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-lg hover-card">
+                <div class="card-body text-center">
+                    <h5 class="fw-bold text-success">Pre-Sales</h5>
+                    <p class="fs-5">Total Pre-Sales Records: <strong>@Model.PreSalesCount</strong></p>
+                    @if (Model.PreSalesCount > 0)
+                    {
+                        <a href="@Url.Action("DownloadPreSales", "Branch", new { branchId = Model.BranchId })"
+                           class="btn btn-gradient-success btn-sm">
+                            <i class="fas fa-download me-2"></i> Download Pre-Sales 
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted mt-2">No records available</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styles -->
+<style>
+    .gradient-text {
+        background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.3rem;
+        letter-spacing: 1px;
+    }
+
+    .heading-underline {
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        border-radius: 10px;
+        transition: width 0.5s ease;
+    }
+
+    .heading-animate:hover + .heading-underline {
+        width: 150px;
+    }
+
+    .hover-card {
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+    .btn-gradient-primary {
+        background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        color: #fff !important;
+        border: none;
+        border-radius: 25px;
+        padding: 8px 18px;
+        transition: 0.3s;
+    }
+
+        .btn-gradient-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+    .btn-gradient-success {
+        background: linear-gradient(90deg, #00b09b, #96c93d);
+        color: #fff !important;
+        border: none;
+        border-radius: 25px;
+        padding: 8px 18px;
+        transition: 0.3s;
+    }
+
+        .btn-gradient-success:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+    .badge.bg-gradient {
+        background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        color: #fff;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+</style>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+    gsap.from(".heading-animate", {
+        y: -40,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out"
+    });
+
+    gsap.from(".heading-underline", {
+        scaleX: 0,
+        opacity: 0,
+        duration: 1,
+        delay: 0.5,
+        transformOrigin: "center"
+    });
+
+    gsap.from(".hover-card", {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        delay: 0.6,
+        stagger: 0.2,
+        ease: "power3.out"
+    });
+</script>

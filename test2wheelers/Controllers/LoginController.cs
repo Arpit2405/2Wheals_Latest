@@ -34,86 +34,92 @@ namespace _2whealers.Controllers
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> Index(Login model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (model.CaptchaCode == null || model.CaptchaCode.ToUpper() != model.HiddenCaptcha.ToUpper())
+                if (ModelState.IsValid)
                 {
-                    return Json(new { success = false, message = "Invalid Captcha" });
-                }
+                    if (model.CaptchaCode == null || model.CaptchaCode.ToUpper() != model.HiddenCaptcha.ToUpper())
+                    {
+                        return Json(new { success = false, message = "Invalid Captcha" });
+                    }
 
-                SqlParameter[] parameters = new SqlParameter[]
-                {
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
                     new SqlParameter("@UserName", model.UserName)
-                };
+                    };
 
-                DataSet ds = _db.ExecuteStoredProcedureWithDataSet("sp_LoginUser", parameters);
+                    DataSet ds = _db.ExecuteStoredProcedureWithDataSet("sp_LoginUser", parameters);
 
-                if (ds.Tables[0].Rows.Count == 0)
-                {
-                    return Json(new { success = false, message = "Invalid Username or Password" });
-                }
+                    if (ds.Tables[0].Rows.Count == 0)
+                    {
+                        return Json(new { success = false, message = "Invalid Username or Password" });
+                    }
 
 
-                bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
-                if (isValid == false)
-                {
-                    return Json(new { success = false, message = "Invalid Username or Password" });
-                }
+                    bool isValid = PasswordHelper.VerifyPassword(model.Password, ds.Tables[0].Rows[0]["PasswordHash"].ToString());
+                    if (isValid == false)
+                    {
+                        return Json(new { success = false, message = "Invalid Username or Password" });
+                    }
 
-                var row = ds.Tables[0].Rows[0];
-                var menuTable = ds.Tables[1];
-
-                // Create claims
-                var claims = new List<Claim>
+                    var row = ds.Tables[0].Rows[0];
+                    var menuTable = ds.Tables[1];
+                     
+                    var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, row["Id"].ToString()),
                         new Claim(ClaimTypes.Name, row["Name"].ToString()),
                         new Claim(ClaimTypes.Thumbprint, row["ProfileImage"].ToString()),
                         new Claim("RegionId", row["RegionId"].ToString()),
                         new Claim("RegionLogo", row["RegionLogo"].ToString()),
-                        new Claim("RegionName", row["RegionName"].ToString()),
-                        new Claim("RegionId", row["RegionId"].ToString()),
-                        new Claim(ClaimTypes.Role, row["RoleId"].ToString()) 
+                        new Claim("RegionName", row["RegionName"].ToString()), 
+                        new Claim(ClaimTypes.Role, row["RoleId"].ToString())
                     };
 
-                foreach (DataRow m in   menuTable.Rows)
-                {
-                    var menuId = m["MenuId"].ToString();
-                    var menuName = m["MenuName"].ToString();
-                    var url = m["Url"] == DBNull.Value ? "" : m["Url"].ToString();
-                    var parent = m["ParentId"] == DBNull.Value ? "" : m["ParentId"].ToString();
-                    var icon = m["Icon"] == DBNull.Value ? "" : m["Icon"].ToString();
-                    var canCreate = Convert.ToInt32(m["CanCreate"]) == 1 ? "1" : "0";
-                    var canEdit = Convert.ToInt32(m["CanEdit"]) == 1 ? "1" : "0";
-                    var canDelete = Convert.ToInt32(m["CanDelete"]) == 1 ? "1" : "0";
-                    var canView = Convert.ToInt32(m["CanView"]) == 1 ? "1" : "0";
-                    var sort = Convert.ToInt32(m["SortOrder"]) == 1 ? "1" : "0";
+                    foreach (DataRow m in menuTable.Rows)
+                    {
+                        var menuId = m["MenuId"].ToString();
+                        var menuName = m["MenuName"].ToString();
+                        var url = m["Url"] == DBNull.Value ? "" : m["Url"].ToString();
+                        var parent = m["ParentId"] == DBNull.Value ? "" : m["ParentId"].ToString();
+                        var icon = m["Icon"] == DBNull.Value ? "" : m["Icon"].ToString();
+                        var canCreate = Convert.ToInt32(m["CanCreate"]) == 1 ? "1" : "0";
+                        var canEdit = Convert.ToInt32(m["CanEdit"]) == 1 ? "1" : "0";
+                        var canDelete = Convert.ToInt32(m["CanDelete"]) == 1 ? "1" : "0";
+                        var canView = Convert.ToInt32(m["CanView"]) == 1 ? "1" : "0";
+                        var sort = Convert.ToInt32(m["SortOrder"]) == 1 ? "1" : "0";
 
-                    string claimValue = string.Join("|", new[] { menuId, menuName, url, parent, icon, canCreate, canEdit, canDelete, canView, sort });
-                    claims.Add(new Claim("Menu", claimValue));
+                        string claimValue = string.Join("|", new[] { menuId, menuName, url, parent, icon, canCreate, canEdit, canDelete, canView, sort });
+                        claims.Add(new Claim("Menu", claimValue));
+                    }
+
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(identity),
+                        new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTime.UtcNow.AddMinutes(20)
+                        });
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Login Successful!",
+                        redirectUrl = Url.Action("Dashboard", "Admin")
+                    });
                 }
 
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(identity),
-                    new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTime.UtcNow.AddMinutes(20)
-                    });
-
-                return Json(new
-                {
-                    success = true,
-                    message = "Login Successful!",
-                    redirectUrl = Url.Action("Dashboard", "Admin")
-                });
+                return Json(new { success = false, message = "Invalid Request" });
             }
+            catch (Exception)
+            {
 
-            return Json(new { success = false, message = "Invalid Request" });
+                throw;
+            }
         }
 
         public async Task<IActionResult> Logout()

@@ -33,8 +33,7 @@ namespace _2whealers.Controllers
 
 
         public IActionResult Manage(int? id)
-        {
-            // Get all menus from DB
+        { 
             var menus = _db.ExecuteStoredProcedure("sp_Menu", new[] {
                 new SqlParameter("@CallType", "GetAll")
             });
@@ -71,7 +70,7 @@ namespace _2whealers.Controllers
                     new SqlParameter("@CallType", "GetByRoleId")
                 });
 
-                ApplyPermissions(model.Permissions, dtPerms);  // <-- fill tree with flags
+                ApplyPermissions(model.Permissions, dtPerms);   
             }
 
             return View(model);
@@ -171,7 +170,7 @@ namespace _2whealers.Controllers
 
                     if (exists == 0)
                     {
-                        _db.ExecuteNonQuery(@"
+                        _db.ExecuteScalar(@"
                     INSERT INTO RolePermissions
                     (RoleId, MenuId, CanView, CanCreate, CanEdit, CanDelete,CreatedOn)
                     VALUES (@RoleId, @MenuId, @CanView, @CanCreate, @CanEdit, @CanDelete, getdate())",
